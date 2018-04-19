@@ -4,8 +4,8 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.BackResponseBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.StatisticsBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public interface ISiteService {
      * @param limit
      * @return
      */
-    List<CommentVo> recentComments(int limit);
+    List<Comment> recentComments(int limit);
 
     /**
      * 最新发表的文章
@@ -30,14 +30,14 @@ public interface ISiteService {
      * @param limit
      * @return
      */
-    List<ContentVo> recentContents(int limit);
+    List<Article> recentContents(int limit);
 
     /**
      * 查询一条评论
      * @param coid
      * @return
      */
-    CommentVo getComment(Integer coid);
+    Comment getComment(Integer coid);
 
     /**
      * 系统备份

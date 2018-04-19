@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
 import org.slf4j.Logger;
@@ -25,9 +25,9 @@ public class OptionServiceImpl implements IOptionService {
     private OptionVoMapper optionVoMapper;
 
     @Override
-    public void insertOption(OptionVo optionVo) {
-        LOGGER.debug("Enter insertOption method:optionVo={}", optionVo);
-        optionVoMapper.insertSelective(optionVo);
+    public void insertOption(Option option) {
+        LOGGER.debug("Enter insertOption method:option={}", option);
+        optionVoMapper.insertSelective(option);
         LOGGER.debug("Exit insertOption method.");
     }
 
@@ -35,13 +35,13 @@ public class OptionServiceImpl implements IOptionService {
     @Transactional
     public void insertOption(String name, String value) {
         LOGGER.debug("Enter insertOption method:name={},value={}", name, value);
-        OptionVo optionVo = new OptionVo();
-        optionVo.setName(name);
-        optionVo.setValue(value);
+        Option option = new Option();
+        option.setName(name);
+        option.setValue(value);
         if (optionVoMapper.selectByPrimaryKey(name) == null) {
-            optionVoMapper.insertSelective(optionVo);
+            optionVoMapper.insertSelective(option);
         } else {
-            optionVoMapper.updateByPrimaryKeySelective(optionVo);
+            optionVoMapper.updateByPrimaryKeySelective(option);
         }
         LOGGER.debug("Exit insertOption method.");
     }
@@ -55,12 +55,12 @@ public class OptionServiceImpl implements IOptionService {
     }
 
     @Override
-    public OptionVo getOptionByName(String name) {
+    public Option getOptionByName(String name) {
         return optionVoMapper.selectByPrimaryKey(name);
     }
 
     @Override
-    public List<OptionVo> getOptions() {
+    public List<Option> getOptions() {
         return optionVoMapper.selectByExample(new OptionVoExample());
     }
 }

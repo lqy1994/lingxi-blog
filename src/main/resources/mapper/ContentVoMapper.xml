@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ContentVoMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo">
+  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
     <id column="cid" jdbcType="INTEGER" property="cid" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="slug" jdbcType="VARCHAR" property="slug" />
@@ -18,8 +18,8 @@
     <result column="allow_ping" jdbcType="BIT" property="allowPing" />
     <result column="allow_feed" jdbcType="BIT" property="allowFeed" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
+    <result column="article" jdbcType="LONGVARCHAR" property="article" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +84,7 @@
     comments_num, allow_comment, allow_ping, allow_feed
   </sql>
   <sql id="Blob_Column_List">
-    content
+    article
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample" resultMap="ResultMapWithBLOBs">
     select
@@ -142,21 +142,21 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo" useGeneratedKeys="true" keyProperty="cid">
+  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article" useGeneratedKeys="true" keyProperty="cid">
     insert into t_contents (cid, title, slug, 
       created, modified, author_id, 
       type, status, tags, 
       categories, hits, comments_num, 
       allow_comment, allow_ping, allow_feed, 
-      content)
+      article)
     values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, 
       #{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
       #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER}, 
       #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT}, #{allowFeed,jdbcType=BIT}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{article,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo" useGeneratedKeys="true" keyProperty="cid">
+  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article" useGeneratedKeys="true" keyProperty="cid">
     insert into t_contents
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="cid != null">
@@ -204,8 +204,8 @@
       <if test="allowFeed != null">
         allow_feed,
       </if>
-      <if test="content != null">
-        content,
+      <if test="article != null">
+        article,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -254,8 +254,8 @@
       <if test="allowFeed != null">
         #{allowFeed,jdbcType=BIT},
       </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
+      <if test="article != null">
+        #{article,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -313,8 +313,8 @@
       <if test="record.allowFeed != null">
         allow_feed = #{record.allowFeed,jdbcType=BIT},
       </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=LONGVARCHAR},
+      <if test="record.article != null">
+        article = #{record.article,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -338,7 +338,7 @@
       allow_comment = #{record.allowComment,jdbcType=BIT},
       allow_ping = #{record.allowPing,jdbcType=BIT},
       allow_feed = #{record.allowFeed,jdbcType=BIT},
-      content = #{record.content,jdbcType=LONGVARCHAR}
+      article = #{record.article,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -364,7 +364,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
     update t_contents
     <set>
       <if test="title != null">
@@ -409,13 +409,13 @@
       <if test="allowFeed != null">
         allow_feed = #{allowFeed,jdbcType=BIT},
       </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
+      <if test="article != null">
+        article = #{article,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where cid = #{cid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
     update t_contents
     set title = #{title,jdbcType=VARCHAR},
       slug = #{slug,jdbcType=VARCHAR},
@@ -431,10 +431,10 @@
       allow_comment = #{allowComment,jdbcType=BIT},
       allow_ping = #{allowPing,jdbcType=BIT},
       allow_feed = #{allowFeed,jdbcType=BIT},
-      content = #{content,jdbcType=LONGVARCHAR}
+      article = #{article,jdbcType=LONGVARCHAR}
     where cid = #{cid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo">
+  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
     update t_contents
     set title = #{title,jdbcType=VARCHAR},
       slug = #{slug,jdbcType=VARCHAR},

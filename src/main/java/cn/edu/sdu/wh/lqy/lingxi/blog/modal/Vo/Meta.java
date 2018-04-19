@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 
 import java.io.Serializable;
 
-public class MetaVo implements Serializable {
+public class Meta implements Serializable {
     /**
      * 项目主键
      */

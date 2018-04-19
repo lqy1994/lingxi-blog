@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.CommentBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVoExample;
 import com.github.pagehelper.PageInfo;
 
@@ -10,9 +10,9 @@ public interface ICommentService {
 
     /**
      * 保存对象
-     * @param commentVo
+     * @param comment
      */
-    String insertComment(CommentVo commentVo);
+    String insertComment(Comment comment);
 
     /**
      * 获取文章下的评论
@@ -28,9 +28,9 @@ public interface ICommentService {
      * @param commentVoExample
      * @param page
      * @param limit
-     * @return CommentVo
+     * @return Comment
      */
-    PageInfo<CommentVo> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit);
+    PageInfo<Comment> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit);
 
 
     /**
@@ -38,7 +38,7 @@ public interface ICommentService {
      * @param coid
      * @return
      */
-    CommentVo getCommentById(Integer coid);
+    Comment getCommentById(Integer coid);
 
 
     /**
@@ -53,6 +53,6 @@ public interface ICommentService {
      * 更新评论状态
      * @param comments
      */
-    void update(CommentVo comments);
+    void update(Comment comments);
 
 }

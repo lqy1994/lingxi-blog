@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public interface IMetaService {
      * @param types
      * @return
      */
-    List<MetaVo> getMetas(String types);
+    List<Meta> getMetas(String types);
 
 
     /**
@@ -65,11 +65,11 @@ public interface IMetaService {
      * 保存项目
      * @param metas
      */
-    void saveMeta(MetaVo metas);
+    void saveMeta(Meta metas);
 
     /**
      * 更新项目
      * @param metas
      */
-    void update(MetaVo metas);
+    void update(Meta metas);
 }

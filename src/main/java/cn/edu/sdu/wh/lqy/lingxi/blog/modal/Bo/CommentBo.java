@@ -1,18 +1,18 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
 
 import java.util.List;
 
 /**
  * 返回页面的评论，包含父子评论内容
  */
-public class CommentBo extends CommentVo {
+public class CommentBo extends Comment {
 
     private int levels;
-    private List<CommentVo> children;
+    private List<Comment> children;
 
-    public CommentBo(CommentVo comments) {
+    public CommentBo(Comment comments) {
         setAuthor(comments.getAuthor());
         setMail(comments.getMail());
         setCoid(comments.getCoid());
@@ -34,11 +34,11 @@ public class CommentBo extends CommentVo {
         this.levels = levels;
     }
 
-    public List<CommentVo> getChildren() {
+    public List<Comment> getChildren() {
         return children;
     }
 
-    public void setChildren(List<CommentVo> children) {
+    public void setChildren(List<Comment> children) {
         this.children = children;
     }
 }

@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -15,26 +15,26 @@ public interface OptionVoMapper {
 
     int deleteByPrimaryKey(String name);
 
-    int insert(OptionVo record);
+    int insert(Option record);
 
-    int insertSelective(OptionVo record);
+    int insertSelective(Option record);
 
-    List<OptionVo> selectByExample(OptionVoExample example);
+    List<Option> selectByExample(OptionVoExample example);
 
-    OptionVo selectByPrimaryKey(String name);
+    Option selectByPrimaryKey(String name);
 
-    int updateByExampleSelective(@Param("record") OptionVo record, @Param("example") OptionVoExample example);
+    int updateByExampleSelective(@Param("record") Option record, @Param("example") OptionVoExample example);
 
-    int updateByExample(@Param("record") OptionVo record, @Param("example") OptionVoExample example);
+    int updateByExample(@Param("record") Option record, @Param("example") OptionVoExample example);
 
-    int updateByPrimaryKeySelective(OptionVo record);
+    int updateByPrimaryKeySelective(Option record);
 
-    int updateByPrimaryKey(OptionVo record);
+    int updateByPrimaryKey(Option record);
 
     /**
      * 批量保存
-     * @param optionVos list
+     * @param options list
      * @return 保存的个数
      */
-    int insertOptions(List<OptionVo> optionVos);
+    int insertOptions(List<Option> options);
 }

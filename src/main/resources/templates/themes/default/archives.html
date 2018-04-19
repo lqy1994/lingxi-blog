@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="themes/default/header::header(title='文章归档',keywords=null)"></div>
 <body>
-<div class="main-content archive-page clearfix">
+<div class="main-article archive-page clearfix">
     <div class="categorys-item">
         <th:block th:each="archive : ${archives}">
             <div class="categorys-title" th:text="${archive.date}"></div>

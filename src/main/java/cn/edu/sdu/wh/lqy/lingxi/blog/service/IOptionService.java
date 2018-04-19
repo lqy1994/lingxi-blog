@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
 
 import java.util.List;
 import java.util.Map;
@@ -10,11 +10,11 @@ import java.util.Map;
  */
 public interface IOptionService {
 
-    void insertOption(OptionVo optionVo);
+    void insertOption(Option option);
 
     void insertOption(String name, String value);
 
-    List<OptionVo> getOptions();
+    List<Option> getOptions();
 
 
     /**
@@ -24,5 +24,5 @@ public interface IOptionService {
      */
     void saveOptions(Map<String, String> options);
 
-    OptionVo getOptionByName(String name);
+    Option getOptionByName(String name);
 }

@@ -56,7 +56,7 @@
 </footer>
 
 <th:block th:if="${is_post}">
-    <div id="directory-content" class="directory-content">
+    <div id="directory-article" class="directory-article">
         <div id="directory"></div>
     </div>
     <script>
@@ -146,7 +146,7 @@
                         }
                         directory.appendChild(root);
                     };
-            createPostDirectory(document.getElementById('post-content'), document.getElementById('directory'), true);
+            createPostDirectory(document.getElementById('post-article'), document.getElementById('directory'), true);
         };
         postDirectoryBuild();
         /*]]>*/
@@ -160,7 +160,7 @@
     /*<![CDATA[*/
     var isOk = [[${is_post}]];
     if (isOk) {
-        var postDirectory = new Headroom(document.getElementById("directory-content"), {
+        var postDirectory = new Headroom(document.getElementById("directory-article"), {
             tolerance: 0,
             offset: 100,
             classes: {

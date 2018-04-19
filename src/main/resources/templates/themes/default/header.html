@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="header(title,keywords)">
 <head>
     <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1"/>
-    <meta name="renderer" content="webkit"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <meta http-equiv="Cache-Control" content="no-transform"/>
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <meta name="keywords" th:content="${keywords ?: commons.site_option('site_keywords')}"/>
-    <meta name="description" th:content="${description ?:commons.site_option('site_description')}"/>
+    <meta http-equiv="X-UA-Compatible" article="IE=edge, chrome=1"/>
+    <meta name="renderer" article="webkit"/>
+    <meta name="viewport" article="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" article="no-transform"/>
+    <meta http-equiv="Cache-Control" article="no-siteapp"/>
+    <meta name="keywords" th:article="${keywords ?: commons.site_option('site_keywords')}"/>
+    <meta name="description" th:article="${description ?:commons.site_option('site_description')}"/>
     <link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
     <link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
     <title><th:block th:text="${title ?: '首页'}+' - '+${commons.site_option('site_title','My Blog')}"></th:block></title>

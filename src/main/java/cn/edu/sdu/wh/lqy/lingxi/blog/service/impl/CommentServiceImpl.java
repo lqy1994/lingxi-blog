@@ -2,11 +2,11 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.CommentBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
@@ -35,7 +35,7 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    public String insertComment(CommentVo comments) {
+    public String insertComment(Comment comments) {
         if (null == comments) {
             return "评论对象为空";
         }
@@ -54,7 +54,7 @@ public class CommentServiceImpl implements ICommentService {
         if (null == comments.getCid()) {
             return "评论文章不能为空";
         }
-        ContentVo contents = contentService.getContents(String.valueOf(comments.getCid()));
+        Article contents = contentService.getContents(String.valueOf(comments.getCid()));
         if (null == contents) {
             return "不存在的文章";
         }
@@ -63,7 +63,7 @@ public class CommentServiceImpl implements ICommentService {
         comments.setCreated(DateKit.getCurrentUnixTime());
         commentVoMapper.insertSelective(comments);
 
-        ContentVo temp = new ContentVo();
+        Article temp = new Article();
         temp.setCid(contents.getCid());
         temp.setCommentsNum(contents.getCommentsNum() + 1);
         contentService.updateContentByCid(temp);
@@ -79,8 +79,8 @@ public class CommentServiceImpl implements ICommentService {
             CommentVoExample commentVoExample = new CommentVoExample();
             commentVoExample.createCriteria().andCidEqualTo(cid).andParentEqualTo(0).andStatusIsNotNull().andStatusEqualTo("approved");
             commentVoExample.setOrderByClause("coid desc");
-            List<CommentVo> parents = commentVoMapper.selectByExampleWithBLOBs(commentVoExample);
-            PageInfo<CommentVo> commentPaginator = new PageInfo<>(parents);
+            List<Comment> parents = commentVoMapper.selectByExampleWithBLOBs(commentVoExample);
+            PageInfo<Comment> commentPaginator = new PageInfo<>(parents);
             PageInfo<CommentBo> returnBo = copyPageInfo(commentPaginator);
             if (parents.size() != 0) {
                 List<CommentBo> comments = new ArrayList<>(parents.size());
@@ -96,16 +96,16 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public PageInfo<CommentVo> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit) {
+    public PageInfo<Comment> getCommentsWithPage(CommentVoExample commentVoExample, int page, int limit) {
         PageHelper.startPage(page, limit);
-        List<CommentVo> commentVos = commentVoMapper.selectByExampleWithBLOBs(commentVoExample);
-        PageInfo<CommentVo> pageInfo = new PageInfo<>(commentVos);
+        List<Comment> comments = commentVoMapper.selectByExampleWithBLOBs(commentVoExample);
+        PageInfo<Comment> pageInfo = new PageInfo<>(comments);
         return pageInfo;
     }
 
     @Override
     @Transactional
-    public void update(CommentVo comments) {
+    public void update(Comment comments) {
         if (null != comments && null != comments.getCoid()) {
             commentVoMapper.updateByPrimaryKeyWithBLOBs(comments);
         }
@@ -115,12 +115,12 @@ public class CommentServiceImpl implements ICommentService {
     @Transactional
     public void delete(Integer coid, Integer cid) {
         if (null == coid) {
-            throw new TipException("主键为空");
+            throw new LingXiException("主键为空");
         }
         commentVoMapper.deleteByPrimaryKey(coid);
-        ContentVo contents = contentService.getContents(cid + "");
+        Article contents = contentService.getContents(cid + "");
         if (null != contents && contents.getCommentsNum() > 0) {
-            ContentVo temp = new ContentVo();
+            Article temp = new Article();
             temp.setCid(cid);
             temp.setCommentsNum(contents.getCommentsNum() - 1);
             contentService.updateContentByCid(temp);
@@ -128,7 +128,7 @@ public class CommentServiceImpl implements ICommentService {
     }
 
     @Override
-    public CommentVo getCommentById(Integer coid) {
+    public Comment getCommentById(Integer coid) {
         if (null != coid) {
             return commentVoMapper.selectByPrimaryKey(coid);
         }

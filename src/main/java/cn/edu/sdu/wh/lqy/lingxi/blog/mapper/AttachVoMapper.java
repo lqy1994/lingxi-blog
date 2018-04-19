@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Attach;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVoExample;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -19,19 +19,19 @@ public interface AttachVoMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(AttachVo record);
+    int insert(Attach record);
 
-    int insertSelective(AttachVo record);
+    int insertSelective(Attach record);
 
-    List<AttachVo> selectByExample(AttachVoExample example);
+    List<Attach> selectByExample(AttachVoExample example);
 
-    AttachVo selectByPrimaryKey(Integer id);
+    Attach selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") AttachVo record, @Param("example") AttachVoExample example);
+    int updateByExampleSelective(@Param("record") Attach record, @Param("example") AttachVoExample example);
 
-    int updateByExample(@Param("record") AttachVo record, @Param("example") AttachVoExample example);
+    int updateByExample(@Param("record") Attach record, @Param("example") AttachVoExample example);
 
-    int updateByPrimaryKeySelective(AttachVo record);
+    int updateByPrimaryKeySelective(Attach record);
 
-    int updateByPrimaryKey(AttachVo record);
+    int updateByPrimaryKey(Attach record);
 }

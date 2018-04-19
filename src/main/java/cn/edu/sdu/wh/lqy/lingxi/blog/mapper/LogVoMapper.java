@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -15,19 +15,19 @@ public interface LogVoMapper {
 
     int deleteByPrimaryKey(Integer id);
 
-    int insert(LogVo record);
+    int insert(Log record);
 
-    int insertSelective(LogVo record);
+    int insertSelective(Log record);
 
-    List<LogVo> selectByExample(LogVoExample example);
+    List<Log> selectByExample(LogVoExample example);
 
-    LogVo selectByPrimaryKey(Integer id);
+    Log selectByPrimaryKey(Integer id);
 
-    int updateByExampleSelective(@Param("record") LogVo record, @Param("example") LogVoExample example);
+    int updateByExampleSelective(@Param("record") Log record, @Param("example") LogVoExample example);
 
-    int updateByExample(@Param("record") LogVo record, @Param("example") LogVoExample example);
+    int updateByExample(@Param("record") Log record, @Param("example") LogVoExample example);
 
-    int updateByPrimaryKeySelective(LogVo record);
+    int updateByPrimaryKeySelective(Log record);
 
-    int updateByPrimaryKey(LogVo record);
+    int updateByPrimaryKey(Log record);
 }

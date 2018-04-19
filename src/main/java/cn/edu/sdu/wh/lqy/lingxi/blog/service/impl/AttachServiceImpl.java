@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Attach;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IAttachService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
@@ -23,16 +23,16 @@ public class AttachServiceImpl implements IAttachService {
     private AttachVoMapper attachVoMapper;
 
     @Override
-    public PageInfo<AttachVo> getAttachs(Integer page, Integer limit) {
+    public PageInfo<Attach> getAttachs(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         AttachVoExample attachVoExample = new AttachVoExample();
         attachVoExample.setOrderByClause("id desc");
-        List<AttachVo> attachVos = attachVoMapper.selectByExample(attachVoExample);
-        return new PageInfo<>(attachVos);
+        List<Attach> attaches = attachVoMapper.selectByExample(attachVoExample);
+        return new PageInfo<>(attaches);
     }
 
     @Override
-    public AttachVo selectById(Integer id) {
+    public Attach selectById(Integer id) {
         if(null != id){
             return attachVoMapper.selectByPrimaryKey(id);
         }
@@ -42,7 +42,7 @@ public class AttachServiceImpl implements IAttachService {
     @Override
     @Transactional
     public void save(String fname, String fkey, String ftype, Integer author) {
-        AttachVo attach = new AttachVo();
+        Attach attach = new Attach();
         attach.setFname(fname);
         attach.setAuthorId(author);
         attach.setFkey(fkey);

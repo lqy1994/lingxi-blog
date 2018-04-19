@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionVoMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo">
+  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option">
     <id column="name" jdbcType="VARCHAR" property="name" />
     <result column="value" jdbcType="VARCHAR" property="value" />
     <result column="description" jdbcType="VARCHAR" property="description" />
@@ -105,13 +105,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo">
+  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option">
     insert into t_options (name, value, description
       )
     values (#{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo">
+  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option">
     insert into t_options
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
@@ -168,7 +168,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option">
     update t_options
     <set>
       <if test="value != null">
@@ -180,7 +180,7 @@
     </set>
     where name = #{name,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo">
+  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option">
     update t_options
     set value = #{value,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR}
@@ -188,7 +188,7 @@
   </update>
 
 <!--批量保存-->
-  <insert id="insertOptions" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo" >
+  <insert id="insertOptions" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option" >
     INSERT INTO t_options(name, value, description) VALUES
     <if test="list.size!=0">
       <foreach collection="list" item="option"   separator="," >

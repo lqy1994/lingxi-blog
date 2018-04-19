@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 
 import java.io.Serializable;
 
-public class ContentVo implements Serializable {
+public class Article implements Serializable {
     /**
      * post表主键
      */

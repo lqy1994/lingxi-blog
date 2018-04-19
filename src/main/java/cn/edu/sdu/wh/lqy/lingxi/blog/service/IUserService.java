@@ -1,24 +1,24 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 
 public interface IUserService {
 
     /**
      * 保存用户数据
      *
-     * @param userVo 用户数据
+     * @param user 用户数据
      * @return 主键
      */
 
-    Integer insertUser(UserVo userVo);
+    Integer insertUser(User user);
 
     /**
      * 通过uid查找对象
      * @param uid
      * @return
      */
-    UserVo queryUserById(Integer uid);
+    User queryUserById(Integer uid);
 
     /**
      * 用戶登录
@@ -26,12 +26,12 @@ public interface IUserService {
      * @param password
      * @return
      */
-    UserVo login(String username, String password);
+    User login(String username, String password);
 
     /**
      * 根据主键更新user对象
-     * @param userVo
+     * @param user
      * @return
      */
-    void updateByUid(UserVo userVo);
+    void updateByUid(User user);
 }

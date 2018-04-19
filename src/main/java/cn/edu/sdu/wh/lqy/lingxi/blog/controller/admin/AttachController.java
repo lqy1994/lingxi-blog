@@ -4,9 +4,9 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Attach;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IAttachService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Commons;
@@ -20,7 +20,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -56,7 +55,7 @@ public class AttachController extends BaseController {
     @GetMapping(value = "")
     public String index(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page,
                         @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        PageInfo<AttachVo> attachPaginator = attachService.getAttachs(page, limit);
+        PageInfo<Attach> attachPaginator = attachService.getAttachs(page, limit);
         request.setAttribute("attachs", attachPaginator);
         request.setAttribute(Types.ATTACH_URL.getType(), Commons.site_option(Types.ATTACH_URL.getType(), Commons.site_url()));
         request.setAttribute("max_file_size", WebConst.MAX_FILE_SIZE / 1024);
@@ -71,8 +70,8 @@ public class AttachController extends BaseController {
      */
     @PostMapping(value = "upload")
     @ResponseBody
-    public RestResponseBo upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] multipartFiles) throws IOException {
-        UserVo users = this.user(request);
+    public ApiResponse upload(HttpServletRequest request, @RequestParam("file") MultipartFile[] multipartFiles) throws IOException {
+        User users = this.user(request);
         Integer uid = users.getUid();
         List<String> errorFiles = new ArrayList<>();
         try {
@@ -93,18 +92,18 @@ public class AttachController extends BaseController {
                 }
             }
         } catch (Exception e) {
-            return RestResponseBo.fail();
+            return ApiResponse.fail();
         }
-        return RestResponseBo.ok(errorFiles);
+        return ApiResponse.ok(errorFiles);
     }
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam Integer id, HttpServletRequest request) {
+    public ApiResponse delete(@RequestParam Integer id, HttpServletRequest request) {
         try {
-            AttachVo attach = attachService.selectById(id);
+            Attach attach = attachService.selectById(id);
             if (null == attach) {
-                return RestResponseBo.fail("不存在该附件");
+                return ApiResponse.fail("不存在该附件");
             }
             attachService.deleteById(id);
             new File(CLASSPATH + attach.getFkey()).delete();
@@ -112,9 +111,9 @@ public class AttachController extends BaseController {
         } catch (Exception e) {
             String msg = "附件删除失败";
             LOGGER.error(msg, e);
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
 }

@@ -4,9 +4,9 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.RelationshipVoKey;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
@@ -51,7 +51,7 @@ public class MetaServiceImpl implements IMetaService {
     }
 
     @Override
-    public List<MetaVo> getMetas(String types) {
+    public List<Meta> getMetas(String types) {
         if (StringUtils.isNotBlank(types)) {
             MetaVoExample metaVoExample = new MetaVoExample();
             metaVoExample.setOrderByClause("sort desc, mid desc");
@@ -82,7 +82,7 @@ public class MetaServiceImpl implements IMetaService {
     @Override
     @Transactional
     public void delete(int mid) {
-        MetaVo metas = metaVoMapper.selectByPrimaryKey(mid);
+        Meta metas = metaVoMapper.selectByPrimaryKey(mid);
         if (null != metas) {
             String type = metas.getType();
             String name = metas.getName();
@@ -92,9 +92,9 @@ public class MetaServiceImpl implements IMetaService {
             List<RelationshipVoKey> rlist = relationshipService.getRelationshipById(null, mid);
             if (null != rlist) {
                 for (RelationshipVoKey r : rlist) {
-                    ContentVo contents = contentService.getContents(String.valueOf(r.getCid()));
+                    Article contents = contentService.getContents(String.valueOf(r.getCid()));
                     if (null != contents) {
-                        ContentVo temp = new ContentVo();
+                        Article temp = new Article();
                         temp.setCid(r.getCid());
                         if (type.equals(Types.CATEGORY.getType())) {
                             temp.setCategories(reMeta(name, contents.getCategories()));
@@ -116,15 +116,15 @@ public class MetaServiceImpl implements IMetaService {
         if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
             MetaVoExample metaVoExample = new MetaVoExample();
             metaVoExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-            List<MetaVo> metaVos = metaVoMapper.selectByExample(metaVoExample);
-            MetaVo metas;
+            List<Meta> metaVos = metaVoMapper.selectByExample(metaVoExample);
+            Meta metas;
             if (metaVos.size() != 0) {
-                throw new TipException("已经存在该项");
+                throw new LingXiException("已经存在该项");
             } else {
-                metas = new MetaVo();
+                metas = new Meta();
                 metas.setName(name);
                 if (null != mid) {
-                    MetaVo original = metaVoMapper.selectByPrimaryKey(mid);
+                    Meta original = metaVoMapper.selectByPrimaryKey(mid);
                     metas.setMid(mid);
                     metaVoMapper.updateByPrimaryKeySelective(metas);
 //                    更新原有文章的categories
@@ -141,7 +141,7 @@ public class MetaServiceImpl implements IMetaService {
     @Transactional
     public void saveMetas(Integer cid, String names, String type) {
         if (null == cid) {
-            throw new TipException("项目关联id不能为空");
+            throw new LingXiException("项目关联id不能为空");
         }
         if (StringUtils.isNotBlank(names) && StringUtils.isNotBlank(type)) {
             String[] nameArr = StringUtils.split(names, ",");
@@ -154,17 +154,17 @@ public class MetaServiceImpl implements IMetaService {
     private void saveOrUpdate(Integer cid, String name, String type) {
         MetaVoExample metaVoExample = new MetaVoExample();
         metaVoExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-        List<MetaVo> metaVos = metaVoMapper.selectByExample(metaVoExample);
+        List<Meta> metaVos = metaVoMapper.selectByExample(metaVoExample);
 
         int mid;
-        MetaVo metas;
+        Meta metas;
         if (metaVos.size() == 1) {
             metas = metaVos.get(0);
             mid = metas.getMid();
         } else if (metaVos.size() > 1) {
-            throw new TipException("查询到多条数据");
+            throw new LingXiException("查询到多条数据");
         } else {
-            metas = new MetaVo();
+            metas = new Meta();
             metas.setSlug(name);
             metas.setName(name);
             metas.setType(type);
@@ -199,7 +199,7 @@ public class MetaServiceImpl implements IMetaService {
 
     @Override
     @Transactional
-    public void saveMeta(MetaVo metas) {
+    public void saveMeta(Meta metas) {
         if (null != metas) {
             metaVoMapper.insertSelective(metas);
         }
@@ -207,7 +207,7 @@ public class MetaServiceImpl implements IMetaService {
 
     @Override
     @Transactional
-    public void update(MetaVo metas) {
+    public void update(Meta metas) {
         if (null != metas && null != metas.getMid()) {
             metaVoMapper.updateByPrimaryKeySelective(metas);
         }

@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 
 import java.io.Serializable;
 
-public class AttachVo implements Serializable {
+public class Attach implements Serializable {
 
     private Integer id;
 

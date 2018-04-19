@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +11,7 @@ public class ArchiveBo implements Serializable {
 
     private String date;
     private String count;
-    private List<ContentVo> articles;
+    private List<Article> articles;
 
     public String getDate() {
         return date;
@@ -29,11 +29,11 @@ public class ArchiveBo implements Serializable {
         this.count = count;
     }
 
-    public List<ContentVo> getArticles() {
+    public List<Article> getArticles() {
         return articles;
     }
 
-    public void setArticles(List<ContentVo> articles) {
+    public void setArticles(List<Article> articles) {
         this.articles = articles;
     }
 

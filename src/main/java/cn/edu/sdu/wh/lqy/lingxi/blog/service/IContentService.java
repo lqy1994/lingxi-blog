@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import com.github.pagehelper.PageInfo;
 
@@ -10,36 +10,36 @@ public interface IContentService {
 //     * 保存文章
 //     * @param contentVo contentVo
 //     */
-//    void insertContent(ContentVo contentVo);
+//    void insertContent(Article contentVo);
 
     /**
      * 发布文章
      * @param contents
      */
-    String publish(ContentVo contents);
+    String publish(Article contents);
 
     /**
      *查询文章返回多条数据
      * @param p 当前页
      * @param limit 每页条数
-     * @return ContentVo
+     * @return Article
      */
-    PageInfo<ContentVo> getContents(Integer p, Integer limit);
+    PageInfo<Article> getContents(Integer p, Integer limit);
 
 
     /**
      * 根据id或slug获取文章
      *
      * @param id id
-     * @return ContentVo
+     * @return Article
      */
-    ContentVo getContents(String id);
+    Article getContents(String id);
 
     /**
      * 根据主键更新
-     * @param contentVo contentVo
+     * @param article article
      */
-    void updateContentByCid(ContentVo contentVo);
+    void updateContentByCid(Article article);
 
 
     /**
@@ -47,18 +47,18 @@ public interface IContentService {
      * @param mid mid
      * @param page page
      * @param limit limit
-     * @return ContentVo
+     * @return Article
      */
-    PageInfo<ContentVo> getArticles(Integer mid, int page, int limit);
+    PageInfo<Article> getArticles(Integer mid, int page, int limit);
 
     /**
      * 搜索、分页
      * @param keyword keyword
      * @param page page
      * @param limit limit
-     * @return ContentVo
+     * @return Article
      */
-    PageInfo<ContentVo> getArticles(String keyword, Integer page, Integer limit);
+    PageInfo<Article> getArticles(String keyword, Integer page, Integer limit);
 
 
     /**
@@ -67,7 +67,7 @@ public interface IContentService {
      * @param limit
      * @return
      */
-    PageInfo<ContentVo> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit);
+    PageInfo<Article> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit);
     /**
      * 根据文章id删除
      * @param cid
@@ -78,7 +78,7 @@ public interface IContentService {
      * 编辑文章
      * @param contents
      */
-    String updateArticle(ContentVo contents);
+    String updateArticle(Article contents);
 
 
     /**

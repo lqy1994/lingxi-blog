@@ -6,10 +6,10 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.CommentBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +74,7 @@ public class IndexController extends BaseController {
     @GetMapping(value = "page/{p}")
     public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
-        PageInfo<ContentVo> articles = contentService.getContents(p, limit);
+        PageInfo<Article> articles = contentService.getContents(p, limit);
         request.setAttribute("articles", articles);
         if (p > 1) {
             this.title(request, "第" + p + "页");
@@ -92,7 +91,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"article/{cid}", "article/{cid}.html"})
     public String getArticle(HttpServletRequest request, @PathVariable String cid) {
-        ContentVo contents = contentService.getContents(cid);
+        Article contents = contentService.getContents(cid);
         if (null == contents || "draft".equals(contents.getStatus())) {
             return this.render_404();
         }
@@ -114,7 +113,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = {"article/{cid}/preview", "article/{cid}.html"})
     public String articlePreview(HttpServletRequest request, @PathVariable String cid) {
-        ContentVo contents = contentService.getContents(cid);
+        Article contents = contentService.getContents(cid);
         if (null == contents) {
             return this.render_404();
         }
@@ -133,7 +132,7 @@ public class IndexController extends BaseController {
      * @param request
      * @param contents
      */
-    private void completeArticle(HttpServletRequest request, ContentVo contents) {
+    private void completeArticle(HttpServletRequest request, Article contents) {
         if (contents.getAllowComment()) {
             String cp = request.getParameter("cp");
             if (StringUtils.isBlank(cp)) {
@@ -161,45 +160,45 @@ public class IndexController extends BaseController {
      */
     @PostMapping(value = "comment")
     @ResponseBody
-    public RestResponseBo comment(HttpServletRequest request, HttpServletResponse response,
-                                  @RequestParam Integer cid, @RequestParam Integer coid,
-                                  @RequestParam String author, @RequestParam String mail,
-                                  @RequestParam String url, @RequestParam String text, @RequestParam String _csrf_token) {
+    public ApiResponse comment(HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam Integer cid, @RequestParam Integer coid,
+                               @RequestParam String author, @RequestParam String mail,
+                               @RequestParam String url, @RequestParam String text, @RequestParam String _csrf_token) {
 
         String ref = request.getHeader("Referer");
         if (StringUtils.isBlank(ref) || StringUtils.isBlank(_csrf_token)) {
-            return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
+            return ApiResponse.fail(ErrorCode.BAD_REQUEST);
         }
 
         String token = cache.hget(Types.CSRF_TOKEN.getType(), _csrf_token);
         if (StringUtils.isBlank(token)) {
-            return RestResponseBo.fail(ErrorCode.BAD_REQUEST);
+            return ApiResponse.fail(ErrorCode.BAD_REQUEST);
         }
 
         if (null == cid || StringUtils.isBlank(text)) {
-            return RestResponseBo.fail("请输入完整后评论");
+            return ApiResponse.fail("请输入完整后评论");
         }
 
         if (StringUtils.isNotBlank(author) && author.length() > 50) {
-            return RestResponseBo.fail("姓名过长");
+            return ApiResponse.fail("姓名过长");
         }
 
         if (StringUtils.isNotBlank(mail) && !TaleUtils.isEmail(mail)) {
-            return RestResponseBo.fail("请输入正确的邮箱格式");
+            return ApiResponse.fail("请输入正确的邮箱格式");
         }
 
         if (StringUtils.isNotBlank(url) && !PatternKit.isURL(url)) {
-            return RestResponseBo.fail("请输入正确的URL格式");
+            return ApiResponse.fail("请输入正确的URL格式");
         }
 
         if (text.length() > 200) {
-            return RestResponseBo.fail("请输入200个字符以内的评论");
+            return ApiResponse.fail("请输入200个字符以内的评论");
         }
 
         String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
         Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
         if (null != count && count > 0) {
-            return RestResponseBo.fail("您发表评论太快了，请过会再试");
+            return ApiResponse.fail("您发表评论太快了，请过会再试");
         }
 
         author = TaleUtils.cleanXSS(author);
@@ -208,7 +207,7 @@ public class IndexController extends BaseController {
         author = EmojiParser.parseToAliases(author);
         text = EmojiParser.parseToAliases(text);
 
-        CommentVo comments = new CommentVo();
+        Comment comments = new Comment();
         comments.setAuthor(author);
         comments.setCid(cid);
         comments.setIp(request.getRemoteAddr());
@@ -226,13 +225,13 @@ public class IndexController extends BaseController {
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
-                return RestResponseBo.fail(result);
+                return ApiResponse.fail(result);
             }
-            return RestResponseBo.ok();
+            return ApiResponse.ok();
         } catch (Exception e) {
             String msg = "评论发布失败";
             LOGGER.error(msg, e);
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
     }
 
@@ -256,7 +255,7 @@ public class IndexController extends BaseController {
             return this.render_404();
         }
 
-        PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<Article> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
 
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
@@ -286,7 +285,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "links")
     public String links(HttpServletRequest request) {
-        List<MetaVo> links = metaService.getMetas(Types.LINK.getType());
+        List<Meta> links = metaService.getMetas(Types.LINK.getType());
         request.setAttribute("links", links);
         return this.render("links");
     }
@@ -296,7 +295,7 @@ public class IndexController extends BaseController {
      */
     @GetMapping(value = "/{pagename}")
     public String page(@PathVariable String pagename, HttpServletRequest request) {
-        ContentVo contents = contentService.getContents(pagename);
+        Article contents = contentService.getContents(pagename);
         if (null == contents) {
             return this.render_404();
         }
@@ -328,7 +327,7 @@ public class IndexController extends BaseController {
     @GetMapping(value = "search/{keyword}/{page}")
     public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
-        PageInfo<ContentVo> articles = contentService.getArticles(keyword, page, limit);
+        PageInfo<Article> articles = contentService.getArticles(keyword, page, limit);
         request.setAttribute("articles", articles);
         request.setAttribute("type", "搜索");
         request.setAttribute("keyword", keyword);
@@ -348,7 +347,7 @@ public class IndexController extends BaseController {
         }
         hits = null == hits ? 1 : hits + 1;
         if (hits >= WebConst.HIT_EXCEED) {
-            ContentVo temp = new ContentVo();
+            Article temp = new Article();
             temp.setCid(cid);
             temp.setHits(chits + hits);
             contentService.updateContentByCid(temp);
@@ -389,7 +388,7 @@ public class IndexController extends BaseController {
             return this.render_404();
         }
 
-        PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
+        PageInfo<Article> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
         request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
         request.setAttribute("type", "标签");

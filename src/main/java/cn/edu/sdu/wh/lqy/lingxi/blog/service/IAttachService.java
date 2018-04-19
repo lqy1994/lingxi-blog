@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Attach;
 import com.github.pagehelper.PageInfo;
 
 public interface IAttachService {
@@ -10,7 +10,7 @@ public interface IAttachService {
      * @param limit
      * @return
      */
-    PageInfo<AttachVo> getAttachs(Integer page, Integer limit);
+    PageInfo<Attach> getAttachs(Integer page, Integer limit);
 
     /**
      * 保存附件
@@ -27,7 +27,7 @@ public interface IAttachService {
      * @param id
      * @return
      */
-    AttachVo selectById(Integer id);
+    Attach selectById(Integer id);
 
     /**
      * 删除附件

@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 
 import java.io.Serializable;
 
-public class CommentVo implements Serializable {
+public class Comment implements Serializable {
     /**
      * comment表主键
      */

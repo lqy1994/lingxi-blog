@@ -4,10 +4,10 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import com.github.pagehelper.PageInfo;
@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller()
@@ -37,7 +36,7 @@ public class PageController extends BaseController {
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.setOrderByClause("created desc");
         contentVoExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
-        PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, 1, WebConst.MAX_POSTS);
+        PageInfo<Article> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, 1, WebConst.MAX_POSTS);
         request.setAttribute("articles", contentsPaginator);
         return "admin/page_list";
     }
@@ -49,19 +48,19 @@ public class PageController extends BaseController {
 
     @GetMapping(value = "/{cid}")
     public String editPage(@PathVariable String cid, HttpServletRequest request) {
-        ContentVo contents = contentsService.getContents(cid);
+        Article contents = contentsService.getContents(cid);
         request.setAttribute("contents", contents);
         return "admin/page_edit";
     }
 
     @PostMapping(value = "publish")
     @ResponseBody
-    public RestResponseBo publishPage(@RequestParam String title, @RequestParam String content,
-                                      @RequestParam String status, @RequestParam String slug,
-                                      @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
+    public ApiResponse publishPage(@RequestParam String title, @RequestParam String content,
+                                   @RequestParam String status, @RequestParam String slug,
+                                   @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
 
-        UserVo users = this.user(request);
-        ContentVo contents = new ContentVo();
+        User users = this.user(request);
+        Article contents = new Article();
         contents.setTitle(title);
         contents.setContent(content);
         contents.setStatus(status);
@@ -76,20 +75,20 @@ public class PageController extends BaseController {
         contents.setAuthorId(users.getUid());
         String result = contentsService.publish(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
-            return RestResponseBo.fail(result);
+            return ApiResponse.fail(result);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
     @PostMapping(value = "modify")
     @ResponseBody
-    public RestResponseBo modifyArticle(@RequestParam Integer cid, @RequestParam String title,
-                                        @RequestParam String content,
-                                        @RequestParam String status, @RequestParam String slug,
-                                        @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
+    public ApiResponse modifyArticle(@RequestParam Integer cid, @RequestParam String title,
+                                     @RequestParam String content,
+                                     @RequestParam String status, @RequestParam String slug,
+                                     @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
 
-        UserVo users = this.user(request);
-        ContentVo contents = new ContentVo();
+        User users = this.user(request);
+        Article contents = new Article();
         contents.setCid(cid);
         contents.setTitle(title);
         contents.setContent(content);
@@ -105,19 +104,19 @@ public class PageController extends BaseController {
         contents.setAuthorId(users.getUid());
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
-            return RestResponseBo.fail(result);
+            return ApiResponse.fail(result);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam int cid, HttpServletRequest request) {
+    public ApiResponse delete(@RequestParam int cid, HttpServletRequest request) {
         String result = contentsService.deleteByCid(cid);
         logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid(request));
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
-            return RestResponseBo.fail(result);
+            return ApiResponse.fail(result);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 }

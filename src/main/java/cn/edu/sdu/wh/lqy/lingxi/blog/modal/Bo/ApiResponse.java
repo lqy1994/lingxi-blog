@@ -3,7 +3,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo;
 /**
  * rest返回对象
  */
-public class RestResponseBo<T> {
+public class ApiResponse<T> {
 
     /**
      * 服务器响应数据
@@ -30,35 +30,35 @@ public class RestResponseBo<T> {
      */
     private long timestamp;
 
-    public RestResponseBo() {
+    public ApiResponse() {
         this.timestamp = System.currentTimeMillis() / 1000;
     }
 
-    public RestResponseBo(boolean success) {
+    public ApiResponse(boolean success) {
         this.timestamp = System.currentTimeMillis() / 1000;
         this.success = success;
     }
 
-    public RestResponseBo(boolean success, T payload) {
+    public ApiResponse(boolean success, T payload) {
         this.timestamp = System.currentTimeMillis() / 1000;
         this.success = success;
         this.payload = payload;
     }
 
-    public RestResponseBo(boolean success, T payload, int code) {
+    public ApiResponse(boolean success, T payload, int code) {
         this.timestamp = System.currentTimeMillis() / 1000;
         this.success = success;
         this.payload = payload;
         this.code = code;
     }
 
-    public RestResponseBo(boolean success, String msg) {
+    public ApiResponse(boolean success, String msg) {
         this.timestamp = System.currentTimeMillis() / 1000;
         this.success = success;
         this.msg = msg;
     }
 
-    public RestResponseBo(boolean success, String msg, int code) {
+    public ApiResponse(boolean success, String msg, int code) {
         this.timestamp = System.currentTimeMillis() / 1000;
         this.success = success;
         this.msg = msg;
@@ -105,36 +105,36 @@ public class RestResponseBo<T> {
         this.timestamp = timestamp;
     }
 
-    public static RestResponseBo ok() {
-        return new RestResponseBo(true);
+    public static ApiResponse ok() {
+        return new ApiResponse(true);
     }
 
-    public static <T> RestResponseBo ok(T payload) {
-        return new RestResponseBo(true, payload);
+    public static <T> ApiResponse ok(T payload) {
+        return new ApiResponse(true, payload);
     }
 
-    public static <T> RestResponseBo ok(int code) {
-        return new RestResponseBo(true, null, code);
+    public static <T> ApiResponse ok(int code) {
+        return new ApiResponse(true, null, code);
     }
 
-    public static <T> RestResponseBo ok(T payload, int code) {
-        return new RestResponseBo(true, payload, code);
+    public static <T> ApiResponse ok(T payload, int code) {
+        return new ApiResponse(true, payload, code);
     }
 
-    public static RestResponseBo fail() {
-        return new RestResponseBo(false);
+    public static ApiResponse fail() {
+        return new ApiResponse(false);
     }
 
-    public static RestResponseBo fail(String msg) {
-        return new RestResponseBo(false, msg);
+    public static ApiResponse fail(String msg) {
+        return new ApiResponse(false, msg);
     }
 
-    public static RestResponseBo fail(int code) {
-        return new RestResponseBo(false, null, code);
+    public static ApiResponse fail(int code) {
+        return new ApiResponse(false, null, code);
     }
 
-    public static RestResponseBo fail(int code, String msg) {
-        return new RestResponseBo(false, msg, code);
+    public static ApiResponse fail(int code, String msg) {
+        return new ApiResponse(false, msg, code);
     }
 
 }

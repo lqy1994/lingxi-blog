@@ -3,9 +3,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -29,7 +28,7 @@ import java.io.IOException;
  */
 @Controller
 @RequestMapping("/admin")
-@Transactional(rollbackFor = TipException.class)
+@Transactional(rollbackFor = LingXiException.class)
 public class AuthController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
@@ -47,15 +46,15 @@ public class AuthController extends BaseController {
 
     @PostMapping(value = "login")
     @ResponseBody
-    public RestResponseBo doLogin(@RequestParam String username,
-                                  @RequestParam String password,
-                                  @RequestParam(required = false) String remeber_me,
-                                  HttpServletRequest request,
-                                  HttpServletResponse response) {
+    public ApiResponse doLogin(@RequestParam String username,
+                               @RequestParam String password,
+                               @RequestParam(required = false) String remeber_me,
+                               HttpServletRequest request,
+                               HttpServletResponse response) {
 
         Integer error_count = cache.get("login_error_count");
         try {
-            UserVo user = usersService.login(username, password);
+            User user = usersService.login(username, password);
             request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeber_me)) {
                 TaleUtils.setCookie(response, user.getUid());
@@ -64,18 +63,18 @@ public class AuthController extends BaseController {
         } catch (Exception e) {
             error_count = null == error_count ? 1 : error_count + 1;
             if (error_count > 3) {
-                return RestResponseBo.fail("您输入密码已经错误超过3次，请10分钟后尝试");
+                return ApiResponse.fail("您输入密码已经错误超过3次，请10分钟后尝试");
             }
             cache.set("login_error_count", error_count, 10 * 60);
             String msg = "登录失败";
-            if (e instanceof TipException) {
+            if (e instanceof LingXiException) {
                 msg = e.getMessage();
             } else {
                 LOGGER.error(msg, e);
             }
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
     /**

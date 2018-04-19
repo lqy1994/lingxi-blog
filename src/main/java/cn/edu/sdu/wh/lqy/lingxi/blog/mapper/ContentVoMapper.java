@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -17,30 +17,30 @@ public interface ContentVoMapper {
 
     int deleteByPrimaryKey(Integer cid);
 
-    int insert(ContentVo record);
+    int insert(Article record);
 
-    int insertSelective(ContentVo record);
+    int insertSelective(Article record);
 
-    List<ContentVo> selectByExampleWithBLOBs(ContentVoExample example);
+    List<Article> selectByExampleWithBLOBs(ContentVoExample example);
 
-    List<ContentVo> selectByExample(ContentVoExample example);
+    List<Article> selectByExample(ContentVoExample example);
 
-    ContentVo selectByPrimaryKey(Integer cid);
+    Article selectByPrimaryKey(Integer cid);
 
-    int updateByExampleSelective(@Param("record") ContentVo record, @Param("example") ContentVoExample example);
+    int updateByExampleSelective(@Param("record") Article record, @Param("example") ContentVoExample example);
 
-    int updateByExampleWithBLOBs(@Param("record") ContentVo record, @Param("example") ContentVoExample example);
+    int updateByExampleWithBLOBs(@Param("record") Article record, @Param("example") ContentVoExample example);
 
-    int updateByExample(@Param("record") ContentVo record, @Param("example") ContentVoExample example);
+    int updateByExample(@Param("record") Article record, @Param("example") ContentVoExample example);
 
-    int updateByPrimaryKeySelective(ContentVo record);
+    int updateByPrimaryKeySelective(Article record);
 
-    int updateByPrimaryKeyWithBLOBs(ContentVo record);
+    int updateByPrimaryKeyWithBLOBs(Article record);
 
-    int updateByPrimaryKey(ContentVo record);
+    int updateByPrimaryKey(Article record);
 
     List<ArchiveBo> findReturnArchiveBo();
 
-    List<ContentVo> findByCatalog(Integer mid);
+    List<Article> findByCatalog(Integer mid);
 
 }

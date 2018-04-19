@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.MapCache;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 
@@ -36,7 +36,7 @@ public abstract class BaseController {
      * @param request
      * @return
      */
-    public UserVo user(HttpServletRequest request) {
+    public User user(HttpServletRequest request) {
         return TaleUtils.getLoginUser(request);
     }
 

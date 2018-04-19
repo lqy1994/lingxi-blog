@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 
 import java.io.Serializable;
 
-public class LogVo implements Serializable {
+public class Log implements Serializable {
     /**
      * 日志主键
      */

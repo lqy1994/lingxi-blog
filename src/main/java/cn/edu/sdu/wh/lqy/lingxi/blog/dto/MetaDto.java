@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.dto;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 
-public class MetaDto extends MetaVo {
+public class MetaDto extends Meta {
 
     private int count;
 

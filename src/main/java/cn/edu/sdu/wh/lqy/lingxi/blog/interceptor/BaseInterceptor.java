@@ -2,8 +2,8 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.interceptor;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.*;
@@ -48,7 +48,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
 
         //请求拦截处理
-        UserVo user = TaleUtils.getLoginUser(request);
+        User user = TaleUtils.getLoginUser(request);
         if (null == user) {
             Integer uid = TaleUtils.getCookieUid(request);
             if (null != uid) {
@@ -73,7 +73,7 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        OptionVo ov = optionService.getOptionByName("site_record");
+        Option ov = optionService.getOptionByName("site_record");
         httpServletRequest.setAttribute("commons", commons);//一些工具类和公共方法
         httpServletRequest.setAttribute("option", ov);
         httpServletRequest.setAttribute("adminCommons", adminCommons);

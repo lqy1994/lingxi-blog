@@ -4,8 +4,8 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ContentVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -45,7 +45,7 @@ public class ContentServiceImpl implements IContentService {
 
     @Override
     @Transactional
-    public String publish(ContentVo contents) {
+    public String publish(Article contents) {
         if (null == contents) {
             return "文章对象为空";
         }
@@ -97,60 +97,60 @@ public class ContentServiceImpl implements IContentService {
     }
 
     @Override
-    public PageInfo<ContentVo> getContents(Integer p, Integer limit) {
+    public PageInfo<Article> getContents(Integer p, Integer limit) {
         LOGGER.debug("Enter getContents method");
         ContentVoExample example = new ContentVoExample();
         example.setOrderByClause("created desc");
         example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
         PageHelper.startPage(p, limit);
-        List<ContentVo> data = contentVoMapper.selectByExampleWithBLOBs(example);
-        PageInfo<ContentVo> pageInfo = new PageInfo<>(data);
+        List<Article> data = contentVoMapper.selectByExampleWithBLOBs(example);
+        PageInfo<Article> pageInfo = new PageInfo<>(data);
         LOGGER.debug("Exit getContents method");
         return pageInfo;
     }
 
     @Override
-    public ContentVo getContents(String id) {
+    public Article getContents(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                ContentVo contentVo = contentVoMapper.selectByPrimaryKey(Integer.valueOf(id));
-                if (contentVo != null) {
-                    contentVo.setHits(contentVo.getHits() + 1);
-                    contentVoMapper.updateByPrimaryKey(contentVo);
+                Article article = contentVoMapper.selectByPrimaryKey(Integer.valueOf(id));
+                if (article != null) {
+                    article.setHits(article.getHits() + 1);
+                    contentVoMapper.updateByPrimaryKey(article);
                 }
-                return contentVo;
+                return article;
             } else {
                 ContentVoExample contentVoExample = new ContentVoExample();
                 contentVoExample.createCriteria().andSlugEqualTo(id);
-                List<ContentVo> contentVos = contentVoMapper.selectByExampleWithBLOBs(contentVoExample);
-                if (contentVos.size() != 1) {
-                    throw new TipException("query content by id and return is not one");
+                List<Article> articles = contentVoMapper.selectByExampleWithBLOBs(contentVoExample);
+                if (articles.size() != 1) {
+                    throw new LingXiException("query content by id and return is not one");
                 }
-                return contentVos.get(0);
+                return articles.get(0);
             }
         }
         return null;
     }
 
     @Override
-    public void updateContentByCid(ContentVo contentVo) {
-        if (null != contentVo && null != contentVo.getCid()) {
-            contentVoMapper.updateByPrimaryKeySelective(contentVo);
+    public void updateContentByCid(Article article) {
+        if (null != article && null != article.getCid()) {
+            contentVoMapper.updateByPrimaryKeySelective(article);
         }
     }
 
     @Override
-    public PageInfo<ContentVo> getArticles(Integer mid, int page, int limit) {
+    public PageInfo<Article> getArticles(Integer mid, int page, int limit) {
         int total = metaVoMapper.countWithSql(mid);
         PageHelper.startPage(page, limit);
-        List<ContentVo> list = contentVoMapper.findByCatalog(mid);
-        PageInfo<ContentVo> paginator = new PageInfo<>(list);
+        List<Article> list = contentVoMapper.findByCatalog(mid);
+        PageInfo<Article> paginator = new PageInfo<>(list);
         paginator.setTotal(total);
         return paginator;
     }
 
     @Override
-    public PageInfo<ContentVo> getArticles(String keyword, Integer page, Integer limit) {
+    public PageInfo<Article> getArticles(String keyword, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         ContentVoExample contentVoExample = new ContentVoExample();
         ContentVoExample.Criteria criteria = contentVoExample.createCriteria();
@@ -158,21 +158,21 @@ public class ContentServiceImpl implements IContentService {
         criteria.andStatusEqualTo(Types.PUBLISH.getType());
         criteria.andTitleLike("%" + keyword + "%");
         contentVoExample.setOrderByClause("created desc");
-        List<ContentVo> contentVos = contentVoMapper.selectByExampleWithBLOBs(contentVoExample);
-        return new PageInfo<>(contentVos);
+        List<Article> articles = contentVoMapper.selectByExampleWithBLOBs(contentVoExample);
+        return new PageInfo<>(articles);
     }
 
     @Override
-    public PageInfo<ContentVo> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit) {
+    public PageInfo<Article> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        List<ContentVo> contentVos = contentVoMapper.selectByExampleWithBLOBs(commentVoExample);
-        return new PageInfo<>(contentVos);
+        List<Article> articles = contentVoMapper.selectByExampleWithBLOBs(commentVoExample);
+        return new PageInfo<>(articles);
     }
 
     @Override
     @Transactional
     public String deleteByCid(Integer cid) {
-        ContentVo contents = this.getContents(cid + "");
+        Article contents = this.getContents(cid + "");
         if (null != contents) {
             contentVoMapper.deleteByPrimaryKey(cid);
             relationshipService.deleteById(cid, null);
@@ -183,16 +183,16 @@ public class ContentServiceImpl implements IContentService {
 
     @Override
     public void updateCategory(String ordinal, String newCatefory) {
-        ContentVo contentVo = new ContentVo();
-        contentVo.setCategories(newCatefory);
+        Article article = new Article();
+        article.setCategories(newCatefory);
         ContentVoExample example = new ContentVoExample();
         example.createCriteria().andCategoriesEqualTo(ordinal);
-        contentVoMapper.updateByExampleSelective(contentVo, example);
+        contentVoMapper.updateByExampleSelective(article, example);
     }
 
     @Override
     @Transactional
-    public String updateArticle(ContentVo contents) {
+    public String updateArticle(Article contents) {
         if (null == contents) {
             return "文章对象为空";
         }

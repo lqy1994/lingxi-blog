@@ -2,8 +2,8 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AttachController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
@@ -78,7 +78,7 @@ public class TaleUtils {
 //            默认是classPath路径
             InputStream resourceAsStream = new FileInputStream(fileName);
             properties.load(resourceAsStream);
-        } catch (TipException | IOException e) {
+        } catch (LingXiException | IOException e) {
             LOGGER.error("get properties file fail={}", e.getMessage());
         }
         return properties;
@@ -140,12 +140,12 @@ public class TaleUtils {
      *
      * @return
      */
-    public static UserVo getLoginUser(HttpServletRequest request) {
+    public static User getLoginUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
         if (null == session) {
             return null;
         }
-        return (UserVo) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+        return (User) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
     }
 
 

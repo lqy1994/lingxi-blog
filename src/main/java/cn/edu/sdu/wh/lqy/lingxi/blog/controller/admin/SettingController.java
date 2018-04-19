@@ -3,10 +3,10 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.BackResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISiteService;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +42,7 @@ public class SettingController extends BaseController {
      */
     @GetMapping(value = "")
     public String setting(HttpServletRequest request) {
-        List<OptionVo> voList = optionService.getOptions();
+        List<Option> voList = optionService.getOptions();
         Map<String, String> options = new HashMap<>();
         voList.forEach((option) -> {
             options.put(option.getName(), option.getValue());
@@ -60,7 +59,7 @@ public class SettingController extends BaseController {
      */
     @PostMapping(value = "")
     @ResponseBody
-    public RestResponseBo saveSetting(@RequestParam(required = false) String site_theme, HttpServletRequest request) {
+    public ApiResponse saveSetting(@RequestParam(required = false) String site_theme, HttpServletRequest request) {
         try {
             Map<String, String[]> parameterMap = request.getParameterMap();
             Map<String, String> querys = new HashMap<>();
@@ -73,10 +72,10 @@ public class SettingController extends BaseController {
                 BaseController.THEME = "themes/" + site_theme;
             }
             logService.insertLog(LogActions.SYS_SETTING.getAction(), GsonUtils.toJsonString(querys), request.getRemoteAddr(), this.getUid(request));
-            return RestResponseBo.ok();
+            return ApiResponse.ok();
         } catch (Exception e) {
             String msg = "保存设置失败";
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
     }
 
@@ -88,23 +87,23 @@ public class SettingController extends BaseController {
      */
     @PostMapping(value = "backup")
     @ResponseBody
-    public RestResponseBo backup(@RequestParam String bk_type, @RequestParam String bk_path,
-                                 HttpServletRequest request) {
+    public ApiResponse backup(@RequestParam String bk_type, @RequestParam String bk_path,
+                              HttpServletRequest request) {
         if (StringUtils.isBlank(bk_type)) {
-            return RestResponseBo.fail("请确认信息输入完整");
+            return ApiResponse.fail("请确认信息输入完整");
         }
         try {
             BackResponseBo backResponse = siteService.backup(bk_type, bk_path, "yyyyMMddHHmm");
             logService.insertLog(LogActions.SYS_BACKUP.getAction(), null, request.getRemoteAddr(), this.getUid(request));
-            return RestResponseBo.ok(backResponse);
+            return ApiResponse.ok(backResponse);
         } catch (Exception e) {
             String msg = "备份失败";
-            if (e instanceof TipException) {
+            if (e instanceof LingXiException) {
                 msg = e.getMessage();
             } else {
                 LOGGER.error(msg, e);
             }
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
     }
 

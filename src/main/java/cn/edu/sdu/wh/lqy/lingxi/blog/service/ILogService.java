@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ public interface ILogService {
     /**
      * 保存操作日志
      *
-     * @param logVo
+     * @param log
      */
-    void insertLog(LogVo logVo);
+    void insertLog(Log log);
 
     /**
      *  保存
@@ -28,5 +28,5 @@ public interface ILogService {
      * @param limit 每页条数
      * @return 日志
      */
-    List<LogVo> getLogs(int page, int limit);
+    List<Log> getLogs(int page, int limit);
 }

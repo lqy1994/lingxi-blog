@@ -8,7 +8,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ContentVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.BackResponseBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.StatisticsBo;
@@ -49,7 +49,7 @@ public class SiteServiceImpl implements ISiteService {
     private MetaVoMapper metaVoMapper;
 
     @Override
-    public List<CommentVo> recentComments(int limit) {
+    public List<Comment> recentComments(int limit) {
         LOGGER.debug("Enter recentComments method:limit={}", limit);
         if (limit < 0 || limit > 10) {
             limit = 10;
@@ -57,13 +57,13 @@ public class SiteServiceImpl implements ISiteService {
         CommentVoExample example = new CommentVoExample();
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<CommentVo> byPage = commentVoMapper.selectByExampleWithBLOBs(example);
+        List<Comment> byPage = commentVoMapper.selectByExampleWithBLOBs(example);
         LOGGER.debug("Exit recentComments method");
         return byPage;
     }
 
     @Override
-    public List<ContentVo> recentContents(int limit) {
+    public List<Article> recentContents(int limit) {
         LOGGER.debug("Enter recentContents method");
         if (limit < 0 || limit > 10) {
             limit = 10;
@@ -72,7 +72,7 @@ public class SiteServiceImpl implements ISiteService {
         example.createCriteria().andStatusEqualTo(Types.PUBLISH.getType()).andTypeEqualTo(Types.ARTICLE.getType());
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<ContentVo> list = contentVoMapper.selectByExample(example);
+        List<Article> list = contentVoMapper.selectByExample(example);
         LOGGER.debug("Exit recentContents method");
         return list;
     }
@@ -82,10 +82,10 @@ public class SiteServiceImpl implements ISiteService {
         BackResponseBo backResponse = new BackResponseBo();
         if (bk_type.equals("attach")) {
             if (StringUtils.isBlank(bk_path)) {
-                throw new TipException("请输入备份文件存储路径");
+                throw new LingXiException("请输入备份文件存储路径");
             }
             if (!(new File(bk_path)).isDirectory()) {
-                throw new TipException("请输入一个存在的目录");
+                throw new LingXiException("请输入一个存在的目录");
             }
             String bkAttachDir = AttachController.CLASSPATH + "upload";
             String bkThemesDir = AttachController.CLASSPATH + "templates/themes";
@@ -123,7 +123,7 @@ public class SiteServiceImpl implements ISiteService {
             ZipUtils.zipFile(sqlFile.getPath(), zip);
 
             if (!sqlFile.exists()) {
-                throw new TipException("数据库备份失败");
+                throw new LingXiException("数据库备份失败");
             }
             sqlFile.delete();
 
@@ -141,7 +141,7 @@ public class SiteServiceImpl implements ISiteService {
     }
 
     @Override
-    public CommentVo getComment(Integer coid) {
+    public Comment getComment(Integer coid) {
         if (null != coid) {
             return commentVoMapper.selectByPrimaryKey(coid);
         }
@@ -188,8 +188,8 @@ public class SiteServiceImpl implements ISiteService {
                 int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
                 criteria.andCreatedGreaterThan(start);
                 criteria.andCreatedLessThan(end);
-                List<ContentVo> contentss = contentVoMapper.selectByExample(example);
-                archive.setArticles(contentss);
+                List<Article> articleList = contentVoMapper.selectByExample(example);
+                archive.setArticles(articleList);
             });
         }
         LOGGER.debug("Exit getArchives method");

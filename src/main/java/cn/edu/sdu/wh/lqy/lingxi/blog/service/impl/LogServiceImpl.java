@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
@@ -23,13 +23,13 @@ public class LogServiceImpl implements ILogService {
     private LogVoMapper logVoMapper;
 
     @Override
-    public void insertLog(LogVo logVo) {
-        logVoMapper.insert(logVo);
+    public void insertLog(Log log) {
+        logVoMapper.insert(log);
     }
 
     @Override
     public void insertLog(String action, String data, String ip, Integer authorId) {
-        LogVo logs = new LogVo();
+        Log logs = new Log();
         logs.setAction(action);
         logs.setData(data);
         logs.setIp(ip);
@@ -39,7 +39,7 @@ public class LogServiceImpl implements ILogService {
     }
 
     @Override
-    public List<LogVo> getLogs(int page, int limit) {
+    public List<Log> getLogs(int page, int limit) {
         LOGGER.debug("Enter getLogs method:page={},linit={}",page,limit);
         if (page <= 0) {
             page = 1;
@@ -50,8 +50,8 @@ public class LogServiceImpl implements ILogService {
         LogVoExample logVoExample = new LogVoExample();
         logVoExample.setOrderByClause("id desc");
         PageHelper.startPage((page - 1) * limit, limit);
-        List<LogVo> logVos = logVoMapper.selectByExample(logVoExample);
+        List<Log> logs = logVoMapper.selectByExample(logVoExample);
         LOGGER.debug("Exit getLogs method");
-        return logVos;
+        return logs;
     }
 }

@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
@@ -143,7 +143,7 @@ public final class Commons {
      * @param contents
      * @return
      */
-    public static String permalink(ContentVo contents) {
+    public static String permalink(Article contents) {
         return permalink(contents.getCid(), contents.getSlug());
     }
 
@@ -270,7 +270,7 @@ public final class Commons {
      *
      * @return
      */
-    public static String show_thumb(ContentVo contents) {
+    public static String show_thumb(Article contents) {
         int cid = contents.getCid();
         int size = cid % 20;
         size = size == 0 ? 1 : size;

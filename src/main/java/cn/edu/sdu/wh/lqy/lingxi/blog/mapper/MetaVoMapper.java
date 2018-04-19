@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -17,21 +17,21 @@ public interface MetaVoMapper {
 
     int deleteByPrimaryKey(Integer mid);
 
-    int insert(MetaVo record);
+    int insert(Meta record);
 
-    int insertSelective(MetaVo record);
+    int insertSelective(Meta record);
 
-    List<MetaVo> selectByExample(MetaVoExample example);
+    List<Meta> selectByExample(MetaVoExample example);
 
-    MetaVo selectByPrimaryKey(Integer mid);
+    Meta selectByPrimaryKey(Integer mid);
 
-    int updateByExampleSelective(@Param("record") MetaVo record, @Param("example") MetaVoExample example);
+    int updateByExampleSelective(@Param("record") Meta record, @Param("example") MetaVoExample example);
 
-    int updateByExample(@Param("record") MetaVo record, @Param("example") MetaVoExample example);
+    int updateByExample(@Param("record") Meta record, @Param("example") MetaVoExample example);
 
-    int updateByPrimaryKeySelective(MetaVo record);
+    int updateByPrimaryKeySelective(Meta record);
 
-    int updateByPrimaryKey(MetaVo record);
+    int updateByPrimaryKey(Meta record);
 
     List<MetaDto> selectFromSql(Map<String, Object> paraMap);
 

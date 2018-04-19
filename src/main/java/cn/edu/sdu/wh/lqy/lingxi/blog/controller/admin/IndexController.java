@@ -3,13 +3,13 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.TipException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.StatisticsBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISiteService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
@@ -23,7 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -33,7 +32,7 @@ import java.util.List;
  */
 @Controller("adminIndexController")
 @RequestMapping("/admin")
-@Transactional(rollbackFor = TipException.class)
+@Transactional(rollbackFor = LingXiException.class)
 public class IndexController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
@@ -53,14 +52,14 @@ public class IndexController extends BaseController {
     @GetMapping(value = {"","/index"})
     public String index(HttpServletRequest request){
         LOGGER.info("Enter admin index method");
-        List<CommentVo> comments = siteService.recentComments(5);
-        List<ContentVo> contents = siteService.recentContents(5);
+        List<Comment> comments = siteService.recentComments(5);
+        List<Article> articles = siteService.recentContents(5);
         StatisticsBo statistics = siteService.getStatistics();
         // 取最新的20条日志
-        List<LogVo> logs = logService.getLogs(1, 5);
+        List<Log> logs = logService.getLogs(1, 5);
 
         request.setAttribute("comments", comments);
-        request.setAttribute("articles", contents);
+        request.setAttribute("articles", articles);
         request.setAttribute("statistics", statistics);
         request.setAttribute("logs", logs);
         LOGGER.info("Exit admin index method");
@@ -81,10 +80,10 @@ public class IndexController extends BaseController {
      */
     @PostMapping(value = "/profile")
     @ResponseBody
-    public RestResponseBo saveProfile(@RequestParam String screenName, @RequestParam String email, HttpServletRequest request, HttpSession session) {
-        UserVo users = this.user(request);
+    public ApiResponse saveProfile(@RequestParam String screenName, @RequestParam String email, HttpServletRequest request, HttpSession session) {
+        User users = this.user(request);
         if (StringUtils.isNotBlank(screenName) && StringUtils.isNotBlank(email)) {
-            UserVo temp = new UserVo();
+            User temp = new User();
             temp.setUid(users.getUid());
             temp.setScreenName(screenName);
             temp.setEmail(email);
@@ -92,12 +91,12 @@ public class IndexController extends BaseController {
             logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            UserVo original= (UserVo)session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            User original= (User)session.getAttribute(WebConst.LOGIN_SESSION_KEY);
             original.setScreenName(screenName);
             original.setEmail(email);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY,original);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
     /**
@@ -105,21 +104,21 @@ public class IndexController extends BaseController {
      */
     @PostMapping(value = "/password")
     @ResponseBody
-    public RestResponseBo upPwd(@RequestParam String oldPassword, @RequestParam String password, HttpServletRequest request, HttpSession session) {
-        UserVo users = this.user(request);
+    public ApiResponse upPwd(@RequestParam String oldPassword, @RequestParam String password, HttpServletRequest request, HttpSession session) {
+        User users = this.user(request);
         if (StringUtils.isBlank(oldPassword) || StringUtils.isBlank(password)) {
-            return RestResponseBo.fail("请确认信息输入完整");
+            return ApiResponse.fail("请确认信息输入完整");
         }
 
         if (!users.getPassword().equals(TaleUtils.MD5encode(users.getUsername() + oldPassword))) {
-            return RestResponseBo.fail("旧密码错误");
+            return ApiResponse.fail("旧密码错误");
         }
         if (password.length() < 6 || password.length() > 14) {
-            return RestResponseBo.fail("请输入6-14位密码");
+            return ApiResponse.fail("请输入6-14位密码");
         }
 
         try {
-            UserVo temp = new UserVo();
+            User temp = new User();
             temp.setUid(users.getUid());
             String pwd = TaleUtils.MD5encode(users.getUsername() + password);
             temp.setPassword(pwd);
@@ -127,18 +126,18 @@ public class IndexController extends BaseController {
             logService.insertLog(LogActions.UP_PWD.getAction(), null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            UserVo original= (UserVo)session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            User original= (User)session.getAttribute(WebConst.LOGIN_SESSION_KEY);
             original.setPassword(pwd);
             session.setAttribute(WebConst.LOGIN_SESSION_KEY,original);
-            return RestResponseBo.ok();
+            return ApiResponse.ok();
         } catch (Exception e){
             String msg = "密码修改失败";
-            if (e instanceof TipException) {
+            if (e instanceof LingXiException) {
                 msg = e.getMessage();
             } else {
                 LOGGER.error(msg, e);
             }
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
     }
 }

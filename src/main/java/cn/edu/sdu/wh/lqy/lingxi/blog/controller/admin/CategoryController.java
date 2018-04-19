@@ -4,7 +4,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.RestResponseBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -36,28 +35,28 @@ public class CategoryController extends BaseController {
 
     @PostMapping(value = "save")
     @ResponseBody
-    public RestResponseBo saveCategory(@RequestParam String cname, @RequestParam Integer mid) {
+    public ApiResponse saveCategory(@RequestParam String cname, @RequestParam Integer mid) {
         try {
             metasService.saveMeta(Types.CATEGORY.getType(), cname, mid);
         } catch (Exception e) {
             String msg = "分类保存失败";
             LOGGER.error(msg, e);
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
     @RequestMapping(value = "delete")
     @ResponseBody
-    public RestResponseBo delete(@RequestParam int mid) {
+    public ApiResponse delete(@RequestParam int mid) {
         try {
             metasService.delete(mid);
         } catch (Exception e) {
             String msg = "删除失败";
             LOGGER.error(msg, e);
-            return RestResponseBo.fail(msg);
+            return ApiResponse.fail(msg);
         }
-        return RestResponseBo.ok();
+        return ApiResponse.ok();
     }
 
 }

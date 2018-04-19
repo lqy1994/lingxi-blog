@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo">
+  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">
     <id column="coid" jdbcType="INTEGER" property="coid" />
     <result column="cid" jdbcType="INTEGER" property="cid" />
     <result column="created" jdbcType="INTEGER" property="created" />
@@ -16,8 +16,8 @@
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="parent" jdbcType="INTEGER" property="parent" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo">
-    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">
+    <result column="article" jdbcType="LONGVARCHAR" property="article" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,7 +82,7 @@
     parent
   </sql>
   <sql id="Blob_Column_List">
-    content
+    article
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVoExample" resultMap="ResultMapWithBLOBs">
     select
@@ -140,19 +140,19 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo" useGeneratedKeys="true" keyProperty="coid">
+  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment" useGeneratedKeys="true" keyProperty="coid">
     insert into t_comments (coid, cid, created, 
       author, author_id, owner_id, 
       mail, url, ip, agent, 
       type, status, parent, 
-      content)
+      article)
     values (#{coid,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{created,jdbcType=INTEGER}, 
       #{author,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER}, #{ownerId,jdbcType=INTEGER}, 
       #{mail,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
-      #{content,jdbcType=LONGVARCHAR})
+      #{article,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo" useGeneratedKeys="true" keyProperty="coid">
+  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment" useGeneratedKeys="true" keyProperty="coid">
     insert into t_comments
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="coid != null">
@@ -194,8 +194,8 @@
       <if test="parent != null">
         parent,
       </if>
-      <if test="content != null">
-        content,
+      <if test="article != null">
+        article,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -238,8 +238,8 @@
       <if test="parent != null">
         #{parent,jdbcType=INTEGER},
       </if>
-      <if test="content != null">
-        #{content,jdbcType=LONGVARCHAR},
+      <if test="article != null">
+        #{article,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -291,8 +291,8 @@
       <if test="record.parent != null">
         parent = #{record.parent,jdbcType=INTEGER},
       </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=LONGVARCHAR},
+      <if test="record.article != null">
+        article = #{record.article,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -314,7 +314,7 @@
       type = #{record.type,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       parent = #{record.parent,jdbcType=INTEGER},
-      content = #{record.content,jdbcType=LONGVARCHAR}
+      article = #{record.article,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -338,7 +338,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">
     update t_comments
     <set>
       <if test="cid != null">
@@ -377,13 +377,13 @@
       <if test="parent != null">
         parent = #{parent,jdbcType=INTEGER},
       </if>
-      <if test="content != null">
-        content = #{content,jdbcType=LONGVARCHAR},
+      <if test="article != null">
+        article = #{article,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where coid = #{coid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo">
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">
     update t_comments
     set cid = #{cid,jdbcType=INTEGER},
       created = #{created,jdbcType=INTEGER},
@@ -397,10 +397,10 @@
       type = #{type,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       parent = #{parent,jdbcType=INTEGER},
-      content = #{content,jdbcType=LONGVARCHAR}
+      article = #{article,jdbcType=LONGVARCHAR}
     where coid = #{coid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVo">
+  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">
     update t_comments
     set cid = #{cid,jdbcType=INTEGER},
       created = #{created,jdbcType=INTEGER},

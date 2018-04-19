@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 
 import java.io.Serializable;
 
-public class OptionVo implements Serializable {
+public class Option implements Serializable {
     /**
      * 配置名称
      */
