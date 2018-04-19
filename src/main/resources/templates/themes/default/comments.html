@@ -54,9 +54,9 @@
                                    th:text="${comment.author}"></a>
                             </span>
                                     </div>
-                                    <div class="comment-article">
+                                    <div class="comment-content">
                                         <span class="comment-author-at"></span>
-                                        <p th:utext="${commons.article(comment.article)}"></p>
+                                        <p th:utext="${commons.article(comment.content)}"></p>
                                     </div>
                                     <div class="comment-meta">
                                         <time class="comment-time" th:text="${commons.fmtdate(comment.created)}"></time>

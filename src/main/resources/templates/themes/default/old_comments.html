@@ -36,9 +36,9 @@
                                 <a href="${comment.url}" target="_blank" rel="external nofollow">${comment.author}</a>
                             </span>
                         </div>
-                        <div class="comment-article">
+                        <div class="comment-content">
                             <span class="comment-author-at"></span>
-                            <p>${comment.article}</p>
+                            <p>${comment.content}</p>
                         </div>
                         <div class="comment-meta">
                             <time class="comment-time">${fmtdate(comment.created)}</time>
@@ -62,11 +62,11 @@
                                             <a href="${child.url}" target="_blank" rel="external nofollow">${child.author}</a>
                                         </span>
                                     </div>
-                                    <div class="comment-article">
+                                    <div class="comment-content">
                                         <span class="comment-author-at">
                                             ${comment_at(child.parent)}
                                         </span>
-                                        <p>${child.article}</p>
+                                        <p>${child.content}</p>
                                     </div>
                                     <div class="comment-meta">
                                         <time class="comment-time">${fmtdate(child.created)}</time>

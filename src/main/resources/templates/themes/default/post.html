@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:yh="http://www.thymeleaf.org">
 <div th:replace="themes/default/header::header(${article.title},${article.tags})"></div>
 <body>
-<article class="main-article post-page" itemscope="" itemtype="http://schema.org/Article">
+<article class="main-content post-page" itemscope="" itemtype="http://schema.org/Article">
     <div class="post-header">
         <h1 class="post-title" itemprop="name headline">
             <a th:href="${commons.permalink(article)}" th:text="${article.title}" data-no-instant=""></a>
@@ -13,9 +13,9 @@
             <th:block th:text="${article.hits}"/>浏览
         </div>
     </div>
-    <div id="post-article" class="post-article" itemprop="articleBody">
+    <div id="post-content" class="post-content" itemprop="articleBody">
         <p class="post-tags" th:utext="${commons.show_tags(article.tags)}"></p>
-        <th:block th:utext="${commons.article(article.article)}"/>
+        <th:block th:utext="${commons.article(article.content)}"/>
         <p class="post-info">
             本站文章除注明转载/出处外，均为本站原创或翻译，转载前请务必署名,转载请标明出处<br/>最后编辑时间为:
             <th:block th:text="${commons.fmtdate(article.modified, 'yyyy/MM/dd HH:mm')}"/>

@@ -4,8 +4,8 @@
 <body class="fixed-left">
 <div id="wrapper">
     <div th:replace="admin/header::header-body"></div>
-    <div class="article-page">
-        <div class="article">
+    <div class="content-page">
+        <div class="content">
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
@@ -29,7 +29,7 @@
                                 <tr th:attr="cid=${comment.coid}">
                                     <td>
                                         <a th:href="@{${commons.site_url('/article/')}+${comment.cid}+'#comments'}"
-                                           target="_blank" th:utext="${commons.article(comment.article)}"></a>
+                                           target="_blank" th:utext="${commons.article(comment.content)}"></a>
                                     </td>
                                     <td th:text="${comment.author}"></td>
                                     <td th:text="${commons.fmtdate(comment.created, 'yyyy-MM-dd HH:mm:ss')}"></td>
@@ -62,7 +62,7 @@
                         <div th:replace="comm/macros :: pageAdminNav(${comments})"></div>
                     </div>
                 </div>
-                <div th:replace="admin/footer :: footer-article"></div>
+                <div th:replace="admin/footer :: footer-content"></div>
             </div>
         </div>
     </div>

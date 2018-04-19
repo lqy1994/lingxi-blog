@@ -84,7 +84,7 @@
     comments_num, allow_comment, allow_ping, allow_feed
   </sql>
   <sql id="Blob_Column_List">
-    article
+    content
   </sql>
   <select id="selectByExampleWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample" resultMap="ResultMapWithBLOBs">
     select
