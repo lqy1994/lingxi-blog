@@ -3,10 +3,13 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 import java.io.Serializable;
 
 public class Article implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
-     * post表主键
+     * id
      */
-    private Integer cid;
+    private Integer id;
 
     /**
      * 内容标题
@@ -16,7 +19,7 @@ public class Article implements Serializable {
     /**
      * 内容缩略名
      */
-    private String slug;
+    private String thumbnail;
 
     /**
      * 内容生成时的GMT unix时间戳
@@ -83,15 +86,6 @@ public class Article implements Serializable {
      */
     private String content;
 
-    private static final long serialVersionUID = 1L;
-
-    public Integer getCid() {
-        return cid;
-    }
-
-    public void setCid(Integer cid) {
-        this.cid = cid;
-    }
 
     public String getTitle() {
         return title;
@@ -101,12 +95,20 @@ public class Article implements Serializable {
         this.title = title;
     }
 
-    public String getSlug() {
-        return slug;
+    public Integer getId() {
+        return id;
     }
 
-    public void setSlug(String slug) {
-        this.slug = slug;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public Integer getCreated() {

@@ -1,5 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.modal.search;
 
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+
 import java.util.List;
 
 /**

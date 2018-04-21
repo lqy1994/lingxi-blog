@@ -9,7 +9,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-sm-12">
-                        <h4 class="page-title">仪表盘</h4>
+                        <h4 class="page-title">Dashboard</h4>
                     </div>
 
                     <div class="row">
@@ -61,7 +61,7 @@
                                         <li class="list-group-item" th:each="article : ${articles}">
                             <span class="badge badge-primary"
                                   th:title="${article.commentsNum}+'条评论'" th:text="${article.commentsNum}"></span>
-                                            <a target="_blank" th:href="${commons.site_url('/article/')}+${article.cid}"
+                                            <a target="_blank" th:href="${commons.site_url('/article/')}+${article.id}"
                                                th:text="${article.title}"></a>
                                         </li>
                                     </ul>

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="comments">
 <body>
 <div th:if="${article}!=null">
-    <div th:id="${article.cid ?: 0}" class="comment-container">
+    <div th:id="${article.id ?: 0}" class="comment-container">
         <div id="comments" class="clearfix">
             <div th:if="${article.allowComment}">
                 <span class="response">
@@ -15,7 +15,7 @@
                 <form method="post" id="comment-form" class="comment-form" role="form"
                       onsubmit="return TaleComment.subComment();">
                     <input type="hidden" name="coid" id="coid"/>
-                    <input type="hidden" name="cid" id="cid" th:value="${article.cid}"/>
+                    <input type="hidden" name="cid" id="cid" th:value="${article.id}"/>
                     <input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
                     <input type="text" name="author" maxlength="12" id="author"
                            class="form-control input-control clearfix"

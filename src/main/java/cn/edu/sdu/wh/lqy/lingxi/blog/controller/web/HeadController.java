@@ -80,11 +80,11 @@ public class HeadController extends BaseController {
             if (StringUtils.isBlank(cp)) {
                 cp = "1";
             }
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(article.getCid(), Integer.parseInt(cp), 6);
+            PageInfo<CommentBo> commentsPaginator = commentService.getComments(article.getId(), Integer.parseInt(cp), 6);
             model.addAttribute("comments", commentsPaginator);
         }
         model.addAttribute("article", article);
-        updateArticleHit(article.getCid(), article.getHits());
+        updateArticleHit(article.getId(), article.getHits());
         return RestPageConst.PAGES;
     }
 
@@ -103,7 +103,7 @@ public class HeadController extends BaseController {
 
         if (hits >= WebConstant.HIT_EXCEED) {
             Article temp = new Article();
-            temp.setCid(articleId);
+            temp.setId(articleId);
             temp.setHits(chits + hits);
             articleService.updateContentByCid(temp);
             redisTemplate.opsForValue().set("article" + ":" + "hits", 1 + "");

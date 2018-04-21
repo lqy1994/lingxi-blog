@@ -43,7 +43,7 @@
                         <form id="articleForm" role="form" novalidate="novalidate">
                             <input type="hidden" name="categories" id="categories"/>
                             <input type="hidden" name="cid"
-                                   th:value="${contents!=null and contents.cid!=null}?${contents.cid}: ''" id="cid"/>
+                                   th:value="${contents!=null and contents.id!=null}?${contents.id}: ''" id="cid"/>
                             <input type="hidden" name="status"
                                    th:value="${contents!=null and contents.status !=null}?${contents.status}: 'publish'"
                                    id="status"/>
@@ -68,7 +68,7 @@
                             <div class="form-group col-md-6" style="padding: 0 0 0 10px;">
                                 <input type="text" class="form-control"
                                        placeholder="自定义访问路径，如：my-first-article  默认为文章id" name="slug"
-                                       th:value="${contents!=null and contents.slug !=null}?${contents.slug}: ''"/>
+                                       th:value="${contents!=null and contents.thumbnail !=null}?${contents.thumbnail}: ''"/>
                             </div>
 
                             <div class="form-group col-md-6" style="padding: 0 10px 0 0;">

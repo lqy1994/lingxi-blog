@@ -140,11 +140,11 @@ public final class Commons {
     /**
      * 返回文章链接地址
      *
-     * @param contents
+     * @param article
      * @return
      */
-    public static String permalink(Article contents) {
-        return permalink(contents.getCid(), contents.getSlug());
+    public static String permalink(Article article) {
+        return permalink(article.getId(), article.getThumbnail());
     }
 
 
@@ -270,8 +270,8 @@ public final class Commons {
      *
      * @return
      */
-    public static String show_thumb(Article contents) {
-        int cid = contents.getCid();
+    public static String show_thumb(Article article) {
+        int cid = article.getId();
         int size = cid % 20;
         size = size == 0 ? 1 : size;
         return "/user/img/rand/" + size + ".jpg";

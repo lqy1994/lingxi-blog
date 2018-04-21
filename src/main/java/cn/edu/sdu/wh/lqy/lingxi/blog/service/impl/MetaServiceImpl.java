@@ -95,7 +95,7 @@ public class MetaServiceImpl implements IMetaService {
                     Article contents = contentService.getContents(String.valueOf(r.getCid()));
                     if (null != contents) {
                         Article temp = new Article();
-                        temp.setCid(r.getCid());
+                        temp.setId(r.getCid());
                         if (type.equals(Types.CATEGORY.getType())) {
                             temp.setCategories(reMeta(name, contents.getCategories()));
                         }

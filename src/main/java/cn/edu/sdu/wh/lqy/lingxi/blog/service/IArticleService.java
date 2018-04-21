@@ -4,7 +4,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import com.github.pagehelper.PageInfo;
 
-public interface IArticleService {
+public interface IArticleService  {
 
 //    /**
 //     * 保存文章

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="headerFragment(title,active)">
     <meta charset="utf-8"/>
-    <title><th:block th:text="${title!=null?title:'博客后台'}+'- My Blog'"></th:block></title>
+    <title><th:block th:text="${title!=null?title:'权限管理平台'}+'- LingXi-Blog'"></th:block></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta content="Coderthemes" name="author"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -68,7 +68,7 @@
                 <li th:class="${active}=='home'?'active':''">
                     <a th:href="@{/admin/index}"
                        th:class="${active}=='home'?'waves-effect active':'waves-effect'"><i
-                            class="fa fa-dashboard" aria-hidden="true"></i><span> 仪表盘 </span></a>
+                            class="fa fa-dashboard" aria-hidden="true"></i><span> Dashboard </span></a>
                 </li>
                 <li th:class="${active}=='publish'?'active':''">
                     <a th:href="@{/admin/article/publish}"

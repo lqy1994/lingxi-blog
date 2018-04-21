@@ -51,7 +51,7 @@ public class ArticleController extends BaseController {
         model.addAttribute("article", article);
         model.addAttribute("is_post", true);
         completeArticle(model, request, article);
-        updateArticleHit(article.getCid(), article.getHits());
+        updateArticleHit(article.getId(), article.getHits());
         return RestPageConst.ART_POST;
     }
 
@@ -71,7 +71,7 @@ public class ArticleController extends BaseController {
         request.setAttribute("article", contents);
         request.setAttribute("is_post", true);
         completeArticle(model, request, contents);
-        updateArticleHit(contents.getCid(), contents.getHits());
+        updateArticleHit(contents.getId(), contents.getHits());
         return RestPageConst.ART_POST;
     }
 
@@ -88,7 +88,7 @@ public class ArticleController extends BaseController {
                 cp = "1";
             }
             request.setAttribute("cp", cp);
-            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt(cp), 6);
+            PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getId(), Integer.parseInt(cp), 6);
             model.addAttribute("comments", commentsPaginator);
         }
     }
@@ -115,7 +115,7 @@ public class ArticleController extends BaseController {
 
         if (hits >= WebConstant.HIT_EXCEED) {
             Article temp = new Article();
-            temp.setCid(articleId);
+            temp.setId(articleId);
             temp.setHits(dbHits + hits);
             articleService.updateContentByCid(temp);
             valueOperations().set("article" + ":" + "hits", 1 + "");

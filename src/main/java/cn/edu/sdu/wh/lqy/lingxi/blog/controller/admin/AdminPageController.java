@@ -56,7 +56,7 @@ public class AdminPageController extends BaseController {
     @PostMapping(value = "publish")
     @ResponseBody
     public ApiResponse publishPage(@RequestParam String title, @RequestParam String content,
-                                   @RequestParam String status, @RequestParam String slug,
+                                   @RequestParam String status, @RequestParam("slug") String thumbnail,
                                    @RequestParam(required = false) Integer allowComment, @RequestParam(required = false) Integer allowPing, HttpServletRequest request) {
 
         User users = this.user(request);
@@ -64,7 +64,7 @@ public class AdminPageController extends BaseController {
         contents.setTitle(title);
         contents.setContent(content);
         contents.setStatus(status);
-        contents.setSlug(slug);
+        contents.setThumbnail(thumbnail);
         contents.setType(Types.PAGE.getType());
         if (null != allowComment) {
             contents.setAllowComment(allowComment == 1);
@@ -89,11 +89,11 @@ public class AdminPageController extends BaseController {
 
         User users = this.user(request);
         Article contents = new Article();
-        contents.setCid(cid);
+        contents.setId(cid);
         contents.setTitle(title);
         contents.setContent(content);
         contents.setStatus(status);
-        contents.setSlug(slug);
+        contents.setThumbnail(slug);
         contents.setType(Types.PAGE.getType());
         if (null != allowComment) {
             contents.setAllowComment(allowComment == 1);

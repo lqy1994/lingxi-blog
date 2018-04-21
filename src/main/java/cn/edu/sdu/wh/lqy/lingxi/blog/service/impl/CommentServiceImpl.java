@@ -64,7 +64,7 @@ public class CommentServiceImpl implements ICommentService {
         commentVoMapper.insertSelective(comments);
 
         Article temp = new Article();
-        temp.setCid(article.getCid());
+        temp.setId(article.getId());
         temp.setCommentsNum(article.getCommentsNum() + 1);
         contentService.updateContentByCid(temp);
 
@@ -121,7 +121,7 @@ public class CommentServiceImpl implements ICommentService {
         Article contents = contentService.getContents(cid + "");
         if (null != contents && contents.getCommentsNum() > 0) {
             Article temp = new Article();
-            temp.setCid(cid);
+            temp.setId(cid);
             temp.setCommentsNum(contents.getCommentsNum() - 1);
             contentService.updateContentByCid(temp);
         }

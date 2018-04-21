@@ -3,21 +3,22 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public interface ArticleMapper {
+public interface ArticleMapper extends BaseMapper<Article> {
 
     long countByExample(ContentVoExample example);
 
     int deleteByExample(ContentVoExample example);
 
-    int deleteByPrimaryKey(Integer cid);
+    int deleteByPrimaryKey(Integer id);
 
-    int insert(Article record);
+//    int insert(Article record);
 
     int insertSelective(Article record);
 
@@ -25,7 +26,7 @@ public interface ArticleMapper {
 
     List<Article> selectByExample(ContentVoExample example);
 
-    Article selectByPrimaryKey(Integer cid);
+    Article selectByPrimaryKey(Integer id);
 
     int updateByExampleSelective(@Param("record") Article record, @Param("example") ContentVoExample example);
 

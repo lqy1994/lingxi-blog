@@ -13,6 +13,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
@@ -27,7 +28,7 @@ import java.util.List;
 
 
 @Service
-public class ArticleServiceImpl implements IArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
@@ -45,52 +46,52 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     @Transactional
-    public String publish(Article contents) {
-        if (null == contents) {
+    public String publish(Article article) {
+        if (null == article) {
             return "文章对象为空";
         }
-        if (StringUtils.isBlank(contents.getTitle())) {
+        if (StringUtils.isBlank(article.getTitle())) {
             return "文章标题不能为空";
         }
-        if (StringUtils.isBlank(contents.getContent())) {
+        if (StringUtils.isBlank(article.getContent())) {
             return "文章内容不能为空";
         }
-        int titleLength = contents.getTitle().length();
+        int titleLength = article.getTitle().length();
         if (titleLength > WebConstant.MAX_TITLE_COUNT) {
             return "文章标题过长";
         }
-        int contentLength = contents.getContent().length();
+        int contentLength = article.getContent().length();
         if (contentLength > WebConstant.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
-        if (null == contents.getAuthorId()) {
+        if (null == article.getAuthorId()) {
             return "请登录后发布文章";
         }
-        if (StringUtils.isNotBlank(contents.getSlug())) {
-            if (contents.getSlug().length() < 5) {
+        if (StringUtils.isNotBlank(article.getThumbnail())) {
+            if (article.getThumbnail().length() < 5) {
                 return "路径太短了";
             }
-            if (!TaleUtils.isPath(contents.getSlug())) return "您输入的路径不合法";
+            if (!TaleUtils.isPath(article.getThumbnail())) return "您输入的路径不合法";
             ContentVoExample contentVoExample = new ContentVoExample();
-            contentVoExample.createCriteria().andTypeEqualTo(contents.getType()).andStatusEqualTo(contents.getSlug());
+            contentVoExample.createCriteria().andTypeEqualTo(article.getType()).andStatusEqualTo(article.getThumbnail());
             long count = articleMapper.countByExample(contentVoExample);
             if (count > 0) return "该路径已经存在，请重新输入";
         } else {
-            contents.setSlug(null);
+            article.setThumbnail(null);
         }
 
-        contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
+        article.setContent(EmojiParser.parseToAliases(article.getContent()));
 
         int time = DateKit.getCurrentUnixTime();
-        contents.setCreated(time);
-        contents.setModified(time);
-        contents.setHits(0);
-        contents.setCommentsNum(0);
+        article.setCreated(time);
+        article.setModified(time);
+        article.setHits(0);
+        article.setCommentsNum(0);
 
-        String tags = contents.getTags();
-        String categories = contents.getCategories();
-        articleMapper.insert(contents);
-        Integer cid = contents.getCid();
+        String tags = article.getTags();
+        String categories = article.getCategories();
+        articleMapper.insert(article);
+        Integer cid = article.getId();
         metasService.saveMetas(cid, tags, Types.TAG.getType());
         metasService.saveMetas(cid, categories, Types.CATEGORY.getType());
         return WebConstant.SUCCESS_RESULT;
@@ -134,7 +135,7 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     public void updateContentByCid(Article article) {
-        if (null != article && null != article.getCid()) {
+        if (null != article && null != article.getId()) {
             articleMapper.updateByPrimaryKeySelective(article);
         }
     }
@@ -172,8 +173,8 @@ public class ArticleServiceImpl implements IArticleService {
     @Override
     @Transactional
     public String deleteByCid(Integer cid) {
-        Article contents = this.getContents(cid + "");
-        if (null != contents) {
+        Article article = this.getContents(cid + "");
+        if (null != article) {
             articleMapper.deleteByPrimaryKey(cid);
             relationshipService.deleteById(cid, null);
             return WebConstant.SUCCESS_RESULT;
@@ -192,39 +193,39 @@ public class ArticleServiceImpl implements IArticleService {
 
     @Override
     @Transactional
-    public String updateArticle(Article contents) {
-        if (null == contents) {
+    public String updateArticle(Article article) {
+        if (null == article) {
             return "文章对象为空";
         }
-        if (StringUtils.isBlank(contents.getTitle())) {
+        if (StringUtils.isBlank(article.getTitle())) {
             return "文章标题不能为空";
         }
-        if (StringUtils.isBlank(contents.getContent())) {
+        if (StringUtils.isBlank(article.getContent())) {
             return "文章内容不能为空";
         }
-        int titleLength = contents.getTitle().length();
+        int titleLength = article.getTitle().length();
         if (titleLength > WebConstant.MAX_TITLE_COUNT) {
             return "文章标题过长";
         }
-        int contentLength = contents.getContent().length();
+        int contentLength = article.getContent().length();
         if (contentLength > WebConstant.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
-        if (null == contents.getAuthorId()) {
+        if (null == article.getAuthorId()) {
             return "请登录后发布文章";
         }
-        if (StringUtils.isBlank(contents.getSlug())) {
-            contents.setSlug(null);
+        if (StringUtils.isBlank(article.getThumbnail())) {
+            article.setThumbnail(null);
         }
         int time = DateKit.getCurrentUnixTime();
-        contents.setModified(time);
-        Integer cid = contents.getCid();
-        contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
+        article.setModified(time);
+        Integer id = article.getId();
+        article.setContent(EmojiParser.parseToAliases(article.getContent()));
 
-        articleMapper.updateByPrimaryKeySelective(contents);
-        relationshipService.deleteById(cid, null);
-        metasService.saveMetas(cid, contents.getTags(), Types.TAG.getType());
-        metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY.getType());
+        articleMapper.updateByPrimaryKeySelective(article);
+        relationshipService.deleteById(id, null);
+        metasService.saveMetas(id, article.getTags(), Types.TAG.getType());
+        metasService.saveMetas(id, article.getCategories(), Types.CATEGORY.getType());
         return WebConstant.SUCCESS_RESULT;
     }
 }
