@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
@@ -55,7 +55,7 @@ public class AuthController extends BaseController {
         Integer error_count = cache.get("login_error_count");
         try {
             User user = usersService.login(username, password);
-            request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
+            request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
             if (StringUtils.isNotBlank(remeber_me)) {
                 TaleUtils.setCookie(response, user.getUid());
             }
@@ -85,8 +85,8 @@ public class AuthController extends BaseController {
      */
     @RequestMapping("/logout")
     public void logout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
-        session.removeAttribute(WebConst.LOGIN_SESSION_KEY);
-        Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, "");
+        session.removeAttribute(WebConstant.LOGIN_SESSION_KEY);
+        Cookie cookie = new Cookie(WebConstant.USER_IN_COOKIE, "");
         cookie.setValue(null);
         cookie.setMaxAge(0);// 立即销毁cookie
         cookie.setPath("/");

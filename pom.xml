@@ -33,6 +33,18 @@
         <shiro-core.version>1.4.0</shiro-core.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.M9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <!--Spring Boot Start-->
         <dependency>
@@ -80,6 +92,16 @@
             <scope>test</scope>
         </dependency>
         <!--Spring Boot End-->
+        <!--Spring Cloud Start-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+        <!--Spring Cloud End-->
         <!--MyBatis Start-->
         <dependency>
             <groupId>mysql</groupId>
@@ -177,6 +199,17 @@
         </dependency>
         <!--Shiro EhCache End -->
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

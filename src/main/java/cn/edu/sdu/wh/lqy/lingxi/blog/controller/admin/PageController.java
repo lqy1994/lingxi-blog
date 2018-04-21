@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
@@ -8,7 +8,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class PageController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PageController.class);
 
     @Autowired
-    private IContentService contentsService;
+    private IArticleService contentsService;
 
     @Autowired
     private ILogService logService;
@@ -36,7 +36,7 @@ public class PageController extends BaseController {
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.setOrderByClause("created desc");
         contentVoExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
-        PageInfo<Article> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, 1, WebConst.MAX_POSTS);
+        PageInfo<Article> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, 1, WebConstant.MAX_POSTS);
         request.setAttribute("articles", contentsPaginator);
         return "admin/page_list";
     }
@@ -74,7 +74,7 @@ public class PageController extends BaseController {
         }
         contents.setAuthorId(users.getUid());
         String result = contentsService.publish(contents);
-        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+        if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
         return ApiResponse.ok();
@@ -103,7 +103,7 @@ public class PageController extends BaseController {
         }
         contents.setAuthorId(users.getUid());
         String result = contentsService.updateArticle(contents);
-        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+        if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
         return ApiResponse.ok();
@@ -114,7 +114,7 @@ public class PageController extends BaseController {
     public ApiResponse delete(@RequestParam int cid, HttpServletRequest request) {
         String result = contentsService.deleteByCid(cid);
         logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid(request));
-        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+        if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
         return ApiResponse.ok();

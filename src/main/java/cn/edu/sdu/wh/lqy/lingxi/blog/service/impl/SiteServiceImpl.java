@@ -1,10 +1,10 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ContentVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
@@ -40,7 +40,7 @@ public class SiteServiceImpl implements ISiteService {
     private CommentVoMapper commentVoMapper;
 
     @Autowired
-    private ContentVoMapper contentVoMapper;
+    private ArticleMapper articleMapper;
 
     @Autowired
     private AttachVoMapper attachVoMapper;
@@ -72,7 +72,7 @@ public class SiteServiceImpl implements ISiteService {
         example.createCriteria().andStatusEqualTo(Types.PUBLISH.getType()).andTypeEqualTo(Types.ARTICLE.getType());
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<Article> list = contentVoMapper.selectByExample(example);
+        List<Article> list = articleMapper.selectByExample(example);
         LOGGER.debug("Exit recentContents method");
         return list;
     }
@@ -155,7 +155,7 @@ public class SiteServiceImpl implements ISiteService {
 
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
-        Long articles =   contentVoMapper.countByExample(contentVoExample);
+        Long articles =   articleMapper.countByExample(contentVoExample);
 
         Long comments = commentVoMapper.countByExample(new CommentVoExample());
 
@@ -176,7 +176,7 @@ public class SiteServiceImpl implements ISiteService {
     @Override
     public List<ArchiveBo> getArchives() {
         LOGGER.debug("Enter getArchives method");
-        List<ArchiveBo> archives = contentVoMapper.findReturnArchiveBo();
+        List<ArchiveBo> archives = articleMapper.findReturnArchiveBo();
         if (null != archives) {
             archives.forEach(archive -> {
                 ContentVoExample example = new ContentVoExample();
@@ -188,7 +188,7 @@ public class SiteServiceImpl implements ISiteService {
                 int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
                 criteria.andCreatedGreaterThan(start);
                 criteria.andCreatedLessThan(end);
-                List<Article> articleList = contentVoMapper.selectByExample(example);
+                List<Article> articleList = articleMapper.selectByExample(example);
                 archive.setArticles(articleList);
             });
         }
@@ -204,7 +204,7 @@ public class SiteServiceImpl implements ISiteService {
             if(StringUtils.isBlank(orderBy)){
                 orderBy = "count desc, a.mid desc";
             }
-            if(limit < 1 || limit > WebConst.MAX_POSTS){
+            if(limit < 1 || limit > WebConstant.MAX_POSTS){
                 limit = 10;
             }
             Map<String, Object> paraMap = new HashMap<>();

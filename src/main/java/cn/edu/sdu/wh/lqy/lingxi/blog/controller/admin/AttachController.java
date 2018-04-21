@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
@@ -58,7 +58,7 @@ public class AttachController extends BaseController {
         PageInfo<Attach> attachPaginator = attachService.getAttachs(page, limit);
         request.setAttribute("attachs", attachPaginator);
         request.setAttribute(Types.ATTACH_URL.getType(), Commons.site_option(Types.ATTACH_URL.getType(), Commons.site_url()));
-        request.setAttribute("max_file_size", WebConst.MAX_FILE_SIZE / 1024);
+        request.setAttribute("max_file_size", WebConstant.MAX_FILE_SIZE / 1024);
         return "admin/attach";
     }
 
@@ -77,7 +77,7 @@ public class AttachController extends BaseController {
         try {
             for (MultipartFile multipartFile : multipartFiles) {
                 String fname = multipartFile.getOriginalFilename();
-                if (multipartFile.getSize() <= WebConst.MAX_FILE_SIZE) {
+                if (multipartFile.getSize() <= WebConstant.MAX_FILE_SIZE) {
                     String fkey = TaleUtils.getFileKey(fname);
                     String ftype = TaleUtils.isImage(multipartFile.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType();
                     File file = new File(CLASSPATH + fkey);

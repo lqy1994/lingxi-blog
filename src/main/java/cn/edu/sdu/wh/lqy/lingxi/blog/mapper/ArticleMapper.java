@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface ContentVoMapper {
+public interface ArticleMapper {
 
     long countByExample(ContentVoExample example);
 

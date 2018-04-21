@@ -4,7 +4,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import com.github.pagehelper.PageInfo;
 
-public interface IContentService {
+public interface IArticleService {
 
 //    /**
 //     * 保存文章
@@ -20,11 +20,11 @@ public interface IContentService {
 
     /**
      *查询文章返回多条数据
-     * @param p 当前页
+     * @param offset 当前页
      * @param limit 每页条数
      * @return Article
      */
-    PageInfo<Article> getContents(Integer p, Integer limit);
+    PageInfo<Article> getContents(Integer offset, Integer limit);
 
 
     /**

@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVoExample;
@@ -44,7 +44,7 @@ public class LogServiceImpl implements ILogService {
         if (page <= 0) {
             page = 1;
         }
-        if (limit < 1 || limit > WebConst.MAX_POSTS) {
+        if (limit < 1 || limit > WebConstant.MAX_POSTS) {
             limit = 10;
         }
         LogVoExample logVoExample = new LogVoExample();

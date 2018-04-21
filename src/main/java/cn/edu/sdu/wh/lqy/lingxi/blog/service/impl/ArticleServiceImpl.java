@@ -1,13 +1,13 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ContentVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
@@ -27,12 +27,12 @@ import java.util.List;
 
 
 @Service
-public class ContentServiceImpl implements IContentService {
+public class ArticleServiceImpl implements IArticleService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ContentServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
     @Autowired
-    private ContentVoMapper contentVoMapper;
+    private ArticleMapper articleMapper;
 
     @Autowired
     private MetaVoMapper metaVoMapper;
@@ -56,11 +56,11 @@ public class ContentServiceImpl implements IContentService {
             return "文章内容不能为空";
         }
         int titleLength = contents.getTitle().length();
-        if (titleLength > WebConst.MAX_TITLE_COUNT) {
+        if (titleLength > WebConstant.MAX_TITLE_COUNT) {
             return "文章标题过长";
         }
         int contentLength = contents.getContent().length();
-        if (contentLength > WebConst.MAX_TEXT_COUNT) {
+        if (contentLength > WebConstant.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
         if (null == contents.getAuthorId()) {
@@ -73,7 +73,7 @@ public class ContentServiceImpl implements IContentService {
             if (!TaleUtils.isPath(contents.getSlug())) return "您输入的路径不合法";
             ContentVoExample contentVoExample = new ContentVoExample();
             contentVoExample.createCriteria().andTypeEqualTo(contents.getType()).andStatusEqualTo(contents.getSlug());
-            long count = contentVoMapper.countByExample(contentVoExample);
+            long count = articleMapper.countByExample(contentVoExample);
             if (count > 0) return "该路径已经存在，请重新输入";
         } else {
             contents.setSlug(null);
@@ -89,23 +89,23 @@ public class ContentServiceImpl implements IContentService {
 
         String tags = contents.getTags();
         String categories = contents.getCategories();
-        contentVoMapper.insert(contents);
+        articleMapper.insert(contents);
         Integer cid = contents.getCid();
         metasService.saveMetas(cid, tags, Types.TAG.getType());
         metasService.saveMetas(cid, categories, Types.CATEGORY.getType());
-        return WebConst.SUCCESS_RESULT;
+        return WebConstant.SUCCESS_RESULT;
     }
 
     @Override
-    public PageInfo<Article> getContents(Integer p, Integer limit) {
-        LOGGER.debug("Enter getContents method");
+    public PageInfo<Article> getContents(Integer offset, Integer limit) {
+        LOGGER.debug("Begin getContents: offset:{}, limit:{}.", offset, limit);
         ContentVoExample example = new ContentVoExample();
         example.setOrderByClause("created desc");
         example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
-        PageHelper.startPage(p, limit);
-        List<Article> data = contentVoMapper.selectByExampleWithBLOBs(example);
+        PageHelper.startPage(offset, limit);
+        List<Article> data = articleMapper.selectByExampleWithBLOBs(example);
         PageInfo<Article> pageInfo = new PageInfo<>(data);
-        LOGGER.debug("Exit getContents method");
+        LOGGER.debug("Exit getContents");
         return pageInfo;
     }
 
@@ -113,16 +113,16 @@ public class ContentServiceImpl implements IContentService {
     public Article getContents(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                Article article = contentVoMapper.selectByPrimaryKey(Integer.valueOf(id));
+                Article article = articleMapper.selectByPrimaryKey(Integer.valueOf(id));
                 if (article != null) {
                     article.setHits(article.getHits() + 1);
-                    contentVoMapper.updateByPrimaryKey(article);
+                    articleMapper.updateByPrimaryKey(article);
                 }
                 return article;
             } else {
                 ContentVoExample contentVoExample = new ContentVoExample();
                 contentVoExample.createCriteria().andSlugEqualTo(id);
-                List<Article> articles = contentVoMapper.selectByExampleWithBLOBs(contentVoExample);
+                List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
                 if (articles.size() != 1) {
                     throw new LingXiException("query content by id and return is not one");
                 }
@@ -135,7 +135,7 @@ public class ContentServiceImpl implements IContentService {
     @Override
     public void updateContentByCid(Article article) {
         if (null != article && null != article.getCid()) {
-            contentVoMapper.updateByPrimaryKeySelective(article);
+            articleMapper.updateByPrimaryKeySelective(article);
         }
     }
 
@@ -143,7 +143,7 @@ public class ContentServiceImpl implements IContentService {
     public PageInfo<Article> getArticles(Integer mid, int page, int limit) {
         int total = metaVoMapper.countWithSql(mid);
         PageHelper.startPage(page, limit);
-        List<Article> list = contentVoMapper.findByCatalog(mid);
+        List<Article> list = articleMapper.findByCatalog(mid);
         PageInfo<Article> paginator = new PageInfo<>(list);
         paginator.setTotal(total);
         return paginator;
@@ -158,14 +158,14 @@ public class ContentServiceImpl implements IContentService {
         criteria.andStatusEqualTo(Types.PUBLISH.getType());
         criteria.andTitleLike("%" + keyword + "%");
         contentVoExample.setOrderByClause("created desc");
-        List<Article> articles = contentVoMapper.selectByExampleWithBLOBs(contentVoExample);
+        List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
         return new PageInfo<>(articles);
     }
 
     @Override
     public PageInfo<Article> getArticlesWithpage(ContentVoExample commentVoExample, Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
-        List<Article> articles = contentVoMapper.selectByExampleWithBLOBs(commentVoExample);
+        List<Article> articles = articleMapper.selectByExampleWithBLOBs(commentVoExample);
         return new PageInfo<>(articles);
     }
 
@@ -174,9 +174,9 @@ public class ContentServiceImpl implements IContentService {
     public String deleteByCid(Integer cid) {
         Article contents = this.getContents(cid + "");
         if (null != contents) {
-            contentVoMapper.deleteByPrimaryKey(cid);
+            articleMapper.deleteByPrimaryKey(cid);
             relationshipService.deleteById(cid, null);
-            return WebConst.SUCCESS_RESULT;
+            return WebConstant.SUCCESS_RESULT;
         }
         return "数据为空";
     }
@@ -187,7 +187,7 @@ public class ContentServiceImpl implements IContentService {
         article.setCategories(newCatefory);
         ContentVoExample example = new ContentVoExample();
         example.createCriteria().andCategoriesEqualTo(ordinal);
-        contentVoMapper.updateByExampleSelective(article, example);
+        articleMapper.updateByExampleSelective(article, example);
     }
 
     @Override
@@ -203,11 +203,11 @@ public class ContentServiceImpl implements IContentService {
             return "文章内容不能为空";
         }
         int titleLength = contents.getTitle().length();
-        if (titleLength > WebConst.MAX_TITLE_COUNT) {
+        if (titleLength > WebConstant.MAX_TITLE_COUNT) {
             return "文章标题过长";
         }
         int contentLength = contents.getContent().length();
-        if (contentLength > WebConst.MAX_TEXT_COUNT) {
+        if (contentLength > WebConstant.MAX_TEXT_COUNT) {
             return "文章内容过长";
         }
         if (null == contents.getAuthorId()) {
@@ -221,10 +221,10 @@ public class ContentServiceImpl implements IContentService {
         Integer cid = contents.getCid();
         contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
 
-        contentVoMapper.updateByPrimaryKeySelective(contents);
+        articleMapper.updateByPrimaryKeySelective(contents);
         relationshipService.deleteById(cid, null);
         metasService.saveMetas(cid, contents.getTags(), Types.TAG.getType());
         metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY.getType());
-        return WebConst.SUCCESS_RESULT;
+        return WebConstant.SUCCESS_RESULT;
     }
 }

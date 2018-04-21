@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
@@ -145,7 +145,7 @@ public class TaleUtils {
         if (null == session) {
             return null;
         }
-        return (User) session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+        return (User) session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
     }
 
 
@@ -157,10 +157,10 @@ public class TaleUtils {
      */
     public static Integer getCookieUid(HttpServletRequest request) {
         if (null != request) {
-            Cookie cookie = cookieRaw(WebConst.USER_IN_COOKIE, request);
+            Cookie cookie = cookieRaw(WebConstant.USER_IN_COOKIE, request);
             if (cookie != null && cookie.getValue() != null) {
                 try {
-                    String uid = Tools.deAes(cookie.getValue(), WebConst.AES_SALT);
+                    String uid = Tools.deAes(cookie.getValue(), WebConstant.AES_SALT);
                     return StringUtils.isNotBlank(uid) && Tools.isNumber(uid) ? Integer.valueOf(uid) : null;
                 } catch (Exception e) {
                 }
@@ -197,9 +197,9 @@ public class TaleUtils {
      */
     public static void setCookie(HttpServletResponse response, Integer uid) {
         try {
-            String val = Tools.enAes(uid.toString(), WebConst.AES_SALT);
+            String val = Tools.enAes(uid.toString(), WebConstant.AES_SALT);
             boolean isSSL = false;
-            Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, val);
+            Cookie cookie = new Cookie(WebConstant.USER_IN_COOKIE, val);
             cookie.setPath("/");
             cookie.setMaxAge(60 * 30);
             cookie.setSecure(isSSL);
@@ -248,8 +248,8 @@ public class TaleUtils {
      * @param response
      */
     public static void logout(HttpSession session, HttpServletResponse response) {
-        session.removeAttribute(WebConst.LOGIN_SESSION_KEY);
-        Cookie cookie = new Cookie(WebConst.USER_IN_COOKIE, "");
+        session.removeAttribute(WebConstant.LOGIN_SESSION_KEY);
+        Cookie cookie = new Cookie(WebConstant.USER_IN_COOKIE, "");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         try {

@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
@@ -91,10 +91,10 @@ public class IndexController extends BaseController {
             logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            User original= (User)session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            User original= (User)session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
             original.setScreenName(screenName);
             original.setEmail(email);
-            session.setAttribute(WebConst.LOGIN_SESSION_KEY,original);
+            session.setAttribute(WebConstant.LOGIN_SESSION_KEY,original);
         }
         return ApiResponse.ok();
     }
@@ -126,9 +126,9 @@ public class IndexController extends BaseController {
             logService.insertLog(LogActions.UP_PWD.getAction(), null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            User original= (User)session.getAttribute(WebConst.LOGIN_SESSION_KEY);
+            User original= (User)session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
             original.setPassword(pwd);
-            session.setAttribute(WebConst.LOGIN_SESSION_KEY,original);
+            session.setAttribute(WebConstant.LOGIN_SESSION_KEY,original);
             return ApiResponse.ok();
         } catch (Exception e){
             String msg = "密码修改失败";

@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
@@ -81,7 +81,7 @@ public final class Commons {
         if (StringUtils.isBlank(key)) {
             return "";
         }
-        String str = WebConst.initConfig.get(key);
+        String str = WebConstant.initConfig.get(key);
         if (StringUtils.isNotBlank(str)) {
             return str;
         } else {
@@ -334,10 +334,10 @@ public final class Commons {
     public static Map<String, String> social() {
         final String prefix = "social_";
         Map<String, String> map = new HashMap<>();
-        map.put("weibo", WebConst.initConfig.get(prefix + "weibo"));
-        map.put("zhihu", WebConst.initConfig.get(prefix + "zhihu"));
-        map.put("github", WebConst.initConfig.get(prefix + "github"));
-        map.put("twitter", WebConst.initConfig.get(prefix + "twitter"));
+        map.put("weibo", WebConstant.initConfig.get(prefix + "weibo"));
+        map.put("zhihu", WebConstant.initConfig.get(prefix + "zhihu"));
+        map.put("github", WebConstant.initConfig.get(prefix + "github"));
+        map.put("twitter", WebConstant.initConfig.get(prefix + "twitter"));
         return map;
     }
 

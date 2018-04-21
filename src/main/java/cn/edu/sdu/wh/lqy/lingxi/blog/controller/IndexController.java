@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.ErrorCode;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
@@ -11,7 +11,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISiteService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.IPKit;
@@ -42,7 +42,7 @@ public class IndexController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
 
     @Autowired
-    private IContentService contentService;
+    private IArticleService contentService;
 
     @Autowired
     private ICommentService commentService;
@@ -53,34 +53,34 @@ public class IndexController extends BaseController {
     @Autowired
     private ISiteService siteService;
 
-    /**
-     * 首页
-     *
-     * @return
-     */
-    @GetMapping(value = "/")
-    public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        return this.index(request, 1, limit);
-    }
-
-    /**
-     * 首页分页
-     *
-     * @param request request
-     * @param p       第几页
-     * @param limit   每页大小
-     * @return 主页
-     */
-    @GetMapping(value = "page/{p}")
-    public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
-        PageInfo<Article> articles = contentService.getContents(p, limit);
-        request.setAttribute("articles", articles);
-        if (p > 1) {
-            this.title(request, "第" + p + "页");
-        }
-        return this.render("index");
-    }
+//    /**
+//     * 首页
+//     *
+//     * @return
+//     */
+//    @GetMapping(value = "/")
+//    public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
+//        return this.index(request, 1, limit);
+//    }
+//
+//    /**
+//     * 首页分页
+//     *
+//     * @param request request
+//     * @param p       第几页
+//     * @param limit   每页大小
+//     * @return 主页
+//     */
+//    @GetMapping(value = "page/{p}")
+//    public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "12") int limit) {
+//        p = p < 0 || p > WebConstant.MAX_PAGE ? 1 : p;
+//        PageInfo<Article> articles = contentService.getContents(p, limit);
+//        request.setAttribute("articles", articles);
+//        if (p > 1) {
+//            this.title(request, "第" + p + "页");
+//        }
+//        return this.render("index");
+//    }
 
     /**
      * 文章页
@@ -224,7 +224,7 @@ public class IndexController extends BaseController {
             }
             // 设置对每个文章1分钟可以评论一次
             cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
-            if (!WebConst.SUCCESS_RESULT.equals(result)) {
+            if (!WebConstant.SUCCESS_RESULT.equals(result)) {
                 return ApiResponse.fail(result);
             }
             return ApiResponse.ok();
@@ -249,7 +249,7 @@ public class IndexController extends BaseController {
     @GetMapping(value = "category/{keyword}/{page}")
     public String categories(HttpServletRequest request, @PathVariable String keyword,
                              @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
+        page = page < 0 || page > WebConstant.MAX_PAGE ? 1 : page;
         MetaDto metaDto = metaService.getMeta(Types.CATEGORY.getType(), keyword);
         if (null == metaDto) {
             return this.render_404();
@@ -326,7 +326,7 @@ public class IndexController extends BaseController {
 
     @GetMapping(value = "search/{keyword}/{page}")
     public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
+        page = page < 0 || page > WebConstant.MAX_PAGE ? 1 : page;
         PageInfo<Article> articles = contentService.getArticles(keyword, page, limit);
         request.setAttribute("articles", articles);
         request.setAttribute("type", "搜索");
@@ -346,7 +346,7 @@ public class IndexController extends BaseController {
             chits = 0;
         }
         hits = null == hits ? 1 : hits + 1;
-        if (hits >= WebConst.HIT_EXCEED) {
+        if (hits >= WebConstant.HIT_EXCEED) {
             Article temp = new Article();
             temp.setCid(cid);
             temp.setHits(chits + hits);
@@ -380,7 +380,7 @@ public class IndexController extends BaseController {
     @GetMapping(value = "tag/{name}/{page}")
     public String tags(HttpServletRequest request, @PathVariable String name, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
 
-        page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
+        page = page < 0 || page > WebConstant.MAX_PAGE ? 1 : page;
 //        对于空格的特殊处理
         name = name.replaceAll("\\+", " ");
         MetaDto metaDto = metaService.getMeta(Types.TAG.getType(), name);

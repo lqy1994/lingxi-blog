@@ -17,7 +17,7 @@
     <result column="parent" jdbcType="INTEGER" property="parent" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">
-    <result column="article" jdbcType="LONGVARCHAR" property="article" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -145,12 +145,12 @@
       author, author_id, owner_id, 
       mail, url, ip, agent, 
       type, status, parent, 
-      article)
+      content)
     values (#{coid,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{created,jdbcType=INTEGER}, 
       #{author,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER}, #{ownerId,jdbcType=INTEGER}, 
       #{mail,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
-      #{article,jdbcType=LONGVARCHAR})
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment" useGeneratedKeys="true" keyProperty="coid">
     insert into t_comments
@@ -194,8 +194,8 @@
       <if test="parent != null">
         parent,
       </if>
-      <if test="article != null">
-        article,
+      <if test="content != null">
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -238,8 +238,8 @@
       <if test="parent != null">
         #{parent,jdbcType=INTEGER},
       </if>
-      <if test="article != null">
-        #{article,jdbcType=LONGVARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -291,8 +291,8 @@
       <if test="record.parent != null">
         parent = #{record.parent,jdbcType=INTEGER},
       </if>
-      <if test="record.article != null">
-        article = #{record.article,jdbcType=LONGVARCHAR},
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -314,7 +314,7 @@
       type = #{record.type,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
       parent = #{record.parent,jdbcType=INTEGER},
-      article = #{record.article,jdbcType=LONGVARCHAR}
+    content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -377,8 +377,8 @@
       <if test="parent != null">
         parent = #{parent,jdbcType=INTEGER},
       </if>
-      <if test="article != null">
-        article = #{article,jdbcType=LONGVARCHAR},
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where coid = #{coid,jdbcType=INTEGER}
@@ -397,7 +397,7 @@
       type = #{type,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       parent = #{parent,jdbcType=INTEGER},
-      article = #{article,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR}
     where coid = #{coid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment">

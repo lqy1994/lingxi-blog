@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ContentVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
     <id column="cid" jdbcType="INTEGER" property="cid" />
     <result column="title" jdbcType="VARCHAR" property="title" />
@@ -19,7 +19,7 @@
     <result column="allow_feed" jdbcType="BIT" property="allowFeed" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">
-    <result column="article" jdbcType="LONGVARCHAR" property="article" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -148,13 +148,13 @@
       type, status, tags, 
       categories, hits, comments_num, 
       allow_comment, allow_ping, allow_feed, 
-      article)
+      content)
     values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, 
       #{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
       #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER}, 
       #{allowComment,jdbcType=BIT}, #{allowPing,jdbcType=BIT}, #{allowFeed,jdbcType=BIT}, 
-      #{article,jdbcType=LONGVARCHAR})
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article" useGeneratedKeys="true" keyProperty="cid">
     insert into t_contents
@@ -204,8 +204,8 @@
       <if test="allowFeed != null">
         allow_feed,
       </if>
-      <if test="article != null">
-        article,
+      <if test="content != null">
+        content,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -254,8 +254,8 @@
       <if test="allowFeed != null">
         #{allowFeed,jdbcType=BIT},
       </if>
-      <if test="article != null">
-        #{article,jdbcType=LONGVARCHAR},
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
@@ -313,8 +313,8 @@
       <if test="record.allowFeed != null">
         allow_feed = #{record.allowFeed,jdbcType=BIT},
       </if>
-      <if test="record.article != null">
-        article = #{record.article,jdbcType=LONGVARCHAR},
+      <if test="record.content != null">
+        content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -338,7 +338,7 @@
       allow_comment = #{record.allowComment,jdbcType=BIT},
       allow_ping = #{record.allowPing,jdbcType=BIT},
       allow_feed = #{record.allowFeed,jdbcType=BIT},
-      article = #{record.article,jdbcType=LONGVARCHAR}
+      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -409,8 +409,8 @@
       <if test="allowFeed != null">
         allow_feed = #{allowFeed,jdbcType=BIT},
       </if>
-      <if test="article != null">
-        article = #{article,jdbcType=LONGVARCHAR},
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where cid = #{cid,jdbcType=INTEGER}
@@ -431,7 +431,7 @@
       allow_comment = #{allowComment,jdbcType=BIT},
       allow_ping = #{allowPing,jdbcType=BIT},
       allow_feed = #{allowFeed,jdbcType=BIT},
-      article = #{article,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR}
     where cid = #{cid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article">

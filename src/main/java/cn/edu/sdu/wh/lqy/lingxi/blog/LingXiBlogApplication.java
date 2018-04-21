@@ -1,12 +1,12 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
-@EnableAutoConfiguration
+@EnableDiscoveryClient
 @EnableTransactionManagement
 public class LingXiBlogApplication {
 

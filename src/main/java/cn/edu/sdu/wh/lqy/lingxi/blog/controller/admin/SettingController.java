@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
@@ -67,7 +67,7 @@ public class SettingController extends BaseController {
                 querys.put(key, join(value));
             });
             optionService.saveOptions(querys);
-            WebConst.initConfig = querys;
+            WebConstant.initConfig = querys;
             if (StringUtils.isNotBlank(site_theme)) {
                 BaseController.THEME = "themes/" + site_theme;
             }

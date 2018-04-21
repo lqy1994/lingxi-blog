@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.CommentBo;
@@ -8,7 +8,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import com.github.pagehelper.PageHelper;
@@ -31,7 +31,7 @@ public class CommentServiceImpl implements ICommentService {
     private CommentVoMapper commentVoMapper;
 
     @Autowired
-    private IContentService contentService;
+    private IArticleService contentService;
 
     @Override
     @Transactional
@@ -54,21 +54,21 @@ public class CommentServiceImpl implements ICommentService {
         if (null == comments.getCid()) {
             return "评论文章不能为空";
         }
-        Article contents = contentService.getContents(String.valueOf(comments.getCid()));
-        if (null == contents) {
+        Article article = contentService.getContents(String.valueOf(comments.getCid()));
+        if (article == null) {
             return "不存在的文章";
         }
-        comments.setOwnerId(contents.getAuthorId());
+        comments.setOwnerId(article.getAuthorId());
         comments.setStatus("not_audit");
         comments.setCreated(DateKit.getCurrentUnixTime());
         commentVoMapper.insertSelective(comments);
 
         Article temp = new Article();
-        temp.setCid(contents.getCid());
-        temp.setCommentsNum(contents.getCommentsNum() + 1);
+        temp.setCid(article.getCid());
+        temp.setCommentsNum(article.getCommentsNum() + 1);
         contentService.updateContentByCid(temp);
 
-        return WebConst.SUCCESS_RESULT;
+        return WebConstant.SUCCESS_RESULT;
     }
 
     @Override

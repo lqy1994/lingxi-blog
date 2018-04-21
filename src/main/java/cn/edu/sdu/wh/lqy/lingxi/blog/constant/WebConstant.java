@@ -4,10 +4,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class WebConst {
-    public static Map<String, String> initConfig = new HashMap<>();
+public class WebConstant {
+
+    public static Map<String, String> initConfig = new ConcurrentHashMap<>();
 
 
     public static String LOGIN_SESSION_KEY = "login_user";

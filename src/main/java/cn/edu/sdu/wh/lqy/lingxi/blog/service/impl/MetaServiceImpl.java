@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
@@ -9,7 +9,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.RelationshipVoKey;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import org.apache.commons.lang3.StringUtils;
@@ -35,7 +35,7 @@ public class MetaServiceImpl implements IMetaService {
     private IRelationshipService relationshipService;
 
     @Autowired
-    private IContentService contentService;
+    private IArticleService contentService;
 
     @Override
     public MetaDto getMeta(String type, String name) {
@@ -67,7 +67,7 @@ public class MetaServiceImpl implements IMetaService {
             if (StringUtils.isBlank(orderby)) {
                 orderby = "count desc, a.mid desc";
             }
-            if (limit < 1 || limit > WebConst.MAX_POSTS) {
+            if (limit < 1 || limit > WebConstant.MAX_POSTS) {
                 limit = 10;
             }
             Map<String, Object> paraMap = new HashMap<>();

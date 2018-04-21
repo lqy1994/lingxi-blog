@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
@@ -10,7 +10,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IContentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import com.github.pagehelper.PageInfo;
@@ -33,7 +33,7 @@ public class ArticleController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
-    private IContentService contentsService;
+    private IArticleService contentsService;
 
     @Autowired
     private IMetaService metasService;
@@ -79,7 +79,7 @@ public class ArticleController extends BaseController {
             contents.setCategories("默认分类");
         }
         String result = contentsService.publish(contents);
-        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+        if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
         return ApiResponse.ok();
@@ -92,7 +92,7 @@ public class ArticleController extends BaseController {
         contents.setAuthorId(users.getUid());
         contents.setType(Types.ARTICLE.getType());
         String result = contentsService.updateArticle(contents);
-        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+        if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
         return ApiResponse.ok();
@@ -103,7 +103,7 @@ public class ArticleController extends BaseController {
     public ApiResponse delete(@RequestParam int cid, HttpServletRequest request) {
         String result = contentsService.deleteByCid(cid);
         logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid(request));
-        if (!WebConst.SUCCESS_RESULT.equals(result)) {
+        if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
         return ApiResponse.ok();

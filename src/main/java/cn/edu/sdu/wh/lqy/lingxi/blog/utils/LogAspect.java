@@ -24,20 +24,23 @@ public class LogAspect {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataSource.class);
 
     @Pointcut("execution(public * cn.edu.sdu.wh.lqy.lingxi.blog.controller..*.*(..))")
-    public void webLog(){}
+    public void logCut() {
+    }
 
-    @Before("webLog()")
+    @Before("logCut()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
         // 接收到请求，记录请求内容
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         // 记录下请求内容
-        LOGGER.info("URL : " + request.getRequestURL().toString() + ",IP : " + request.getRemoteAddr() + ",CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName() + ",ARGS : " + Arrays.toString(joinPoint.getArgs()));
+        LOGGER.info("Request-url: " + request.getRequestURL().toString() + ",IP : " + request.getRemoteAddr() + ",Class_Method : "
+                + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName()
+                + ",Args : " + Arrays.toString(joinPoint.getArgs()));
     }
 
-    @AfterReturning(returning = "object", pointcut = "webLog()")
+    @AfterReturning(returning = "object", pointcut = "logCut()")
     public void doAfterReturning(Object object) throws Throwable {
         // 处理完请求，返回内容
-        LOGGER.info("RESPONSE : " + object);
+        LOGGER.info("Response : " + object);
     }
 }

@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.interceptor;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConst;
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
@@ -54,7 +54,7 @@ public class BaseInterceptor implements HandlerInterceptor {
             if (null != uid) {
                 //这里还是有安全隐患,cookie是可以伪造的
                 user = userService.queryUserById(uid);
-                request.getSession().setAttribute(WebConst.LOGIN_SESSION_KEY, user);
+                request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
             }
         }
         if (uri.startsWith("/admin") && !uri.startsWith("/admin/login") && null == user) {
