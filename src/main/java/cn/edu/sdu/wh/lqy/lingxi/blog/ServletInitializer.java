@@ -7,6 +7,7 @@ public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+//		System.setProperty("es.set.netty.runtime.available.processors", "false");
 		return application.sources(LingXiBlogApplication.class);
 	}
 

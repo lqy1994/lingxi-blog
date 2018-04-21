@@ -1,4 +1,4 @@
-package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.lingxi.doc.config.shiro;
+//package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;
 //
 //import org.apache.shiro.authc.AuthenticationInfo;
 //import org.apache.shiro.authc.AuthenticationToken;

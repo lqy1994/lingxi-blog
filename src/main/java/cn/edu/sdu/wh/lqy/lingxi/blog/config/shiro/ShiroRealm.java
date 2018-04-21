@@ -1,5 +1,8 @@
-package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.lingxi.doc.config.shiro;
+//package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;
 //
+//import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AuthorizingUser;
+//import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+//import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 //import org.apache.shiro.SecurityUtils;
 //import org.apache.shiro.authc.*;
 //import org.apache.shiro.authz.AuthorizationInfo;
@@ -13,7 +16,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //public class ShiroRealm extends AuthorizingRealm {
 //
 //    @Autowired
-//    private UserService userService;
+//    private IUserService userService;
 ////	@Autowired
 ////	private RoleService roleService;
 ////	@Autowired
@@ -23,7 +26,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principal) {
 //
 //        User user = (User) SecurityUtils.getSubject().getPrincipal();
-//        String userName = user.getUserName();
+//        String userName = user.getUsername();
 //
 //        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 //
@@ -48,17 +51,10 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
 //
 //        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-////        String userName = (String) token.getPrincipal();
-////        String password = new String((char[]) token.getCredentials());
-//
-//        User user = userService.getUserByLoginName(token.getUsername());
+//        User user = userService.getUserByName(token.getUsername());
 //
 //        if (user == null) {
 //            throw new UnknownAccountException();// 没找到帐号
-//        }
-//
-//        if (StatusEnum.FREEZE.getStatus().equals(user.getStatus())) {
-//            throw new DisabledAccountException();// 校验用户状态
 //        }
 //
 //        AuthorizingUser authorizingUser = new AuthorizingUser();

@@ -296,4 +296,9 @@
       group_name = #{groupName,jdbcType=VARCHAR}
     where uid = #{uid,jdbcType=INTEGER}
   </update>
+    <select id="selectByUserName" resultType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User">
+      SELECT <include refid="Base_Column_List"/>
+      FROM t_users
+      WHERE username = #{userName}
+    </select>
 </mapper>

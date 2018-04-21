@@ -9,29 +9,34 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义拦截器
  */
 @Component
-public class BaseInterceptor implements HandlerInterceptor {
+public class BaseInterceptor extends HandlerInterceptorAdapter {
     private static final Logger LOGGE = LoggerFactory.getLogger(BaseInterceptor.class);
     private static final String USER_AGENT = "user-agent";
 
-    @Resource
+    @Autowired
     private IUserService userService;
 
-    @Resource
+    @Autowired
     private IOptionService optionService;
 
-    private MapCache cache = MapCache.single();
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Resource
     private Commons commons;
@@ -44,14 +49,13 @@ public class BaseInterceptor implements HandlerInterceptor {
         String uri = request.getRequestURI();
 
         LOGGE.info("UserAgent: {}", request.getHeader(USER_AGENT));
-        LOGGE.info("用户访问地址: {}, 来路地址: {}", uri, IPKit.getIpAddrByRequest(request));
-
+        LOGGE.info("用户访问地址: {}, 来源地址: {}", uri, IPKit.getIpAddrByRequest(request));
 
         //请求拦截处理
         User user = TaleUtils.getLoginUser(request);
-        if (null == user) {
+        if (user == null) {
             Integer uid = TaleUtils.getCookieUid(request);
-            if (null != uid) {
+            if (uid != null) {
                 //这里还是有安全隐患,cookie是可以伪造的
                 user = userService.queryUserById(uid);
                 request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
@@ -65,7 +69,8 @@ public class BaseInterceptor implements HandlerInterceptor {
         if (request.getMethod().equals("GET")) {
             String csrf_token = UUID.UU64();
             // 默认存储30分钟
-            cache.hset(Types.CSRF_TOKEN.getType(), csrf_token, uri, 30 * 60);
+            stringRedisTemplate.opsForValue().set(Types.CSRF_TOKEN.getType() + ":" + csrf_token,
+                    uri, 30 * 60, TimeUnit.SECONDS);
             request.setAttribute("_csrf_token", csrf_token);
         }
         return true;
@@ -79,8 +84,7 @@ public class BaseInterceptor implements HandlerInterceptor {
         httpServletRequest.setAttribute("adminCommons", adminCommons);
     }
 
-    @Override
-    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-
-    }
+//    @Override
+//    public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+//    }
 }

@@ -77,4 +77,12 @@ public class UserServiceImpl implements IUserService {
             throw new LingXiException("update user by uid and retrun is not one");
         }
     }
+
+    @Override
+    public User getUserByName(String userName) {
+        if (userName != null && !userName.equals("")) {
+            return userVoMapper.selectByUserName(userName);
+        }
+        return null;
+    }
 }

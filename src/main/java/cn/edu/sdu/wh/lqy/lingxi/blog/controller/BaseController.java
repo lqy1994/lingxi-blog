@@ -12,7 +12,7 @@ public abstract class BaseController {
 
     public static String THEME = "themes/default";
 
-    protected MapCache cache = MapCache.single();
+//    protected MapCache cache = MapCache.single();
 
     /**
      * 主页的页面主题

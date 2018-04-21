@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class CommentController extends BaseController {
@@ -32,6 +34,9 @@ public class CommentController extends BaseController {
 
     @Autowired
     private ICommentService commentService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
     /**
      * 评论操作
      */
@@ -47,8 +52,8 @@ public class CommentController extends BaseController {
             return ApiResponse.fail(ErrorCode.BAD_REQUEST);
         }
 
-        String token = cache.hget(Types.CSRF_TOKEN.getType(), _csrf_token);
-        if (StringUtils.isBlank(token)) {
+        String token = redisTemplate.opsForValue().get(Types.CSRF_TOKEN.getType() + ":" + _csrf_token);
+        if (cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils.isNull(token)) {
             return ApiResponse.fail(ErrorCode.BAD_REQUEST);
         }
 
@@ -73,8 +78,14 @@ public class CommentController extends BaseController {
         }
 
         String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
-        Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
-        if (null != count && count > 0) {
+        String cntStr = redisTemplate.opsForValue().get(Types.COMMENTS_FREQUENCY.getType() + ":" + val);
+        Integer count = 0;
+
+        if (cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils.isNotNull(cntStr)) {
+            count = Integer.valueOf(cntStr);
+        }
+
+        if (count > 0) {
             return ApiResponse.fail("您发表评论太快了，请过会再试");
         }
 
@@ -100,7 +111,7 @@ public class CommentController extends BaseController {
                 cookie("tale_remember_url", URLEncoder.encode(url, "UTF-8"), 7 * 24 * 60 * 60, response);
             }
             // 设置对每个文章1分钟可以评论一次
-            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
+            redisTemplate.opsForValue().set(Types.COMMENTS_FREQUENCY.getType() + ":" + val, "1", 60, TimeUnit.SECONDS);
             if (!WebConstant.SUCCESS_RESULT.equals(result)) {
                 return ApiResponse.fail(result);
             }

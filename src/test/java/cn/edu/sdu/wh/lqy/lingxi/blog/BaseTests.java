@@ -11,6 +11,7 @@ public class BaseTests {
 
     @Test
     public void contextLoads() {
+        System.out.println("Ok");
     }
 
 }

@@ -3,6 +3,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo;
 import java.io.Serializable;
 
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * user表主键
      */
@@ -52,8 +55,6 @@ public class User implements Serializable {
      * 用户组
      */
     private String groupName;
-
-    private static final long serialVersionUID = 1L;
 
     public Integer getUid() {
         return uid;

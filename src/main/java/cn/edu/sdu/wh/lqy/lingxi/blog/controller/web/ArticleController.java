@@ -7,9 +7,12 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.CommentBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils;
 import com.github.pagehelper.PageInfo;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +28,12 @@ public class ArticleController extends BaseController {
 
     @Autowired
     private IArticleService articleService;
-
+    @Autowired
+    private ISearchService searchService;
     @Autowired
     private ICommentService commentService;
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 文章详情页
@@ -53,7 +59,7 @@ public class ArticleController extends BaseController {
      * 文章页(预览)
      *
      * @param request 请求
-     * @param id     文章主键
+     * @param id      文章主键
      * @return
      */
     @GetMapping(value = {"article/{id}/preview", "article/{id}.html"})
@@ -80,7 +86,6 @@ public class ArticleController extends BaseController {
             String cp = request.getParameter("cp");
             if (StringUtils.isBlank(cp)) {
                 cp = "1";
-
             }
             request.setAttribute("cp", cp);
             PageInfo<CommentBo> commentsPaginator = commentService.getComments(contents.getCid(), Integer.parseInt(cp), 6);
@@ -92,22 +97,34 @@ public class ArticleController extends BaseController {
      * 更新文章的点击率
      *
      * @param articleId
-     * @param chits
+     * @param dbHits    数据库中存储的点击数
      */
-    private void updateArticleHit(Integer articleId, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
-        if (chits == null) {
-            chits = 0;
+    private void updateArticleHit(Integer articleId, Integer dbHits) {
+
+        if (dbHits == null) {
+            dbHits = 0;
         }
-        hits = null == hits ? 1 : hits + 1;
+
+        String hitStr = valueOperations().get("article" + ":" + "hits");
+        Integer hits = 0;
+        if (StringUtils.isNotNull(hitStr)) {
+            hits = Integer.valueOf(hitStr);
+        }
+
+        hits++;
+
         if (hits >= WebConstant.HIT_EXCEED) {
             Article temp = new Article();
             temp.setCid(articleId);
-            temp.setHits(chits + hits);
+            temp.setHits(dbHits + hits);
             articleService.updateContentByCid(temp);
-            cache.hset("article", "hits", 1);
+            valueOperations().set("article" + ":" + "hits", 1 + "");
         } else {
-            cache.hset("article", "hits", hits);
+            valueOperations().set("article" + ":" + "hits", hits + "");
         }
+    }
+
+    public ValueOperations<String, String> valueOperations() {
+        return redisTemplate.opsForValue();
     }
 }

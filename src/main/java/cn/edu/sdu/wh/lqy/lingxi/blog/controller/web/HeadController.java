@@ -15,6 +15,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISiteService;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,6 +38,9 @@ public class HeadController extends BaseController {
     private IArticleService articleService;
     @Autowired
     private ICommentService commentService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     /**
      * 归档页
@@ -85,19 +89,26 @@ public class HeadController extends BaseController {
     }
 
     private void updateArticleHit(Integer articleId, Integer chits) {
-        Integer hits = cache.hget("article", "hits");
+        String hitStr = redisTemplate.opsForValue().get("article" + ":" + "hits");
+        Integer hits = 0;
+        if (cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils.isNotNull(hitStr)) {
+            hits = Integer.valueOf(hitStr);
+        }
+
         if (chits == null) {
             chits = 0;
         }
-        hits = null == hits ? 1 : hits + 1;
+
+        hits++;
+
         if (hits >= WebConstant.HIT_EXCEED) {
             Article temp = new Article();
             temp.setCid(articleId);
             temp.setHits(chits + hits);
             articleService.updateContentByCid(temp);
-            cache.hset("article", "hits", 1);
+            redisTemplate.opsForValue().set("article" + ":" + "hits", 1 + "");
         } else {
-            cache.hset("article", "hits", hits);
+            redisTemplate.opsForValue().set("article" + ":" + "hits", hits + "");
         }
     }
 

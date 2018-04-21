@@ -8,12 +8,13 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户后台登录/登出
@@ -38,6 +40,9 @@ public class AdminLoginController extends BaseController {
 
     @Autowired
     private ILogService logService;
+//
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @GetMapping(value = "/login")
     public String login() {
@@ -52,7 +57,13 @@ public class AdminLoginController extends BaseController {
                                HttpServletRequest request,
                                HttpServletResponse response) {
 
-        Integer error_count = cache.get("login_error_count");
+        String errorCount = redisTemplate.opsForValue().get("login_error_count");
+        Integer errCnt = 0;
+        if (StringUtils.isNotNull(errorCount)) {
+            errCnt = Integer.valueOf(errorCount);
+        } else {
+            redisTemplate.opsForValue().set("login_error_count", (errCnt + 1) + "", 10 * 60, TimeUnit.SECONDS);
+        }
         try {
             User user = usersService.login(username, password);
             request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
@@ -61,11 +72,11 @@ public class AdminLoginController extends BaseController {
             }
             logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getUid());
         } catch (Exception e) {
-            error_count = null == error_count ? 1 : error_count + 1;
-            if (error_count > 3) {
+            errCnt = errCnt == 0 ? 1 : errCnt + 1;
+            if (errCnt > 3) {
                 return ApiResponse.fail("您输入密码已经错误超过3次，请10分钟后尝试");
             }
-            cache.set("login_error_count", error_count, 10 * 60);
+            redisTemplate.opsForValue().set("login_error_count", errCnt + "", 10 * 60, TimeUnit.SECONDS);
             String msg = "登录失败";
             if (e instanceof LingXiException) {
                 msg = e.getMessage();

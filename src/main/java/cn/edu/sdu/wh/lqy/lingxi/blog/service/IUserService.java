@@ -34,4 +34,12 @@ public interface IUserService {
      * @return
      */
     void updateByUid(User user);
+
+    /**
+     * 根据用户名获取用户
+     * @param userName
+     * @return
+     */
+    User getUserByName(String userName);
+
 }

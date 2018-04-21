@@ -1,4 +1,4 @@
-package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.lingxi.doc.config.shiro;
+//package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;
 //
 //import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 //import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -6,6 +6,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //import org.apache.shiro.codec.Base64;
 //import org.apache.shiro.crypto.hash.Md5Hash;
 //import org.apache.shiro.mgt.SecurityManager;
+//import org.apache.shiro.session.Session;
 //import org.apache.shiro.session.SessionListener;
 //import org.apache.shiro.session.mgt.SessionManager;
 //import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
@@ -28,6 +29,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //import java.util.ArrayList;
 //import java.util.Collection;
 //import java.util.LinkedHashMap;
+//import java.util.concurrent.atomic.AtomicInteger;
 //
 //@Configuration
 //public class ShiroConfiguration {
@@ -36,7 +38,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    private String cipherKey = "U3ByaW5nQmxhZGUAAAAAAA==";
 //
 //    @Bean
-////    @ConditionalOnMissingBean
 //    public EhCacheManager ehCacheManager() {
 //        EhCacheManagerFactoryBean cacheManagerFactoryBean = new EhCacheManagerFactoryBean();
 //        cacheManagerFactoryBean.setConfigLocation(new ClassPathResource("classpath:config/Ehcache.xml"));
@@ -47,29 +48,29 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
-////    @ConditionalOnClass(SecurityManager.class)
 //    public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
 //        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 //        shiroFilterFactoryBean.setSecurityManager(securityManager);
-//        shiroFilterFactoryBean.setLoginUrl("/login");
-//        shiroFilterFactoryBean.setSuccessUrl("/index");
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/login");
+//        shiroFilterFactoryBean.setLoginUrl("/admin/login");
+//        shiroFilterFactoryBean.setSuccessUrl("/admin/index");
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/admin/login");
 //
 //        LinkedHashMap<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-//        filterChainDefinitionMap.put("/static/css/**", "anon");
-//        filterChainDefinitionMap.put("/static/js/**", "anon");
-//        filterChainDefinitionMap.put("/static/fonts/**", "anon");
-//        filterChainDefinitionMap.put("/static/img/**", "anon");
-//        filterChainDefinitionMap.put("/static/layui/**", "anon");
 //
-//        filterChainDefinitionMap.put("/404", "anon");
-//        filterChainDefinitionMap.put("/error", "anon");
+//        filterChainDefinitionMap.put("/static/admin/css/**", "anon");
+//        filterChainDefinitionMap.put("/static/admin/js/**", "anon");
+//        filterChainDefinitionMap.put("/static/admin/images/**", "anon");
+//        filterChainDefinitionMap.put("/static/admin/plugins/**", "anon");
+//        filterChainDefinitionMap.put("/static/user/css/**", "anon");
+//        filterChainDefinitionMap.put("/static/user/img/**", "anon");
+//
+//        filterChainDefinitionMap.put("/common/error_404", "anon");
+//        filterChainDefinitionMap.put("/common/error_500", "anon");
 //
 //        filterChainDefinitionMap.put("/druid/**", "anon");
-//        filterChainDefinitionMap.put("/register", "anon");
-//        filterChainDefinitionMap.put("/login", "anon");
-//        filterChainDefinitionMap.put("/gifCode", "anon");
+////        filterChainDefinitionMap.put("/register", "anon");
+////        filterChainDefinitionMap.put("/login", "anon");
+////        filterChainDefinitionMap.put("/gifCode", "anon");
 //        filterChainDefinitionMap.put("/logout", "logout");
 //        filterChainDefinitionMap.put("/", "anon");
 //        filterChainDefinitionMap.put("/**", "user");
@@ -80,9 +81,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @Order(Ordered.HIGHEST_PRECEDENCE + 2000000)
-////    @ConditionalOnMissingBean
-////    @ConditionalOnBean({ShiroRealm.class, RememberMeManager.class, CacheManager.class, SessionManager.class})
 //    public SecurityManager securityManager(SessionManager sessionManager){
 //        DefaultWebSecurityManager securityManager =  new DefaultWebSecurityManager();
 //        securityManager.setRealm(shiroRealm(retryLimitHashedCredentialsMatcher()));
@@ -103,7 +101,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean(name = "lifecycleBeanPostProcessor")
-////    @ConditionalOnMissingBean
 //    public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
 //        return new LifecycleBeanPostProcessor();
 //    }
@@ -125,7 +122,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
 //    public SimpleCookie rememberMeCookie() {
 //        SimpleCookie cookie = new SimpleCookie("rememberMe");
 //        cookie.setMaxAge(7 * 24 * 60 * 60);
@@ -134,9 +130,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
-////    @ConditionalOnClass(Base64.class)
-////    @ConditionalOnProperty(prefix = "shiro", name = "cipher-key", matchIfMissing = false)
 //    public CookieRememberMeManager rememberMeManager() {
 //        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
 //        cookieRememberMeManager.setCookie(rememberMeCookie());
@@ -145,7 +138,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
 //    @DependsOn({"lifecycleBeanPostProcessor"})
 //    public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
 //        DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
@@ -154,8 +146,6 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
-////    @ConditionalOnClass(SecurityManager.class)
 //    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
 //        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
 //        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
@@ -163,26 +153,40 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;//package cn.edu.sdu.wh.lqy.l
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
 //    public ShiroDialect shiroDialect() {
 //        return new ShiroDialect();
 //    }
 //
 //    @Bean
-////    @ConditionalOnMissingBean
 //    public SessionDAO sessionDAO() {
 //        MemorySessionDAO sessionDAO = new MemorySessionDAO();
 //        return sessionDAO;
 //    }
 //
 //    @Bean
-////    @Order(Ordered.HIGHEST_PRECEDENCE + 1)
-////    @ConditionalOnMissingBean
-////    @ConditionalOnClass({SessionListener.class, SessionDAO.class})
 //    public SessionManager sessionManager() {
 //        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 //        Collection<SessionListener> listeners = new ArrayList<>();
-//        listeners.add(new ShiroSessionListener());
+//        listeners.add(new SessionListener() {
+//
+//            private final AtomicInteger sessionCount = new AtomicInteger(0);
+//
+//            @Override
+//            public void onStart(Session session) {
+//                sessionCount.incrementAndGet();
+//            }
+//
+//            @Override
+//            public void onStop(Session session) {
+//                sessionCount.decrementAndGet();
+//            }
+//
+//            @Override
+//            public void onExpiration(Session session) {
+//                sessionCount.decrementAndGet();
+//            }
+//
+//        });
 //        sessionManager.setSessionListeners(listeners);
 //        sessionManager.setSessionDAO(sessionDAO());
 //        return sessionManager;
