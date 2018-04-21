@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AttachController;
+import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AdminAttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
@@ -87,8 +87,8 @@ public class SiteServiceImpl implements ISiteService {
             if (!(new File(bk_path)).isDirectory()) {
                 throw new LingXiException("请输入一个存在的目录");
             }
-            String bkAttachDir = AttachController.CLASSPATH + "upload";
-            String bkThemesDir = AttachController.CLASSPATH + "templates/themes";
+            String bkAttachDir = AdminAttachController.CLASSPATH + "upload";
+            String bkThemesDir = AdminAttachController.CLASSPATH + "templates/themes";
 
             String fname = DateKit.dateFormat(new Date(), fmt) + "_" + TaleUtils.getRandomNumber(5) + ".zip";
 
@@ -103,7 +103,7 @@ public class SiteServiceImpl implements ISiteService {
         }
         if (bk_type.equals("db")) {
 
-            String bkAttachDir = AttachController.CLASSPATH + "upload/";
+            String bkAttachDir = AdminAttachController.CLASSPATH + "upload/";
             if (!(new File(bkAttachDir)).isDirectory()) {
                 File file = new File(bkAttachDir);
                 if (!file.exists()) {

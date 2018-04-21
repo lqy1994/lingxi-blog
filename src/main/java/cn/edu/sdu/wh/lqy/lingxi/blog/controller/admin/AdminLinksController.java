@@ -1,10 +1,9 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,30 +15,41 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("admin/category")
-public class CategoryController extends BaseController {
+@RequestMapping("admin/links")
+public class AdminLinksController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminLinksController.class);
 
     @Autowired
     private IMetaService metasService;
 
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConstant.MAX_POSTS);
-        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConstant.MAX_POSTS);
-        request.setAttribute("categories", categories);
-        request.setAttribute("tags", tags);
-        return "admin/category";
+        List<Meta> metas = metasService.getMetas(Types.LINK.getType());
+        request.setAttribute("links", metas);
+        return "admin/links";
     }
 
     @PostMapping(value = "save")
     @ResponseBody
-    public ApiResponse saveCategory(@RequestParam String cname, @RequestParam Integer mid) {
+    public ApiResponse saveLink(@RequestParam String title, @RequestParam String url,
+                                @RequestParam String logo, @RequestParam Integer mid,
+                                @RequestParam(value = "sort", defaultValue = "0") int sort) {
         try {
-            metasService.saveMeta(Types.CATEGORY.getType(), cname, mid);
+            Meta metas = new Meta();
+            metas.setName(title);
+            metas.setSlug(url);
+            metas.setDescription(logo);
+            metas.setSort(sort);
+            metas.setType(Types.LINK.getType());
+            if (null != mid) {
+                metas.setMid(mid);
+                metasService.update(metas);
+            } else {
+                metasService.saveMeta(metas);
+            }
         } catch (Exception e) {
-            String msg = "分类保存失败";
+            String msg = "友链保存失败";
             LOGGER.error(msg, e);
             return ApiResponse.fail(msg);
         }
@@ -52,7 +62,7 @@ public class CategoryController extends BaseController {
         try {
             metasService.delete(mid);
         } catch (Exception e) {
-            String msg = "删除失败";
+            String msg = "友链删除失败";
             LOGGER.error(msg, e);
             return ApiResponse.fail(msg);
         }

@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("admin/comments")
-public class CommentController extends BaseController {
+public class AdminCommentController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminCommentController.class);
 
     @Autowired
     private ICommentService commentsService;

@@ -1,9 +1,11 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +14,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * 首页
@@ -21,8 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
-
-    public static final String INDEX = "themes/default/index";
 
     @Autowired
     private IArticleService articleService;
@@ -40,9 +44,9 @@ public class HomeController extends BaseController {
     /**
      * 首页分页
      *
-     * @param model model
-     * @param offset       第几页
-     * @param limit   每页大小
+     * @param model  model
+     * @param offset 第几页
+     * @param limit  每页大小
      * @return 主页
      */
     @GetMapping(value = "page/{offset}")
@@ -53,9 +57,18 @@ public class HomeController extends BaseController {
         if (offset > 1) {
             model.addAttribute("title", "第" + offset + "页");
         }
-        return INDEX;
+        return RestPageConst.INDEX;
     }
 
-
+    /**
+     * 注销
+     *
+     * @param session
+     * @param response
+     */
+    @RequestMapping("logout")
+    public void logout(HttpSession session, HttpServletResponse response) {
+        TaleUtils.logout(session, response);
+    }
 
 }

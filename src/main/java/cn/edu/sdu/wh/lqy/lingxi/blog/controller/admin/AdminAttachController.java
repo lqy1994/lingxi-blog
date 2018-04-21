@@ -32,9 +32,9 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("admin/attach")
-public class AttachController extends BaseController {
+public class AdminAttachController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AttachController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminAttachController.class);
 
     public static final String CLASSPATH = TaleUtils.getUplodFilePath();
 

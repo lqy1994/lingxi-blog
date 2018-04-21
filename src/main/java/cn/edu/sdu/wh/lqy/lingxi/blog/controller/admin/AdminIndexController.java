@@ -33,8 +33,8 @@ import java.util.List;
 @Controller("adminIndexController")
 @RequestMapping("/admin")
 @Transactional(rollbackFor = LingXiException.class)
-public class IndexController extends BaseController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(IndexController.class);
+public class AdminIndexController extends BaseController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminIndexController.class);
 
     @Autowired
     private ISiteService siteService;

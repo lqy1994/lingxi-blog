@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AttachController;
+import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AdminAttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import org.apache.commons.lang3.StringUtils;
@@ -350,8 +350,8 @@ public class TaleUtils {
 
     public static String getFileKey(String name) {
         String prefix = "/upload/" + DateKit.dateFormat(new Date(), "yyyy/MM");
-        if (!new File(AttachController.CLASSPATH + prefix).exists()) {
-            new File(AttachController.CLASSPATH + prefix).mkdirs();
+        if (!new File(AdminAttachController.CLASSPATH + prefix).exists()) {
+            new File(AdminAttachController.CLASSPATH + prefix).mkdirs();
         }
 
         name = StringUtils.trimToNull(name);

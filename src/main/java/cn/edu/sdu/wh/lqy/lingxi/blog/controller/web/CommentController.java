@@ -1,0 +1,115 @@
+package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
+
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
+import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
+import cn.edu.sdu.wh.lqy.lingxi.blog.dto.ErrorCode;
+import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.IPKit;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.PatternKit;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
+import com.vdurmont.emoji.EmojiParser;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+
+@Controller
+public class CommentController extends BaseController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
+
+    @Autowired
+    private ICommentService commentService;
+    /**
+     * 评论操作
+     */
+    @PostMapping(value = "comment")
+    @ResponseBody
+    public ApiResponse comment(Model model, HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam Integer cid, @RequestParam Integer coid, @RequestParam String author,
+                               @RequestParam String mail, @RequestParam String url, @RequestParam String text,
+                               @RequestParam String _csrf_token) {
+
+        String ref = request.getHeader("Referer");
+        if (StringUtils.isBlank(ref) || StringUtils.isBlank(_csrf_token)) {
+            return ApiResponse.fail(ErrorCode.BAD_REQUEST);
+        }
+
+        String token = cache.hget(Types.CSRF_TOKEN.getType(), _csrf_token);
+        if (StringUtils.isBlank(token)) {
+            return ApiResponse.fail(ErrorCode.BAD_REQUEST);
+        }
+
+        if (null == cid || StringUtils.isBlank(text)) {
+            return ApiResponse.fail("请输入完整后评论");
+        }
+
+        if (StringUtils.isNotBlank(author) && author.length() > 50) {
+            return ApiResponse.fail("姓名过长");
+        }
+
+        if (StringUtils.isNotBlank(mail) && !TaleUtils.isEmail(mail)) {
+            return ApiResponse.fail("请输入正确的邮箱格式");
+        }
+
+        if (StringUtils.isNotBlank(url) && !PatternKit.isURL(url)) {
+            return ApiResponse.fail("请输入正确的URL格式");
+        }
+
+        if (text.length() > 200) {
+            return ApiResponse.fail("请输入200个字符以内的评论");
+        }
+
+        String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
+        Integer count = cache.hget(Types.COMMENTS_FREQUENCY.getType(), val);
+        if (null != count && count > 0) {
+            return ApiResponse.fail("您发表评论太快了，请过会再试");
+        }
+
+        author = TaleUtils.cleanXSS(author);
+        text = TaleUtils.cleanXSS(text);
+
+        author = EmojiParser.parseToAliases(author);
+        text = EmojiParser.parseToAliases(text);
+
+        Comment comments = new Comment();
+        comments.setAuthor(author);
+        comments.setCid(cid);
+        comments.setIp(request.getRemoteAddr());
+        comments.setUrl(url);
+        comments.setContent(text);
+        comments.setMail(mail);
+        comments.setParent(coid);
+        try {
+            String result = commentService.insertComment(comments);
+            cookie("tale_remember_author", URLEncoder.encode(author, "UTF-8"), 7 * 24 * 60 * 60, response);
+            cookie("tale_remember_mail", URLEncoder.encode(mail, "UTF-8"), 7 * 24 * 60 * 60, response);
+            if (StringUtils.isNotBlank(url)) {
+                cookie("tale_remember_url", URLEncoder.encode(url, "UTF-8"), 7 * 24 * 60 * 60, response);
+            }
+            // 设置对每个文章1分钟可以评论一次
+            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
+            if (!WebConstant.SUCCESS_RESULT.equals(result)) {
+                return ApiResponse.fail(result);
+            }
+            return ApiResponse.ok();
+        } catch (Exception e) {
+            String msg = "评论发布失败";
+            LOGGER.error(msg, e);
+            return ApiResponse.fail(msg);
+        }
+    }
+
+}

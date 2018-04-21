@@ -29,9 +29,9 @@ import java.io.IOException;
 @Controller
 @RequestMapping("/admin")
 @Transactional(rollbackFor = LingXiException.class)
-public class AuthController extends BaseController {
+public class AdminLoginController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AdminLoginController.class);
 
     @Autowired
     private IUserService usersService;

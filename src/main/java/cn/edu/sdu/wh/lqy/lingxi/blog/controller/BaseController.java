@@ -4,7 +4,9 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.MapCache;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public abstract class BaseController {
 
@@ -48,4 +50,18 @@ public abstract class BaseController {
         return "comm/error_404";
     }
 
+    /**
+     * 设置cookie
+     *
+     * @param name
+     * @param value
+     * @param maxAge
+     * @param response
+     */
+    protected void cookie(String name, String value, int maxAge, HttpServletResponse response) {
+        Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setSecure(false);
+        response.addCookie(cookie);
+    }
 }
