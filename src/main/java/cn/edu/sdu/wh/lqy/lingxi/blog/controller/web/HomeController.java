@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
  * 首页
  */
 @Controller
+@RequestMapping("/lingxi")
 public class HomeController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
@@ -36,7 +37,7 @@ public class HomeController extends BaseController {
      *
      * @return
      */
-    @GetMapping(value = "/")
+    @GetMapping(value = {"", "/", "/index"})
     public String index(Model model, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         return index(model, 1, limit);
     }
@@ -49,7 +50,7 @@ public class HomeController extends BaseController {
      * @param limit  每页大小
      * @return 主页
      */
-    @GetMapping(value = "page/{offset}")
+    @GetMapping(value = "/page/{offset}")
     public String index(Model model, @PathVariable("offset") int offset, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         offset = offset < 0 || offset > WebConstant.MAX_PAGE ? 1 : offset;
         PageInfo<Article> articles = articleService.getContents(offset, limit);
@@ -66,7 +67,7 @@ public class HomeController extends BaseController {
      * @param session
      * @param response
      */
-    @RequestMapping("logout")
+    @RequestMapping("/logout")
     public void logout(HttpSession session, HttpServletResponse response) {
         TaleUtils.logout(session, response);
     }

@@ -167,7 +167,7 @@ public final class Commons {
      * @return
      */
     public static String permalink(Integer cid, String slug) {
-        return site_url("/article/" + (StringUtils.isNotBlank(slug) ? slug : cid.toString()));
+        return site_url("/lingxi/article/" + (StringUtils.isNotBlank(slug) ? slug : cid.toString()));
     }
 
     /**
@@ -205,7 +205,7 @@ public final class Commons {
             String[] arr = categories.split(",");
             StringBuffer sbuf = new StringBuffer();
             for (String c : arr) {
-                sbuf.append("<a href=\"/category/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
+                sbuf.append("<a href=\"/lingxi/category/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
             }
             return sbuf.toString();
         }
@@ -223,7 +223,7 @@ public final class Commons {
             String[] arr = tags.split(",");
             StringBuffer sbuf = new StringBuffer();
             for (String c : arr) {
-                sbuf.append("<a href=\"/tag/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
+                sbuf.append("<a href=\"/lingxi/tag/" + URLEncoder.encode(c, "UTF-8") + "\">" + c + "</a>");
             }
             return sbuf.toString();
         }

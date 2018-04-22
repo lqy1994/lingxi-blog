@@ -19,6 +19,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -28,6 +29,7 @@ import java.net.URLEncoder;
 import java.util.concurrent.TimeUnit;
 
 @Controller
+@RequestMapping("/lingxi/")
 public class CommentController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentController.class);
