@@ -39,9 +39,4 @@ public class AdminCommonController extends BaseController {
             LOGGER.error("generate gif code error! ", e);
         }
     }
-
-    @GetMapping("/error_404")
-    public String error404(Model model) {
-        return render_404();
-    }
 }

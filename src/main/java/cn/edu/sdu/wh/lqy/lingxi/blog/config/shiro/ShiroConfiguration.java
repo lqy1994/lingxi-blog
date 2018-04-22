@@ -76,7 +76,7 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/gifCode", "anon");
         filterChainDefinitionMap.put("/logout", "logout");
         filterChainDefinitionMap.put("/lingxi/**", "anon");
-        filterChainDefinitionMap.put("/admin/**", "anon");
+        filterChainDefinitionMap.put("/admin/**", "user");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 

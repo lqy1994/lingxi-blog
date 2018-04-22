@@ -65,6 +65,15 @@ public class ApiResponse<T> {
         this.code = code;
     }
 
+    public ApiResponse(int status, String msg) {
+        this.code = status;
+        this.msg = msg;
+    }
+
+    public static ApiResponse of(int status, String msg) {
+        return new ApiResponse(status, msg);
+    }
+
     public T getPayload() {
         return payload;
     }
