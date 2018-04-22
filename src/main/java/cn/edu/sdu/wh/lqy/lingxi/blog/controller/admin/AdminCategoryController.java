@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
@@ -30,7 +31,7 @@ public class AdminCategoryController extends BaseController {
         List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConstant.MAX_POSTS);
         request.setAttribute("categories", categories);
         request.setAttribute("tags", tags);
-        return "admin/category";
+        return RestPageConst.ADMIN_CATEGORY;
     }
 
     @PostMapping(value = "save")

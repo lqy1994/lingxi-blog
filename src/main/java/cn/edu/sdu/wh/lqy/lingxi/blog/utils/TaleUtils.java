@@ -5,6 +5,8 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AdminAttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;
 import org.commonmark.node.Node;
@@ -141,11 +143,24 @@ public class TaleUtils {
      * @return
      */
     public static User getLoginUser(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        if (null == session) {
-            return null;
+
+        HttpSession httpSession = request.getSession();
+        if (httpSession != null) {
+            Object userObj = httpSession.getAttribute(WebConstant.LOGIN_SESSION_KEY);
+            if (userObj != null) {
+                return (User) userObj;
+            }
         }
-        return (User) session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
+
+        Session shiroSession = SecurityUtils.getSubject().getSession();
+        if (shiroSession != null){
+            Object userObj1 = shiroSession.getAttribute(WebConstant.LOGIN_SESSION_KEY);
+            if (userObj1 != null) {
+                return (User) userObj1;
+            }
+        }
+
+        return null;
     }
 
 

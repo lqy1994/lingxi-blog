@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
@@ -33,7 +34,7 @@ public class AdminCommentController extends BaseController {
         commentVoExample.createCriteria().andAuthorIdNotEqualTo(users.getUid());
         PageInfo<Comment> commentsPaginator = commentsService.getCommentsWithPage(commentVoExample, page, limit);
         request.setAttribute("comments", commentsPaginator);
-        return "admin/comment_list";
+        return RestPageConst.ADMIN_COMMENT_LIST;
     }
 
     /**

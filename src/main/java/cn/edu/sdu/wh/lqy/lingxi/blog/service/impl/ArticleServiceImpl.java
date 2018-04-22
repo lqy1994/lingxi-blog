@@ -13,6 +13,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
@@ -27,7 +28,7 @@ import java.util.List;
 
 
 @Service("articleService")
-public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article>*/ implements IArticleService {
+public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */implements IArticleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
 

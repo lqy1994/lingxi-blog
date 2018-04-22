@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
@@ -46,14 +47,14 @@ public class AdminArticleController extends BaseController {
         contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
         PageInfo<Article> contentsPaginator = articleService.getArticlesWithpage(contentVoExample, page, limit);
         request.setAttribute("articles", contentsPaginator);
-        return "admin/article_list";
+        return RestPageConst.ADMIN_ARTICLE_LIST;
     }
 
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
         List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
-        return "admin/article_edit2";
+        return RestPageConst.ADMIN_ARTICLE_EDIT;
     }
 
     @GetMapping(value = "/{cid}")
@@ -63,7 +64,7 @@ public class AdminArticleController extends BaseController {
         List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
-        return "admin/article_edit2";
+        return RestPageConst.ADMIN_ARTICLE_EDIT;
     }
 
     @PostMapping(value = "/publish")

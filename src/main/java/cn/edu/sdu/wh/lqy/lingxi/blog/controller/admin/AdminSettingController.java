@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
@@ -26,6 +27,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/admin/setting")
 public class AdminSettingController extends BaseController {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminSettingController.class);
 
     @Autowired
@@ -51,7 +53,7 @@ public class AdminSettingController extends BaseController {
             options.put("site_record", "");
         }
         request.setAttribute("options", options);
-        return "admin/setting";
+        return RestPageConst.ADMIN_SETTINGS;
     }
 
     /**
@@ -116,14 +118,10 @@ public class AdminSettingController extends BaseController {
      */
     private String join(String[] arr) {
         StringBuilder ret = new StringBuilder();
-        String[] var3 = arr;
-        int var4 = arr.length;
-
-        for (int var5 = 0; var5 < var4; ++var5) {
-            String item = var3[var5];
+        for (int i = 0; i < arr.length; i++) {
+            String item = arr[i];
             ret.append(',').append(item);
         }
-
         return ret.length() > 0 ? ret.substring(1) : ret.toString();
     }
 

@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
@@ -38,7 +39,7 @@ public class AdminPageController extends BaseController {
         contentVoExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
         PageInfo<Article> contentsPaginator = articleService.getArticlesWithpage(contentVoExample, 1, WebConstant.MAX_POSTS);
         request.setAttribute("articles", contentsPaginator);
-        return "admin/page_list";
+        return RestPageConst.ADMIN_PAGE_LIST;
     }
 
     @GetMapping(value = "new")
@@ -50,7 +51,7 @@ public class AdminPageController extends BaseController {
     public String editPage(@PathVariable String cid, HttpServletRequest request) {
         Article contents = articleService.getContents(cid);
         request.setAttribute("contents", contents);
-        return "admin/page_edit";
+        return RestPageConst.ADMIN_PAGE_EDIT;
     }
 
     @PostMapping(value = "publish")

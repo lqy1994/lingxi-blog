@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
@@ -67,7 +68,7 @@ public class AdminIndexController extends BaseController {
         model.addAttribute("statistics", statistics);
         model.addAttribute("logs", logs);
         LOGGER.info("Exit admin index method");
-        return "admin/index";
+        return RestPageConst.ADMIN_INDEX;
     }
 
     /**
@@ -75,7 +76,7 @@ public class AdminIndexController extends BaseController {
      */
     @GetMapping(value = "profile")
     public String profile() {
-        return "admin/profile";
+        return RestPageConst.ADMIN_PROFILE;
     }
 
 

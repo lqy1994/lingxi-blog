@@ -3,6 +3,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
+import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

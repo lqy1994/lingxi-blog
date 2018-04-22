@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
@@ -27,7 +28,7 @@ public class AdminLinksController extends BaseController {
     public String index(HttpServletRequest request) {
         List<Meta> metas = metasService.getMetas(Types.LINK.getType());
         request.setAttribute("links", metas);
-        return "admin/links";
+        return RestPageConst.ADMIN_LINKS;
     }
 
     @PostMapping(value = "save")

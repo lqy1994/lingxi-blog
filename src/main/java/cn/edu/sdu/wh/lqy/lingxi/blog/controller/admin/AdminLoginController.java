@@ -1,5 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
@@ -58,7 +59,7 @@ public class AdminLoginController extends BaseController {
         Map<String, Object> publicKeyMap = RSAUtils.getPublicKeyMap();
         model.addAttribute("publicKeyMap", publicKeyMap);
 
-        return "admin/user/login";
+        return RestPageConst.ADMIN_LOGIN;
     }
 
     @PostMapping("/login")
@@ -90,6 +91,9 @@ public class AdminLoginController extends BaseController {
             currentUser.login(token);
             User user = usersService.getUserByName(userName);
             session.setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
+
+            logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getUid());
+
             return ApiResponse.ok(200);
         } catch (UnknownAccountException e) {
             return  ApiResponse.fail(103,"未知账户");
@@ -100,46 +104,6 @@ public class AdminLoginController extends BaseController {
 
     }
 
-
-//    @PostMapping(value = "login")
-//    @ResponseBody
-//    public ApiResponse doLogin(@RequestParam String username,
-//                               @RequestParam String password,
-//                               @RequestParam(required = false) String remeber_me,
-//                               HttpServletRequest request,
-//                               HttpServletResponse response) {
-//
-//        String errorCount = redisTemplate.opsForValue().get("login_error_count");
-//        Integer errCnt = 0;
-//        if (StringUtils.isNotNull(errorCount)) {
-//            errCnt = Integer.valueOf(errorCount);
-//        } else {
-//            redisTemplate.opsForValue().set("login_error_count", (errCnt + 1) + "", 10 * 60, TimeUnit.SECONDS);
-//        }
-//        try {
-//            User user = usersService.login(username, password);
-//            request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
-//            if (StringUtils.isNotBlank(remeber_me)) {
-//                TaleUtils.setCookie(response, user.getUid());
-//            }
-//            logService.insertLog(LogActions.LOGIN.getAction(), null, request.getRemoteAddr(), user.getUid());
-//        } catch (Exception e) {
-//            errCnt = errCnt == 0 ? 1 : errCnt + 1;
-//            if (errCnt > 3) {
-//                return ApiResponse.fail("您输入密码已经错误超过3次，请10分钟后尝试");
-//            }
-//            redisTemplate.opsForValue().set("login_error_count", errCnt + "", 10 * 60, TimeUnit.SECONDS);
-//            String msg = "登录失败";
-//            if (e instanceof LingXiException) {
-//                msg = e.getMessage();
-//            } else {
-//                LOGGER.error(msg, e);
-//            }
-//            return ApiResponse.fail(msg);
-//        }
-//        return ApiResponse.ok();
-//    }
-
     /**
      * 注销
      *
@@ -149,13 +113,14 @@ public class AdminLoginController extends BaseController {
     @RequestMapping("/logout")
     public void logout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
         session.removeAttribute(WebConstant.LOGIN_SESSION_KEY);
+        SecurityUtils.getSubject().logout();
         Cookie cookie = new Cookie(WebConstant.USER_IN_COOKIE, "");
         cookie.setValue(null);
         cookie.setMaxAge(0);// 立即销毁cookie
         cookie.setPath("/");
         response.addCookie(cookie);
         try {
-            response.sendRedirect("/admin/login");
+            response.sendRedirect("/login");
         } catch (IOException e) {
             e.printStackTrace();
             LOGGER.error("注销失败", e);
