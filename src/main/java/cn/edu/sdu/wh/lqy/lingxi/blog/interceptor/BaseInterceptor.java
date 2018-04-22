@@ -1,9 +1,9 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.interceptor;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.*;
@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 

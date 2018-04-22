@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option;
 
 import java.util.List;
 import java.util.Map;

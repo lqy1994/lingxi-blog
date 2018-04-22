@@ -2,10 +2,10 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils;

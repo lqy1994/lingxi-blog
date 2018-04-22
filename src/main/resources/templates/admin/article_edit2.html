@@ -91,13 +91,20 @@
                                 </select>
                             </div>
                             <div class="clearfix"></div>
+
                             <!--编辑框-->
                             <div class="form-group">
-                                <textarea style="height: 450px" autocomplete="off" id="text" name="text"
+                                <!--<textarea style="height: 450px" autocomplete="off" id="text" name="text"
                                           class="markdown-textarea"
-                                          th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>
+                                          th:utext="${contents!=null and contents.content !=null}?${contents.content}: ''"></textarea>-->
+                                <div id="summernote" class="summernote"></div>
                             </div>
                             <!--编辑框-->
+
+
+
+
+
                             <div class="form-group col-md-3 col-sm-4">
                                 <label class="col-sm-4">开启评论</label>
                                 <div class="col-sm-8">
@@ -144,7 +151,6 @@
     </div>
 </div>
 <div th:replace="admin/footer :: footer"></div>
-
 <script th:src="@{/admin/plugins/tagsinput/jquery.tagsinput.min.js}"></script>
 <script th:src="@{/admin/plugins/jquery-multi-select/jquery.quicksearch.js}"></script>
 
@@ -158,5 +164,16 @@
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{/admin/js/article.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+    var content = /*[[${contents!=null and contents.content !=null } ? ${contents.content} : '']]*/
+
+    $('#summernote').summernote({
+        // placeholder: content,
+        // tabsize: 2,
+        height: 500
+    });
+    $('#summernote').code(content);
+    $('.summernote').destroy();
+</script>
 </body>
 </html>

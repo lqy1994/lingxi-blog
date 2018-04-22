@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
 
 import java.util.List;
 

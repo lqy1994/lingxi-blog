@@ -1,12 +1,11 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ArticleVoSearch;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.search.ServiceMultiResult;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import com.github.pagehelper.PageInfo;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 

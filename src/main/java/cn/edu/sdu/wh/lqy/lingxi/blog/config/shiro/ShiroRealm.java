@@ -1,7 +1,7 @@
 //package cn.edu.sdu.wh.lqy.lingxi.blog.config.shiro;
 //
-//import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AuthorizingUser;
-//import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+//import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.AuthorizingUser;
+//import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 //import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 //import org.apache.shiro.SecurityUtils;
 //import org.apache.shiro.authc.*;

@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;

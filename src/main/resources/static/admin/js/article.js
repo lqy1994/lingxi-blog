@@ -28,7 +28,8 @@ var tale = new $.tale();
  */
 function subArticle(status) {
     var title = $('#articleForm input[name=title]').val();
-    var content = $('#text').val();
+    var content = $('#summernote').summernote('code');
+    console.log(content)
     if (title == '') {
         tale.alertWarn('请输入文章标题');
         return;
@@ -62,11 +63,12 @@ function subArticle(status) {
     });
 }
 
-var textarea = $('#text'),
-    toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
-preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown-editor');
+// var textarea = $('#text'),
 
-markdown(textarea, toolbar, preview);
+    // toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
+// preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown-editor');
+
+// markdown(textarea, toolbar, preview);
 
 
 function allow_comment(obj) {

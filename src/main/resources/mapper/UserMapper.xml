@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.UserVoMapper">
-  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User">
+  <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
     <id column="uid" jdbcType="INTEGER" property="uid" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
@@ -75,7 +75,7 @@
     uid, username, password, email, home_url, screen_name, created, activated, logged, 
     group_name
   </sql>
-  <select id="selectByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -107,13 +107,13 @@
     delete from t_users
     where uid = #{uid,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVoExample">
+  <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample">
     delete from t_users
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User" useGeneratedKeys="true" keyProperty="uid">
+  <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User" useGeneratedKeys="true" keyProperty="uid">
     insert into t_users (uid, username, password, 
       email, home_url, screen_name, 
       created, activated, logged, 
@@ -123,7 +123,7 @@
       #{created,jdbcType=INTEGER}, #{activated,jdbcType=INTEGER}, #{logged,jdbcType=INTEGER}, 
       #{groupName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User" useGeneratedKeys="true" keyProperty="uid">
+  <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User" useGeneratedKeys="true" keyProperty="uid">
     insert into t_users
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="uid != null">
@@ -190,7 +190,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample" resultType="java.lang.Long">
     select count(*) from t_users
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -250,7 +250,7 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User">
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
     update t_users
     <set>
       <if test="username != null">
@@ -283,7 +283,7 @@
     </set>
     where uid = #{uid,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User">
+  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
     update t_users
     set username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
@@ -296,7 +296,7 @@
       group_name = #{groupName,jdbcType=VARCHAR}
     where uid = #{uid,jdbcType=INTEGER}
   </update>
-    <select id="selectByUserName" resultType="cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User">
+    <select id="selectByUserName" resultType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
       SELECT <include refid="Base_Column_List"/>
       FROM t_users
       WHERE username = #{userName}

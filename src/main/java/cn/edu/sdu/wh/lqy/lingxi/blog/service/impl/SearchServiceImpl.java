@@ -1,9 +1,9 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ArticleVoSearch;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.search.*;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.*;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

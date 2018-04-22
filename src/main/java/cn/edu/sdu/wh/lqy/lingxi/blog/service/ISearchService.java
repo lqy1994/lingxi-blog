@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ArticleVoSearch;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.search.ServiceMultiResult;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.search.ServiceResult;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceResult;
 
 import java.util.List;
 

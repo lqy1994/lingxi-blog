@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
 import com.github.pagehelper.PageInfo;
 
 public interface IArticleService  {

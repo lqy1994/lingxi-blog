@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log;
 
 import java.util.List;
 

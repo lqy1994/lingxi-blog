@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.RelationshipVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.RelationshipVoKey;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

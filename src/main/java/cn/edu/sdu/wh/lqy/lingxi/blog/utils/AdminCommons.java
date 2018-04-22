@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

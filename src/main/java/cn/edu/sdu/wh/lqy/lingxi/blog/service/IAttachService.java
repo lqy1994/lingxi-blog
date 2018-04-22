@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Attach;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Attach;
 import com.github.pagehelper.PageInfo;
 
 public interface IAttachService {

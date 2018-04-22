@@ -3,17 +3,16 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
@@ -28,7 +27,7 @@ import java.util.List;
 
 
 @Service
-public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService {
+public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article>*/ implements IArticleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
@@ -80,7 +79,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             article.setThumbnail(null);
         }
 
-        article.setContent(EmojiParser.parseToAliases(article.getContent()));
+//        article.setContent(EmojiParser.parseToAliases(article.getContent()));
+        article.setContent(article.getContent());
 
         int time = DateKit.getCurrentUnixTime();
         article.setCreated(time);
@@ -90,10 +90,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         String tags = article.getTags();
         String categories = article.getCategories();
-        articleMapper.insert(article);
-        Integer cid = article.getId();
-        metasService.saveMetas(cid, tags, Types.TAG.getType());
-        metasService.saveMetas(cid, categories, Types.CATEGORY.getType());
+        articleMapper.insertNewArticle(article);
+        Integer artId = article.getId();
+        metasService.saveMetas(artId, tags, Types.TAG.getType());
+        metasService.saveMetas(artId, categories, Types.CATEGORY.getType());
         return WebConstant.SUCCESS_RESULT;
     }
 

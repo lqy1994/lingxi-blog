@@ -2,10 +2,10 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.ErrorCode;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ErrorCode;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.IPKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.PatternKit;

@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.CommentBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.CommentBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.CommentVoExample;
 import com.github.pagehelper.PageInfo;
 
 

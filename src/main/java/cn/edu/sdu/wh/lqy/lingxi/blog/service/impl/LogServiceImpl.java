@@ -2,8 +2,8 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Log;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.LogVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.LogVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import com.github.pagehelper.PageHelper;

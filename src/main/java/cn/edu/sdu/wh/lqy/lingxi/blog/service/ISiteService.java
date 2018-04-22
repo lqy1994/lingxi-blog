@@ -1,11 +1,11 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.BackResponseBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.StatisticsBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ArchiveBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.BackResponseBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.StatisticsBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 
 import java.util.List;
 

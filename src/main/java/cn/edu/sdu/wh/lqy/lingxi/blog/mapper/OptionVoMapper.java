@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.OptionVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

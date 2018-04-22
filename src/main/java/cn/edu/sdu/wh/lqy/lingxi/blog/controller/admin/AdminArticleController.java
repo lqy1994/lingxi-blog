@@ -2,11 +2,11 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.*;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.*;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -53,7 +53,7 @@ public class AdminArticleController extends BaseController {
     public String newArticle(HttpServletRequest request) {
         List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
-        return "admin/article_edit";
+        return "admin/article_edit2";
     }
 
     @GetMapping(value = "/{cid}")
@@ -63,7 +63,7 @@ public class AdminArticleController extends BaseController {
         List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
-        return "admin/article_edit";
+        return "admin/article_edit2";
     }
 
     @PostMapping(value = "/publish")

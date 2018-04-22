@@ -2,8 +2,8 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.UserVoMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.UserVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import org.apache.commons.lang3.StringUtils;

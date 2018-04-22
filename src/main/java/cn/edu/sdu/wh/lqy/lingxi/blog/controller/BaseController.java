@@ -1,7 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
-import cn.edu.sdu.wh.lqy.lingxi.blog.utils.MapCache;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 
 import javax.servlet.http.Cookie;

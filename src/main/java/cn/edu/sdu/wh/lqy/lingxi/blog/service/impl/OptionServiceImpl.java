@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Option;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.OptionVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.OptionVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

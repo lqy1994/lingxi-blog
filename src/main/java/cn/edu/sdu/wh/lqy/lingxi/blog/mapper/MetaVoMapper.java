@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Meta;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.MetaVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.MetaVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 

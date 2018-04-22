@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.RelationshipVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.RelationshipVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.RelationshipVoKey;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

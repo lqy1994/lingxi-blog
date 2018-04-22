@@ -1,16 +1,15 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.mapper;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ArchiveBo;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.ContentVoExample;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ArchiveBo;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public interface ArticleMapper extends BaseMapper<Article> {
+public interface ArticleMapper /*extends BaseMapper<Article>*/ {
 
     long countByExample(ContentVoExample example);
 
@@ -18,7 +17,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     int deleteByPrimaryKey(Integer id);
 
-//    int insert(Article record);
+    int insertNewArticle(Article article);
 
     int insertSelective(Article record);
 

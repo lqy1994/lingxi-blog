@@ -1,8 +1,8 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Attach;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.AttachVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Attach;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.AttachVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IAttachService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import com.github.pagehelper.PageHelper;

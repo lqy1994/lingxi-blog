@@ -3,7 +3,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.utils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AdminAttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import org.apache.commons.lang3.StringUtils;
 import org.commonmark.Extension;
 import org.commonmark.ext.gfm.tables.TablesExtension;

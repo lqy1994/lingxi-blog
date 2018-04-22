@@ -1,10 +1,10 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Bo.ApiResponse;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.Comment;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.CommentVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.CommentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
