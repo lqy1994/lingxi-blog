@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.LogVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
@@ -20,11 +20,11 @@ public class LogServiceImpl implements ILogService {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogServiceImpl.class);
 
     @Autowired
-    private LogVoMapper logVoMapper;
+    private LogMapper logMapper;
 
     @Override
     public void insertLog(Log log) {
-        logVoMapper.insert(log);
+        logMapper.insert(log);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class LogServiceImpl implements ILogService {
         logs.setIp(ip);
         logs.setAuthorId(authorId);
         logs.setCreated(DateKit.getCurrentUnixTime());
-        logVoMapper.insert(logs);
+        logMapper.insert(logs);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class LogServiceImpl implements ILogService {
         LogVoExample logVoExample = new LogVoExample();
         logVoExample.setOrderByClause("id desc");
         PageHelper.startPage((page - 1) * limit, limit);
-        List<Log> logs = logVoMapper.selectByExample(logVoExample);
+        List<Log> logs = logMapper.selectByExample(logVoExample);
         LOGGER.debug("Exit getLogs method");
         return logs;
     }

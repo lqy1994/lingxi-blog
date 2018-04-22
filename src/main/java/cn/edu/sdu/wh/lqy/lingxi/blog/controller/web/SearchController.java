@@ -42,7 +42,7 @@ public class SearchController extends BaseController {
      */
     @GetMapping(value = "search/{keyword}")
     public String search(Model model, @PathVariable String keyword, @RequestParam(value = "limit", defaultValue = "12") int limit) {
-        return search(model, keyword, 1, limit);
+        return search(model, keyword, 0, limit);
     }
 
     @GetMapping(value = "search/{keyword}/{page}")

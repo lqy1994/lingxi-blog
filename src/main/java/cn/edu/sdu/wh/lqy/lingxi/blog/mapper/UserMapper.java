@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface UserVoMapper {
+public interface UserMapper {
+
     long countByExample(UserVoExample example);
 
     int deleteByExample(UserVoExample example);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta">
     <id column="mid" jdbcType="INTEGER" property="mid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
@@ -82,7 +82,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_metas
+    from meta
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -101,21 +101,21 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from t_metas
+    from meta
     where mid = #{mid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_metas
+    delete from meta
     where mid = #{mid,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.MetaVoExample">
-    delete from t_metas
+    delete from meta
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta" useGeneratedKeys="true" keyProperty="mid">
-    insert into t_metas (mid, name, slug,
+    insert into meta (mid, name, slug,
       type, description, sort,
       parent)
     values (#{mid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
@@ -123,7 +123,7 @@
       #{parent,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta" useGeneratedKeys="true" keyProperty="mid">
-    insert into t_metas
+    insert into meta
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="mid != null">
         mid,
@@ -172,13 +172,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.MetaVoExample" resultType="java.lang.Long">
-    select count(*) from t_metas
+    select count(*) from meta
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_metas
+    update meta
     <set>
       <if test="record.mid != null">
         mid = #{record.mid,jdbcType=INTEGER},
@@ -207,7 +207,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_metas
+    update meta
     set mid = #{record.mid,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
       slug = #{record.slug,jdbcType=VARCHAR},
@@ -220,7 +220,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta">
-    update t_metas
+    update meta
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
@@ -244,7 +244,7 @@
     where mid = #{mid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta">
-    update t_metas
+    update meta
     set name = #{name,jdbcType=VARCHAR},
       slug = #{slug,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
@@ -255,16 +255,16 @@
   </update>
 
   <select id="selectFromSql" resultMap="MetaDto" parameterType="Map">
-    select a.*, count(b.cid) as count from t_metas a left join `t_relationships` b on a.mid = b.mid where a.type = #{type} group by a.mid order by #{order} limit #{limit}
+    select a.*, count(b.cid) as count from meta a left join relationship b on a.mid = b.mid where a.type = #{type} group by a.mid order by #{order} limit #{limit}
   </select>
 
   <select id="selectDtoByNameAndType" resultMap="MetaDto">
-    select a.*, count(b.cid) as count from t_metas a left join `t_relationships` b on a.mid = b.mid where a.type = #{type} and a.name = #{name} group by a.mid
+    select a.*, count(b.cid) as count from meta a left join relationship b on a.mid = b.mid where a.type = #{type} and a.name = #{name} group by a.mid
   </select>
 
   <select id="countWithSql" parameterType="Integer" resultType="Integer">
     SELECT count(0)
-    FROM t_contents a LEFT JOIN t_relationships b ON a.cid = b.cid
+    FROM content a LEFT JOIN relationship b ON a.cid = b.cid
     WHERE b.mid = #{value} AND a.status = 'publish' AND a.type = 'post';
   </select>
 </mapper>

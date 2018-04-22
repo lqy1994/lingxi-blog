@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public interface MetaVoMapper {
+public interface MetaMapper {
     long countByExample(MetaVoExample example);
 
     int deleteByExample(MetaVoExample example);

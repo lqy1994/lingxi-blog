@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.RelationshipVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.RelationshipMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
@@ -16,7 +16,7 @@ public class RelationshipServiceImpl implements IRelationshipService {
     private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipServiceImpl.class);
 
     @Autowired
-    private RelationshipVoMapper relationshipVoMapper;
+    private RelationshipMapper relationshipMapper;
 
     @Override
     public void deleteById(Integer cid, Integer mid) {
@@ -28,7 +28,7 @@ public class RelationshipServiceImpl implements IRelationshipService {
         if (mid != null) {
             criteria.andMidEqualTo(mid);
         }
-        relationshipVoMapper.deleteByExample(relationshipVoExample);
+        relationshipMapper.deleteByExample(relationshipVoExample);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class RelationshipServiceImpl implements IRelationshipService {
         if (mid != null) {
             criteria.andMidEqualTo(mid);
         }
-        return relationshipVoMapper.selectByExample(relationshipVoExample);
+        return relationshipMapper.selectByExample(relationshipVoExample);
     }
 
     @Override
     public void insertVo(RelationshipVoKey relationshipVoKey) {
-        relationshipVoMapper.insert(relationshipVoKey);
+        relationshipMapper.insert(relationshipVoKey);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class RelationshipServiceImpl implements IRelationshipService {
         if (mid != null) {
             criteria.andMidEqualTo(mid);
         }
-        long num = relationshipVoMapper.countByExample(relationshipVoExample);
+        long num = relationshipMapper.countByExample(relationshipVoExample);
         LOGGER.debug("Exit countById method return num={}",num);
         return num;
     }

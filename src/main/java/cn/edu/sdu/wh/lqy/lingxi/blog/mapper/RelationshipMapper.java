@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface RelationshipVoMapper {
+public interface RelationshipMapper {
     long countByExample(RelationshipVoExample example);
 
     int deleteByExample(RelationshipVoExample example);

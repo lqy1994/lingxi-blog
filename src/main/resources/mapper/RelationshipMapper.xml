@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.RelationshipVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.RelationshipMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey">
     <id column="cid" jdbcType="INTEGER" property="cid" />
     <id column="mid" jdbcType="INTEGER" property="mid" />
@@ -72,7 +72,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_relationships
+    from relationship
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -89,22 +89,22 @@
     </if>
   </select>
   <delete id="deleteByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey">
-    delete from t_relationships
+    delete from relationship
     where cid = #{cid,jdbcType=INTEGER}
       and mid = #{mid,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoExample">
-    delete from t_relationships
+    delete from relationship
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey">
-    insert into t_relationships (cid, mid)
+    insert into relationship (cid, mid)
     values (#{cid,jdbcType=INTEGER}, #{mid,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey">
-    insert into t_relationships
+    insert into relationship
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="cid != null">
         cid,
@@ -123,13 +123,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoExample" resultType="java.lang.Long">
-    select count(*) from t_relationships
+    select count(*) from relationship
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_relationships
+    update relationship
     <set>
       <if test="record.cid != null">
         cid = #{record.cid,jdbcType=INTEGER},
@@ -143,7 +143,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_relationships
+    update relationship
     set cid = #{record.cid,jdbcType=INTEGER},
       mid = #{record.mid,jdbcType=INTEGER}
     <if test="_parameter != null">

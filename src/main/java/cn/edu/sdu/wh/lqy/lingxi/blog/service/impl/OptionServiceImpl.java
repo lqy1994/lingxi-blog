@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.OptionVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
@@ -22,12 +22,12 @@ public class OptionServiceImpl implements IOptionService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OptionServiceImpl.class);
 
     @Autowired
-    private OptionVoMapper optionVoMapper;
+    private OptionMapper optionMapper;
 
     @Override
     public void insertOption(Option option) {
         LOGGER.debug("Enter insertOption method:option={}", option);
-        optionVoMapper.insertSelective(option);
+        optionMapper.insertSelective(option);
         LOGGER.debug("Exit insertOption method.");
     }
 
@@ -38,10 +38,10 @@ public class OptionServiceImpl implements IOptionService {
         Option option = new Option();
         option.setName(name);
         option.setValue(value);
-        if (optionVoMapper.selectByPrimaryKey(name) == null) {
-            optionVoMapper.insertSelective(option);
+        if (optionMapper.selectByPrimaryKey(name) == null) {
+            optionMapper.insertSelective(option);
         } else {
-            optionVoMapper.updateByPrimaryKeySelective(option);
+            optionMapper.updateByPrimaryKeySelective(option);
         }
         LOGGER.debug("Exit insertOption method.");
     }
@@ -56,11 +56,11 @@ public class OptionServiceImpl implements IOptionService {
 
     @Override
     public Option getOptionByName(String name) {
-        return optionVoMapper.selectByPrimaryKey(name);
+        return optionMapper.selectByPrimaryKey(name);
     }
 
     @Override
     public List<Option> getOptions() {
-        return optionVoMapper.selectByExample(new OptionVoExample());
+        return optionMapper.selectByExample(new OptionVoExample());
     }
 }

@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
@@ -26,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
-@Service
+@Service("articleService")
 public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article>*/ implements IArticleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
@@ -35,7 +35,7 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article>*/ 
     private ArticleMapper articleMapper;
 
     @Autowired
-    private MetaVoMapper metaVoMapper;
+    private MetaMapper metaMapper;
 
     @Autowired
     private IRelationshipService relationshipService;
@@ -142,7 +142,7 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article>*/ 
 
     @Override
     public PageInfo<Article> getArticles(Integer mid, int page, int limit) {
-        int total = metaVoMapper.countWithSql(mid);
+        int total = metaMapper.countWithSql(mid);
         PageHelper.startPage(page, limit);
         List<Article> list = articleMapper.findByCatalog(mid);
         PageInfo<Article> paginator = new PageInfo<>(list);

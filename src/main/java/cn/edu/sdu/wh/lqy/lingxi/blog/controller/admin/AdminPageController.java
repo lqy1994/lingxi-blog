@@ -26,7 +26,7 @@ public class AdminPageController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminPageController.class);
 
     @Autowired
-    private IArticleService contentsService;
+    private IArticleService articleService;
 
     @Autowired
     private ILogService logService;
@@ -36,7 +36,7 @@ public class AdminPageController extends BaseController {
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.setOrderByClause("created desc");
         contentVoExample.createCriteria().andTypeEqualTo(Types.PAGE.getType());
-        PageInfo<Article> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, 1, WebConstant.MAX_POSTS);
+        PageInfo<Article> contentsPaginator = articleService.getArticlesWithpage(contentVoExample, 1, WebConstant.MAX_POSTS);
         request.setAttribute("articles", contentsPaginator);
         return "admin/page_list";
     }
@@ -48,7 +48,7 @@ public class AdminPageController extends BaseController {
 
     @GetMapping(value = "/{cid}")
     public String editPage(@PathVariable String cid, HttpServletRequest request) {
-        Article contents = contentsService.getContents(cid);
+        Article contents = articleService.getContents(cid);
         request.setAttribute("contents", contents);
         return "admin/page_edit";
     }
@@ -73,7 +73,7 @@ public class AdminPageController extends BaseController {
             contents.setAllowPing(allowPing == 1);
         }
         contents.setAuthorId(users.getUid());
-        String result = contentsService.publish(contents);
+        String result = articleService.publish(contents);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
@@ -102,7 +102,7 @@ public class AdminPageController extends BaseController {
             contents.setAllowPing(allowPing == 1);
         }
         contents.setAuthorId(users.getUid());
-        String result = contentsService.updateArticle(contents);
+        String result = articleService.updateArticle(contents);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
@@ -112,7 +112,7 @@ public class AdminPageController extends BaseController {
     @RequestMapping(value = "delete")
     @ResponseBody
     public ApiResponse delete(@RequestParam int cid, HttpServletRequest request) {
-        String result = contentsService.deleteByCid(cid);
+        String result = articleService.deleteByCid(cid);
         logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid(request));
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);

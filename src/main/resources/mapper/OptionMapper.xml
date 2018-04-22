@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.OptionMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option">
     <id column="name" jdbcType="VARCHAR" property="name" />
     <result column="value" jdbcType="VARCHAR" property="value" />
@@ -73,7 +73,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_options
+    from `option`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -92,27 +92,27 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_options
+    from `option`
     where name = #{name,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from t_options
+    delete from `option`
     where name = #{name,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.OptionVoExample">
-    delete from t_options
+    delete from `option`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option">
-    insert into t_options (name, value, description
+    insert into `option` (name, value, description
       )
     values (#{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option">
-    insert into t_options
+    insert into `option`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
         name,
@@ -137,13 +137,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.OptionVoExample" resultType="java.lang.Long">
-    select count(*) from t_options
+    select count(*) from `option`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_options
+    update `option`
     <set>
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
@@ -160,7 +160,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_options
+    update `option`
     set name = #{record.name,jdbcType=VARCHAR},
       value = #{record.value,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR}
@@ -169,7 +169,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option">
-    update t_options
+    update `option`
     <set>
       <if test="value != null">
         value = #{value,jdbcType=VARCHAR},
@@ -181,7 +181,7 @@
     where name = #{name,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option">
-    update t_options
+    update `option`
     set value = #{value,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR}
     where name = #{name,jdbcType=VARCHAR}
@@ -189,7 +189,7 @@
 
 <!--批量保存-->
   <insert id="insertOptions" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option" >
-    INSERT INTO t_options(name, value, description) VALUES
+    INSERT INTO `option`(name, value, description) VALUES
     <if test="list.size!=0">
       <foreach collection="list" item="option"   separator="," >
         ( #{option.name},#{option.value},#{option.description})

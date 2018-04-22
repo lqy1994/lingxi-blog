@@ -1,5 +1,7 @@
 
 spring:
+  application:
+    name: lingxi-blog
   profiles:
     active: dev
 server:

@@ -3,9 +3,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AdminAttachController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
@@ -37,7 +37,7 @@ public class SiteServiceImpl implements ISiteService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SiteServiceImpl.class);
 
     @Autowired
-    private CommentVoMapper commentVoMapper;
+    private CommentMapper commentMapper;
 
     @Autowired
     private ArticleMapper articleMapper;
@@ -46,7 +46,7 @@ public class SiteServiceImpl implements ISiteService {
     private AttachVoMapper attachVoMapper;
 
     @Autowired
-    private MetaVoMapper metaVoMapper;
+    private MetaMapper metaMapper;
 
     @Override
     public List<Comment> recentComments(int limit) {
@@ -57,7 +57,7 @@ public class SiteServiceImpl implements ISiteService {
         CommentVoExample example = new CommentVoExample();
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
-        List<Comment> byPage = commentVoMapper.selectByExampleWithBLOBs(example);
+        List<Comment> byPage = commentMapper.selectByExampleWithBLOBs(example);
         LOGGER.debug("Exit recentComments method");
         return byPage;
     }
@@ -143,7 +143,7 @@ public class SiteServiceImpl implements ISiteService {
     @Override
     public Comment getComment(Integer coid) {
         if (null != coid) {
-            return commentVoMapper.selectByPrimaryKey(coid);
+            return commentMapper.selectByPrimaryKey(coid);
         }
         return null;
     }
@@ -157,13 +157,13 @@ public class SiteServiceImpl implements ISiteService {
         contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
         Long articles =   articleMapper.countByExample(contentVoExample);
 
-        Long comments = commentVoMapper.countByExample(new CommentVoExample());
+        Long comments = commentMapper.countByExample(new CommentVoExample());
 
         Long attachs = attachVoMapper.countByExample(new AttachVoExample());
 
         MetaVoExample metaVoExample = new MetaVoExample();
         metaVoExample.createCriteria().andTypeEqualTo(Types.LINK.getType());
-        Long links = metaVoMapper.countByExample(metaVoExample);
+        Long links = metaMapper.countByExample(metaVoExample);
 
         statistics.setArticles(articles);
         statistics.setComments(comments);
@@ -211,7 +211,7 @@ public class SiteServiceImpl implements ISiteService {
             paraMap.put("type", type);
             paraMap.put("order", orderBy);
             paraMap.put("limit", limit);
-            retList= metaVoMapper.selectFromSql(paraMap);
+            retList= metaMapper.selectFromSql(paraMap);
         }
         LOGGER.debug("Exit metas method");
         return retList;

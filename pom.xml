@@ -31,6 +31,7 @@
         <shiro-ehcache.version>1.4.0</shiro-ehcache.version>
         <shiro-spring.version>1.4.0</shiro-spring.version>
         <shiro-core.version>1.4.0</shiro-core.version>
+        <dubbo.version>2.6.0</dubbo.version>
     </properties>
 
     <dependencyManagement>
@@ -208,6 +209,14 @@
             <version>20.0</version>
         </dependency>
         <!--Shiro EhCache End -->
+        <!--dubbo start-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>${dubbo.version}</version>
+        </dependency>
+        <!-- dubbo end -->
+
     </dependencies>
 
     <repositories>

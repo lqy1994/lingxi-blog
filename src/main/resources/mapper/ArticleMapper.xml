@@ -480,7 +480,7 @@
 
     <select id="findByCatalog" resultMap="BaseResultMap" parameterType="Integer">
         select a.*
-        from tale.article a left join t_relationships b on a.id = b.cid
+        from tale.article a left join relationship b on a.id = b.cid
         where b.mid = #{value} and a.status = 'publish' and a.type = 'post'
         order by a.created desc
     </select>

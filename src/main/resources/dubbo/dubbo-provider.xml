@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <context:property-placeholder location="classpath:dubbo/dubbo.properties"/>
+
+    <dubbo:application name="lingxi-blog-provider"/>
+
+    <!-- 注册中心配置：使用zookeeper注册中心暴露服务地址  file="${catalina.home}/dubbo-registry/dubbo-registry.properties" -->
+    <dubbo:registry address="${dubbo.registry.address}" check="true" subscribe="false" />
+
+    <!-- 服务提供者协议配置：用dubbo协议在20880端口暴露服务 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.protocol.port}" threads="${dubbo.protocol.threads}" />
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService" ref="articleService"/>
+
+
+
+</beans>

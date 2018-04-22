@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.UserVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
         <id column="uid" jdbcType="INTEGER" property="uid"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
@@ -85,7 +85,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from t_users
+        from user
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -104,22 +104,22 @@
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from t_users
+        from user
         where uid = #{uid,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from t_users
+        delete from user
         where uid = #{uid,jdbcType=INTEGER}
     </delete>
     <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample">
-        delete from t_users
+        delete from user
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User" useGeneratedKeys="true"
             keyProperty="uid">
-        insert into t_users (uid, username, password,
+        insert into user (uid, username, password,
                              email, salt, home_url, screen_name,
                              created, activated, logged,
                              group_name)
@@ -131,7 +131,7 @@
     </insert>
     <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User" useGeneratedKeys="true"
             keyProperty="uid">
-        insert into t_users
+        insert into user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="uid != null">
                 uid,
@@ -205,13 +205,13 @@
     </insert>
     <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample"
             resultType="java.lang.Long">
-        select count(*) from t_users
+        select count(*) from user
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update t_users
+        update user
         <set>
             <if test="record.uid != null">
                 uid = #{record.uid,jdbcType=INTEGER},
@@ -252,7 +252,7 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update t_users
+        update user
         set uid = #{record.uid,jdbcType=INTEGER},
         username = #{record.username,jdbcType=VARCHAR},
         password = #{record.password,jdbcType=VARCHAR},
@@ -269,7 +269,7 @@
         </if>
     </update>
     <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
-        update t_users
+        update user
         <set>
             <if test="username != null">
                 username = #{username,jdbcType=VARCHAR},
@@ -305,7 +305,7 @@
         where uid = #{uid,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
-        update t_users
+        update user
         set username    = #{username,jdbcType=VARCHAR},
             password    = #{password,jdbcType=VARCHAR},
             email       = #{email,jdbcType=VARCHAR},
@@ -321,7 +321,7 @@
     <select id="selectByUserName" resultType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User">
         SELECT
         <include refid="Base_Column_List"/>
-        FROM t_users
+        FROM user
         WHERE username = #{userName}
     </select>
 </mapper>

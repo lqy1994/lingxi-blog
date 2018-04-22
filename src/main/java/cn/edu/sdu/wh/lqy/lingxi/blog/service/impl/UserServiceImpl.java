@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.UserVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.UserMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.UserVoExample;
@@ -16,12 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
-@Service
+@Service("userService")
 public class UserServiceImpl implements IUserService {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
-    private UserVoMapper userVoMapper;
+    private UserMapper userMapper;
 
     @Override
     @Transactional
@@ -31,7 +31,7 @@ public class UserServiceImpl implements IUserService {
 //            用户密码加密
             String encodePwd = TaleUtils.MD5encode(user.getUsername() + user.getPassword());
             user.setPassword(encodePwd);
-            userVoMapper.insertSelective(user);
+            userMapper.insertSelective(user);
         }
         return user.getUid();
     }
@@ -40,7 +40,7 @@ public class UserServiceImpl implements IUserService {
     public User queryUserById(Integer uid) {
         User user = null;
         if (uid != null) {
-            user = userVoMapper.selectByPrimaryKey(uid);
+            user = userMapper.selectByPrimaryKey(uid);
         }
         return user;
     }
@@ -53,13 +53,13 @@ public class UserServiceImpl implements IUserService {
         UserVoExample example = new UserVoExample();
         UserVoExample.Criteria criteria = example.createCriteria();
         criteria.andUsernameEqualTo(username);
-        long count = userVoMapper.countByExample(example);
+        long count = userMapper.countByExample(example);
         if (count < 1) {
             throw new LingXiException("不存在该用户");
         }
         String pwd = TaleUtils.MD5encode(username + password);
         criteria.andPasswordEqualTo(pwd);
-        List<User> users = userVoMapper.selectByExample(example);
+        List<User> users = userMapper.selectByExample(example);
         if (users.size() != 1) {
             throw new LingXiException("用户名或密码错误");
         }
@@ -72,7 +72,7 @@ public class UserServiceImpl implements IUserService {
         if (null == user || null == user.getUid()) {
             throw new LingXiException("user is null");
         }
-        int i = userVoMapper.updateByPrimaryKeySelective(user);
+        int i = userMapper.updateByPrimaryKeySelective(user);
         if (i != 1) {
             throw new LingXiException("update user by uid and retrun is not one");
         }
@@ -81,7 +81,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User getUserByName(String userName) {
         if (userName != null && !userName.equals("")) {
-            return userVoMapper.selectByUserName(userName);
+            return userMapper.selectByUserName(userName);
         }
         return null;
     }

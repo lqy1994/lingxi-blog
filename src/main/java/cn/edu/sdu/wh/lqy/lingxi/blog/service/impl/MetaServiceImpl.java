@@ -1,7 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
@@ -29,25 +29,25 @@ public class MetaServiceImpl implements IMetaService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MetaServiceImpl.class);
 
     @Autowired
-    private MetaVoMapper metaVoMapper;
+    private MetaMapper metaMapper;
 
     @Autowired
     private IRelationshipService relationshipService;
 
     @Autowired
-    private IArticleService contentService;
+    private IArticleService articleService;
 
     @Override
     public MetaDto getMeta(String type, String name) {
         if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
-            return metaVoMapper.selectDtoByNameAndType(name, type);
+            return metaMapper.selectDtoByNameAndType(name, type);
         }
         return null;
     }
 
     @Override
     public Integer countMeta(Integer mid) {
-        return metaVoMapper.countWithSql(mid);
+        return metaMapper.countWithSql(mid);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MetaServiceImpl implements IMetaService {
             MetaVoExample metaVoExample = new MetaVoExample();
             metaVoExample.setOrderByClause("sort desc, mid desc");
             metaVoExample.createCriteria().andTypeEqualTo(types);
-            return metaVoMapper.selectByExample(metaVoExample);
+            return metaMapper.selectByExample(metaVoExample);
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class MetaServiceImpl implements IMetaService {
             paraMap.put("type", type);
             paraMap.put("order", orderby);
             paraMap.put("limit", limit);
-            return metaVoMapper.selectFromSql(paraMap);
+            return metaMapper.selectFromSql(paraMap);
         }
         return null;
     }
@@ -82,17 +82,17 @@ public class MetaServiceImpl implements IMetaService {
     @Override
     @Transactional
     public void delete(int mid) {
-        Meta metas = metaVoMapper.selectByPrimaryKey(mid);
+        Meta metas = metaMapper.selectByPrimaryKey(mid);
         if (null != metas) {
             String type = metas.getType();
             String name = metas.getName();
 
-            metaVoMapper.deleteByPrimaryKey(mid);
+            metaMapper.deleteByPrimaryKey(mid);
 
             List<RelationshipVoKey> rlist = relationshipService.getRelationshipById(null, mid);
             if (null != rlist) {
                 for (RelationshipVoKey r : rlist) {
-                    Article contents = contentService.getContents(String.valueOf(r.getCid()));
+                    Article contents = articleService.getContents(String.valueOf(r.getCid()));
                     if (null != contents) {
                         Article temp = new Article();
                         temp.setId(r.getCid());
@@ -102,7 +102,7 @@ public class MetaServiceImpl implements IMetaService {
                         if (type.equals(Types.TAG.getType())) {
                             temp.setTags(reMeta(name, contents.getTags()));
                         }
-                        contentService.updateContentByCid(temp);
+                        articleService.updateContentByCid(temp);
                     }
                 }
             }
@@ -116,7 +116,7 @@ public class MetaServiceImpl implements IMetaService {
         if (StringUtils.isNotBlank(type) && StringUtils.isNotBlank(name)) {
             MetaVoExample metaVoExample = new MetaVoExample();
             metaVoExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-            List<Meta> metaVos = metaVoMapper.selectByExample(metaVoExample);
+            List<Meta> metaVos = metaMapper.selectByExample(metaVoExample);
             Meta metas;
             if (metaVos.size() != 0) {
                 throw new LingXiException("已经存在该项");
@@ -124,14 +124,14 @@ public class MetaServiceImpl implements IMetaService {
                 metas = new Meta();
                 metas.setName(name);
                 if (null != mid) {
-                    Meta original = metaVoMapper.selectByPrimaryKey(mid);
+                    Meta original = metaMapper.selectByPrimaryKey(mid);
                     metas.setMid(mid);
-                    metaVoMapper.updateByPrimaryKeySelective(metas);
+                    metaMapper.updateByPrimaryKeySelective(metas);
 //                    更新原有文章的categories
-                    contentService.updateCategory(original.getName(), name);
+                    articleService.updateCategory(original.getName(), name);
                 } else {
                     metas.setType(type);
-                    metaVoMapper.insertSelective(metas);
+                    metaMapper.insertSelective(metas);
                 }
             }
         }
@@ -154,7 +154,7 @@ public class MetaServiceImpl implements IMetaService {
     private void saveOrUpdate(Integer cid, String name, String type) {
         MetaVoExample metaVoExample = new MetaVoExample();
         metaVoExample.createCriteria().andTypeEqualTo(type).andNameEqualTo(name);
-        List<Meta> metaVos = metaVoMapper.selectByExample(metaVoExample);
+        List<Meta> metaVos = metaMapper.selectByExample(metaVoExample);
 
         int mid;
         Meta metas;
@@ -168,7 +168,7 @@ public class MetaServiceImpl implements IMetaService {
             metas.setSlug(name);
             metas.setName(name);
             metas.setType(type);
-            metaVoMapper.insertSelective(metas);
+            metaMapper.insertSelective(metas);
             mid = metas.getMid();
         }
         if (mid != 0) {
@@ -201,7 +201,7 @@ public class MetaServiceImpl implements IMetaService {
     @Transactional
     public void saveMeta(Meta metas) {
         if (null != metas) {
-            metaVoMapper.insertSelective(metas);
+            metaMapper.insertSelective(metas);
         }
     }
 
@@ -209,7 +209,7 @@ public class MetaServiceImpl implements IMetaService {
     @Transactional
     public void update(Meta metas) {
         if (null != metas && null != metas.getMid()) {
-            metaVoMapper.updateByPrimaryKeySelective(metas);
+            metaMapper.updateByPrimaryKeySelective(metas);
         }
     }
 }

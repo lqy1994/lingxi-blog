@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.LogMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="action" jdbcType="VARCHAR" property="action" />
@@ -76,7 +76,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_logs
+    from log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,21 +95,21 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from t_logs
+    from log
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_logs
+    delete from log
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.LogVoExample">
-    delete from t_logs
+    delete from log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log" useGeneratedKeys="true" keyProperty="id">
-    insert into t_logs (id, action, data, 
+    insert into log (id, action, data,
       author_id, ip, created
       )
     values (#{id,jdbcType=INTEGER}, #{action,jdbcType=VARCHAR}, #{data,jdbcType=VARCHAR}, 
@@ -117,7 +117,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log" useGeneratedKeys="true" keyProperty="id">
-    insert into t_logs
+    insert into log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
@@ -160,13 +160,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.LogVoExample" resultType="java.lang.Long">
-    select count(*) from t_logs
+    select count(*) from log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_logs
+    update log
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -192,7 +192,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_logs
+    update log
     set id = #{record.id,jdbcType=INTEGER},
       action = #{record.action,jdbcType=VARCHAR},
       data = #{record.data,jdbcType=VARCHAR},
@@ -204,7 +204,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log">
-    update t_logs
+    update log
     <set>
       <if test="action != null">
         action = #{action,jdbcType=VARCHAR},
@@ -225,7 +225,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Log">
-    update t_logs
+    update log
     set action = #{action,jdbcType=VARCHAR},
       data = #{data,jdbcType=VARCHAR},
       author_id = #{authorId,jdbcType=INTEGER},

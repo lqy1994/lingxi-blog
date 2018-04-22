@@ -30,7 +30,7 @@ public class AdminArticleController extends BaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminArticleController.class);
 
     @Autowired
-    private IArticleService contentsService;
+    private IArticleService articleService;
 
     @Autowired
     private IMetaService metasService;
@@ -44,7 +44,7 @@ public class AdminArticleController extends BaseController {
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.setOrderByClause("created desc");
         contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
-        PageInfo<Article> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, page, limit);
+        PageInfo<Article> contentsPaginator = articleService.getArticlesWithpage(contentVoExample, page, limit);
         request.setAttribute("articles", contentsPaginator);
         return "admin/article_list";
     }
@@ -58,7 +58,7 @@ public class AdminArticleController extends BaseController {
 
     @GetMapping(value = "/{cid}")
     public String editArticle(@PathVariable String cid, HttpServletRequest request) {
-        Article contents = contentsService.getContents(cid);
+        Article contents = articleService.getContents(cid);
         request.setAttribute("contents", contents);
         List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
@@ -75,7 +75,7 @@ public class AdminArticleController extends BaseController {
         if (StringUtils.isBlank(contents.getCategories())) {
             contents.setCategories("默认分类");
         }
-        String result = contentsService.publish(contents);
+        String result = articleService.publish(contents);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
@@ -88,7 +88,7 @@ public class AdminArticleController extends BaseController {
         User users = this.user(request);
         contents.setAuthorId(users.getUid());
         contents.setType(Types.ARTICLE.getType());
-        String result = contentsService.updateArticle(contents);
+        String result = articleService.updateArticle(contents);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
         }
@@ -98,7 +98,7 @@ public class AdminArticleController extends BaseController {
     @RequestMapping(value = "/delete")
     @ResponseBody
     public ApiResponse delete(@RequestParam int cid, HttpServletRequest request) {
-        String result = contentsService.deleteByCid(cid);
+        String result = articleService.deleteByCid(cid);
         logService.insertLog(LogActions.DEL_ARTICLE.getAction(), cid + "", request.getRemoteAddr(), this.getUid(request));
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);

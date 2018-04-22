@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentVoMapper">
+<mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
     <id column="coid" jdbcType="INTEGER" property="coid" />
     <result column="cid" jdbcType="INTEGER" property="cid" />
@@ -92,7 +92,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from t_comments
+    from `comment`
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -106,7 +106,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from t_comments
+    from comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -131,17 +131,17 @@
     where coid = #{coid,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from t_comments
+    delete from comment
     where coid = #{coid,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.CommentVoExample">
-    delete from t_comments
+    delete from comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment" useGeneratedKeys="true" keyProperty="coid">
-    insert into t_comments (coid, cid, created, 
+    insert into comment (coid, cid, created,
       author, author_id, owner_id, 
       mail, url, ip, agent, 
       type, status, parent, 
@@ -153,7 +153,7 @@
       #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment" useGeneratedKeys="true" keyProperty="coid">
-    insert into t_comments
+    insert into comment
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="coid != null">
         coid,
@@ -244,13 +244,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.CommentVoExample" resultType="java.lang.Long">
-    select count(*) from t_comments
+    select count(*) from comment
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update t_comments
+    update comment
     <set>
       <if test="record.coid != null">
         coid = #{record.coid,jdbcType=INTEGER},
@@ -300,7 +300,7 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
-    update t_comments
+    update comment
     set coid = #{record.coid,jdbcType=INTEGER},
       cid = #{record.cid,jdbcType=INTEGER},
       created = #{record.created,jdbcType=INTEGER},
@@ -320,7 +320,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update t_comments
+    update comment
     set coid = #{record.coid,jdbcType=INTEGER},
       cid = #{record.cid,jdbcType=INTEGER},
       created = #{record.created,jdbcType=INTEGER},
@@ -339,7 +339,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
-    update t_comments
+    update comment
     <set>
       <if test="cid != null">
         cid = #{cid,jdbcType=INTEGER},
@@ -384,7 +384,7 @@
     where coid = #{coid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
-    update t_comments
+    update comment
     set cid = #{cid,jdbcType=INTEGER},
       created = #{created,jdbcType=INTEGER},
       author = #{author,jdbcType=VARCHAR},
@@ -401,7 +401,7 @@
     where coid = #{coid,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
-    update t_comments
+    update comment
     set cid = #{cid,jdbcType=INTEGER},
       created = #{created,jdbcType=INTEGER},
       author = #{author,jdbcType=VARCHAR},
