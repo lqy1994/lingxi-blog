@@ -1,6 +1,6 @@
 //package cn.edu.sdu.wh.lqy.lingxi.blog;
 //
-//import cn.edu.sdu.wh.lqy.lingxi.blog.modal.Vo.User;
+//import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 //import org.junit.Assert;
 //import org.junit.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
