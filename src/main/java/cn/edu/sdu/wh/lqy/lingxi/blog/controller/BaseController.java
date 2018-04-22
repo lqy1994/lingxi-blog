@@ -1,7 +1,11 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.controller;
 
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.AuthorizingUser;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -62,5 +66,21 @@ public abstract class BaseController {
         cookie.setMaxAge(maxAge);
         cookie.setSecure(false);
         response.addCookie(cookie);
+    }
+
+    public static Subject getSubject() {
+        return SecurityUtils.getSubject();
+    }
+
+    protected AuthorizingUser getCurrentUser() {
+        return (AuthorizingUser) getSubject().getPrincipal();
+    }
+
+    protected Session getSession() {
+        return getSubject().getSession();
+    }
+
+    protected Session getSession(Boolean flag) {
+        return getSubject().getSession(flag);
     }
 }

@@ -50,6 +50,10 @@ public class User implements Serializable {
      * 上次登录最后活跃时间
      */
     private Integer logged;
+    /**
+     * 加密码的盐
+     */
+    private String salt;
 
     /**
      * 用户组
@@ -134,5 +138,13 @@ public class User implements Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

@@ -2,7 +2,13 @@
 spring:
   profiles:
     active: dev
+server:
+  error:
+    whitelabel:
+      enabled: false
 
-debug: true
+#debug: true
+
+
 
 

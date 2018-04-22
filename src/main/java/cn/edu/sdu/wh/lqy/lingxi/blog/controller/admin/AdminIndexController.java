@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,10 +31,12 @@ import java.util.List;
 /**
  * 后台管理首页
  */
-@Controller("adminIndexController")
+//@Controller("adminIndexController")
+@Controller
 @RequestMapping("/admin")
 @Transactional(rollbackFor = LingXiException.class)
 public class AdminIndexController extends BaseController {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminIndexController.class);
 
     @Autowired
@@ -47,10 +50,11 @@ public class AdminIndexController extends BaseController {
 
     /**
      * 页面跳转
+     *
      * @return
      */
-    @GetMapping(value = {"","/index"})
-    public String index(HttpServletRequest request){
+    @GetMapping(value = {"", "/", "/index"})
+    public String index(Model model) {
         LOGGER.info("Enter admin index method");
         List<Comment> comments = siteService.recentComments(5);
         List<Article> articles = siteService.recentContents(5);
@@ -58,10 +62,10 @@ public class AdminIndexController extends BaseController {
         // 取最新的20条日志
         List<Log> logs = logService.getLogs(1, 5);
 
-        request.setAttribute("comments", comments);
-        request.setAttribute("articles", articles);
-        request.setAttribute("statistics", statistics);
-        request.setAttribute("logs", logs);
+        model.addAttribute("comments", comments);
+        model.addAttribute("articles", articles);
+        model.addAttribute("statistics", statistics);
+        model.addAttribute("logs", logs);
         LOGGER.info("Exit admin index method");
         return "admin/index";
     }
@@ -91,10 +95,10 @@ public class AdminIndexController extends BaseController {
             logService.insertLog(LogActions.UP_INFO.getAction(), GsonUtils.toJsonString(temp), request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            User original= (User)session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
+            User original = (User) session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
             original.setScreenName(screenName);
             original.setEmail(email);
-            session.setAttribute(WebConstant.LOGIN_SESSION_KEY,original);
+            session.setAttribute(WebConstant.LOGIN_SESSION_KEY, original);
         }
         return ApiResponse.ok();
     }
@@ -126,11 +130,11 @@ public class AdminIndexController extends BaseController {
             logService.insertLog(LogActions.UP_PWD.getAction(), null, request.getRemoteAddr(), this.getUid(request));
 
             //更新session中的数据
-            User original= (User)session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
+            User original = (User) session.getAttribute(WebConstant.LOGIN_SESSION_KEY);
             original.setPassword(pwd);
-            session.setAttribute(WebConstant.LOGIN_SESSION_KEY,original);
+            session.setAttribute(WebConstant.LOGIN_SESSION_KEY, original);
             return ApiResponse.ok();
-        } catch (Exception e){
+        } catch (Exception e) {
             String msg = "密码修改失败";
             if (e instanceof LingXiException) {
                 msg = e.getMessage();

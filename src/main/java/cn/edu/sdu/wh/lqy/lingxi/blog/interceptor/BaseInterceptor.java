@@ -51,27 +51,26 @@ public class BaseInterceptor extends HandlerInterceptorAdapter {
         LOGGE.info("用户访问地址: {}, 来源地址: {}", uri, IPKit.getIpAddrByRequest(request));
 
         //请求拦截处理
-        User user = TaleUtils.getLoginUser(request);
-        if (user == null) {
-            Integer uid = TaleUtils.getCookieUid(request);
-            if (uid != null) {
-                //这里还是有安全隐患,cookie是可以伪造的
-                user = userService.queryUserById(uid);
-                request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
-            }
-        }
-        if (uri.startsWith("/admin") && !uri.startsWith("/admin/login") && null == user) {
-            response.sendRedirect(request.getContextPath() + "/admin/login");
-            return false;
-        }
+//        User user = TaleUtils.getLoginUser(request);
+//        if (user == null) {
+//            Integer uid = TaleUtils.getCookieUid(request);
+//            if (uid != null) {
+//                user = userService.queryUserById(uid);
+//                request.getSession().setAttribute(WebConstant.LOGIN_SESSION_KEY, user);
+//            }
+//        }
+//        if (uri.startsWith("/admin") && !uri.startsWith("/admin/login") && null == user) {
+//            response.sendRedirect(request.getContextPath() + "/admin/login");
+//            return false;
+//        }
         //设置get请求的token
-        if (request.getMethod().equals("GET")) {
-            String csrf_token = UUID.UU64();
-            // 默认存储30分钟
-            stringRedisTemplate.opsForValue().set(Types.CSRF_TOKEN.getType() + ":" + csrf_token,
-                    uri, 30 * 60, TimeUnit.SECONDS);
-            request.setAttribute("_csrf_token", csrf_token);
-        }
+//        if (request.getMethod().equals("GET")) {
+//            String csrf_token = UUID.UU64();
+//            // 默认存储30分钟
+//            stringRedisTemplate.opsForValue().set(Types.CSRF_TOKEN.getType() + ":" + csrf_token,
+//                    uri, 30 * 60, TimeUnit.SECONDS);
+//            request.setAttribute("_csrf_token", csrf_token);
+//        }
         return true;
     }
 
