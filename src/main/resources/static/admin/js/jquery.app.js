@@ -211,7 +211,7 @@ var changeptype = function () {
     dw = $(document).width();
     dh = $(document).height();
 
-    /*if(jQuery.browser.mobile === true){
+    /*if(jQuery.browse.mobile === true){
      $("body").addClass("mobile").removeClass("fixed-left");
      }*/
 

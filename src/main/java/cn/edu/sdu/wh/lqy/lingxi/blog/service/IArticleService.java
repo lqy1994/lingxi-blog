@@ -2,6 +2,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ArticleDTO;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import com.github.pagehelper.PageInfo;
 
 public interface IArticleService  {
@@ -87,4 +90,7 @@ public interface IArticleService  {
      * @param newCatefory
      */
     void updateCategory(String ordinal, String newCatefory);
+
+    ServiceMultiResult<ArticleDTO> query(BrowseSearch browseSearch);
+
 }

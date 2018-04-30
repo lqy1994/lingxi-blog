@@ -5,6 +5,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.CommentBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
@@ -16,6 +17,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -125,6 +127,33 @@ public class ArticleController extends BaseController {
             valueOperations().set("article" + ":" + "hits", hits + "");
         }
     }
+
+
+    @GetMapping("browser")
+    public String articleBrowser(Model model, @ModelAttribute BrowseSearch browseSearch) {
+
+//        searchService.query()
+//        ServiceMultiResult<ArticleDTO> serviceMultiResult = articleService.query(browseSearch);
+//
+//        model.addAttribute("total", serviceMultiResult.getTotal());
+//        model.addAttribute("articles", serviceMultiResult.getResult());
+//
+//        if (rentSearch.getRegionEnName() == null) {
+//            rentSearch.setRegionEnName("*");
+//        }
+//
+//        model.addAttribute("searchBody", rentSearch);
+//        model.addAttribute("regions", addressResult.getResult());
+//
+//        model.addAttribute("priceBlocks", RentValueBlock.PRICE_BLOCK);
+//        model.addAttribute("areaBlocks", RentValueBlock.AREA_BLOCK);
+//
+//        model.addAttribute("currentPriceBlock", RentValueBlock.matchPrice(rentSearch.getPriceBlock()));
+//        model.addAttribute("currentAreaBlock", RentValueBlock.matchArea(rentSearch.getAreaBlock()));
+
+        return RestPageConst.ARTICLE_BROWSER;
+    }
+
 
     public ValueOperations<String, String> valueOperations() {
         return redisTemplate.opsForValue();

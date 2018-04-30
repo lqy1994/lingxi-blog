@@ -3,17 +3,19 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
-import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ArticleDTO;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
@@ -43,6 +45,8 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
 
     @Autowired
     private IMetaService metasService;
+    @Autowired
+    private ISearchService searchService;
 
     @Override
     @Transactional
@@ -95,6 +99,9 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
         Integer artId = article.getId();
         metasService.saveMetas(artId, tags, Types.TAG.getType());
         metasService.saveMetas(artId, categories, Types.CATEGORY.getType());
+
+        searchService.index(artId);
+
         return WebConstant.SUCCESS_RESULT;
     }
 
@@ -125,9 +132,9 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
                 ContentVoExample contentVoExample = new ContentVoExample();
                 contentVoExample.createCriteria().andSlugEqualTo(id);
                 List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
-                if (articles.size() != 1) {
-                    throw new LingXiException("query content by id and return is not one");
-                }
+//                if (articles.size() != 1) {
+////                    throw new LingXiException("query content by id and return is not one");
+////                }
                 return articles.get(0);
             }
         }
@@ -193,6 +200,11 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
     }
 
     @Override
+    public ServiceMultiResult<ArticleDTO> query(BrowseSearch browseSearch) {
+        return null;
+    }
+
+    @Override
     @Transactional
     public String updateArticle(Article article) {
         if (null == article) {
@@ -227,6 +239,7 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
         relationshipService.deleteById(id, null);
         metasService.saveMetas(id, article.getTags(), Types.TAG.getType());
         metasService.saveMetas(id, article.getCategories(), Types.CATEGORY.getType());
+        searchService.index(id);
         return WebConstant.SUCCESS_RESULT;
     }
 }

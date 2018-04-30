@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Attach;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.AttachVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IAttachService;
@@ -20,21 +20,21 @@ public class AttachServiceImpl implements IAttachService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AttachServiceImpl.class);
 
     @Autowired
-    private AttachVoMapper attachVoMapper;
+    private AttachMapper attachMapper;
 
     @Override
     public PageInfo<Attach> getAttachs(Integer page, Integer limit) {
         PageHelper.startPage(page, limit);
         AttachVoExample attachVoExample = new AttachVoExample();
         attachVoExample.setOrderByClause("id desc");
-        List<Attach> attaches = attachVoMapper.selectByExample(attachVoExample);
+        List<Attach> attaches = attachMapper.selectByExample(attachVoExample);
         return new PageInfo<>(attaches);
     }
 
     @Override
     public Attach selectById(Integer id) {
         if(null != id){
-            return attachVoMapper.selectByPrimaryKey(id);
+            return attachMapper.selectByPrimaryKey(id);
         }
         return null;
     }
@@ -48,14 +48,14 @@ public class AttachServiceImpl implements IAttachService {
         attach.setFkey(fkey);
         attach.setFtype(ftype);
         attach.setCreated(DateKit.getCurrentUnixTime());
-        attachVoMapper.insertSelective(attach);
+        attachMapper.insertSelective(attach);
     }
 
     @Override
     @Transactional
     public void deleteById(Integer id) {
         if (null != id) {
-            attachVoMapper.deleteByPrimaryKey( id);
+            attachMapper.deleteByPrimaryKey( id);
         }
     }
 }

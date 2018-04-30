@@ -10,13 +10,12 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.RSAUtils;
-import cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils;
-import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.DisabledAccountException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,13 +31,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 用户后台登录/登出
  */
 @Controller
-//@RequestMapping("/admin")
 @Transactional(rollbackFor = LingXiException.class)
 public class AdminLoginController extends BaseController {
 
@@ -110,7 +107,7 @@ public class AdminLoginController extends BaseController {
      * @param session
      * @param response
      */
-    @RequestMapping("/logout")
+    @RequestMapping("/admin/logout")
     public void logout(HttpSession session, HttpServletResponse response, HttpServletRequest request) {
         session.removeAttribute(WebConstant.LOGIN_SESSION_KEY);
         SecurityUtils.getSubject().logout();

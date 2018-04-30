@@ -3,11 +3,14 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.*;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -79,6 +82,10 @@ public class AdminArticleController extends BaseController {
         String result = articleService.publish(contents);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
+        } else {
+            //索引更新
+
+//            searchService.index();
         }
         return ApiResponse.ok();
     }

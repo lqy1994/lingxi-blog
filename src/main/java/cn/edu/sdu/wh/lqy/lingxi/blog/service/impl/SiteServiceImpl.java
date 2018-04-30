@@ -2,17 +2,17 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin.AdminAttachController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachVoMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.AttachMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.BackResponseBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.StatisticsBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.*;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISiteService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
@@ -43,7 +43,7 @@ public class SiteServiceImpl implements ISiteService {
     private ArticleMapper articleMapper;
 
     @Autowired
-    private AttachVoMapper attachVoMapper;
+    private AttachMapper attachMapper;
 
     @Autowired
     private MetaMapper metaMapper;
@@ -159,7 +159,7 @@ public class SiteServiceImpl implements ISiteService {
 
         Long comments = commentMapper.countByExample(new CommentVoExample());
 
-        Long attachs = attachVoMapper.countByExample(new AttachVoExample());
+        Long attachs = attachMapper.countByExample(new AttachVoExample());
 
         MetaVoExample metaVoExample = new MetaVoExample();
         metaVoExample.createCriteria().andTypeEqualTo(Types.LINK.getType());

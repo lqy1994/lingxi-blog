@@ -16,6 +16,8 @@ public class RestPageConst {
 
     public static final String INDEX = "themes/default/index";
 
+    public static final String ARTICLE_BROWSER = "themes/default/article_browser";
+
     //=======Admin==================
 
     public static final String ADMIN_INDEX = "admin/index";

@@ -11,7 +11,7 @@ import java.util.List;
 
 @Mapper
 @Repository
-public interface AttachVoMapper {
+public interface AttachMapper {
 
     long countByExample(AttachVoExample example);
 
