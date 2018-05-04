@@ -3,11 +3,19 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.CommentBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.RangeValueBlock;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ArticleDTO;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils;
 import com.github.pagehelper.PageInfo;
@@ -16,12 +24,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * 文章
@@ -32,6 +38,8 @@ public class ArticleController extends BaseController {
 
     @Autowired
     private IArticleService articleService;
+    @Autowired
+    private IMetaService metaService;
     @Autowired
     private ISearchService searchService;
     @Autowired
@@ -130,23 +138,41 @@ public class ArticleController extends BaseController {
 
 
     @GetMapping("browser")
-    public String articleBrowser(Model model, @ModelAttribute BrowseSearch browseSearch) {
+    public String articleBrowser(Model model, @ModelAttribute BrowseSearch searchBody) {
 
 
-//        ServiceMultiResult<HouseDTO> serviceMultiResult = articleService.query(browseSearch);
+        ServiceMultiResult<ArticleDTO> serviceMultiResult = articleService.query(searchBody);
 
-        model.addAttribute("searchBody", browseSearch);
+        model.addAttribute("total",  serviceMultiResult.getTotal());
+        model.addAttribute("articles", serviceMultiResult.getResult());
 
+        List<Meta> metas = metaService.getMetas(TypeEnum.CATEGORY.getType());
 
+        model.addAttribute("categories", metas);
 
+        model.addAttribute("searchBody", searchBody);
+        model.addAttribute("hitsBlocks", RangeValueBlock.HITS_BLOCK);
+        model.addAttribute("wordCntBlocks", RangeValueBlock.WORDCNT_BLOCK);
 
-
-
+        model.addAttribute("currentHitsBlock", RangeValueBlock.matchHits(searchBody.getHitsBlock()));
+        model.addAttribute("currentWordCntBlock", RangeValueBlock.matchWordCnt(searchBody.getWordCntBlock()));
 
 
         return RestPageConst.ARTICLE_BROWSER;
     }
 
+    /**
+     * 自动补全接口
+     */
+    @GetMapping("article/autocomplete")
+    @ResponseBody
+    public ApiResponse autoComplete(@RequestParam(value = "prefix") String prefix) {
+        if (prefix.isEmpty()) {
+            return ApiResponse.fail(400, "Bad Request");
+        }
+        ServiceResult<List<String>> result = searchService.suggest(prefix);
+        return ApiResponse.ofSuccess(result.getResult());
+    }
 
     public ValueOperations<String, String> valueOperations() {
         return redisTemplate.opsForValue();

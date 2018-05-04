@@ -3,14 +3,17 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.ArticleSort;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.RangeValueBlock;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.*;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Ints;
+import com.google.gson.Gson;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeAction;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeRequestBuilder;
 import org.elasticsearch.action.admin.indices.analyze.AnalyzeResponse;
@@ -53,7 +56,7 @@ public class SearchServiceImpl implements ISearchService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ISearchService.class);
 
-    private static final String INDEX_NAME = "lingxi";
+    private static final String INDEX_NAME = "lingxi_sug";
 
     private static final String INDEX_TYPE = "article";
 
@@ -72,6 +75,8 @@ public class SearchServiceImpl implements ISearchService {
     private ModelMapper modelMapper;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private Gson gson;
 
     /**
      * kafka消息处理
@@ -301,10 +306,12 @@ public class SearchServiceImpl implements ISearchService {
 
 
     @Override
-    public ServiceMultiResult<Long> query(BrowseSearch browseSearch) {
+    public ServiceMultiResult<Integer> query(BrowseSearch browseSearch) {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         //Category
-        boolQuery.filter(QueryBuilders.termQuery(ArticleIndexKey.CATEGORIES, browseSearch.getCategoryName()));
+        if (StringUtils.isNotNull(browseSearch.getCategoryName())) {
+            boolQuery.filter(QueryBuilders.termQuery(ArticleIndexKey.CATEGORIES, browseSearch.getCategoryName()));
+        }
         //Hits
         RangeValueBlock hitsBlock = RangeValueBlock.matchHits(browseSearch.getHitsBlock());
         if (!RangeValueBlock.ALL.equals(hitsBlock)) {
@@ -319,24 +326,55 @@ public class SearchServiceImpl implements ISearchService {
         }
         //WordCnt
         RangeValueBlock wordCntBlock = RangeValueBlock.matchWordCnt(browseSearch.getWordCntBlock());
-//        if (!RangeValueBlock.ALL.equals(wordCntBlock)) {
-//            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(ArticleIndexKey);
-//            if (hitsBlock.getMax() > 0) {
-//                rangeQueryBuilder.lte(hitsBlock.getMax());
-//            }
-//            if (hitsBlock.getMin() > 0) {
-//                rangeQueryBuilder.gte(hitsBlock.getMin());
-//            }
-//            boolQuery.filter(rangeQueryBuilder);
-//        }
+        if (!RangeValueBlock.ALL.equals(wordCntBlock)) {
+            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(ArticleIndexKey.WORD_CNT);
+            if (wordCntBlock.getMax() > 0) {
+                rangeQueryBuilder.lte(wordCntBlock.getMax());
+            }
+            if (wordCntBlock.getMin() > 0) {
+                rangeQueryBuilder.gte(wordCntBlock.getMin());
+            }
+            boolQuery.filter(rangeQueryBuilder);
+        }
 
 
-        return null;
+        boolQuery.must(
+                QueryBuilders.multiMatchQuery(browseSearch.getKeywords(),
+                        ArticleIndexKey.TITLE,
+                        ArticleIndexKey.CONTENT,
+                        ArticleIndexKey.CATEGORIES
+                ));
+
+        SearchRequestBuilder requestBuilder = elasticsearchClient.prepareSearch(INDEX_NAME)
+                .setTypes(INDEX_TYPE).setQuery(boolQuery)
+                .addSort(ArticleSort.getSortKey(browseSearch.getOrderBy()),
+                        SortOrder.fromString(browseSearch.getOrderDirect()))
+                .setFrom(browseSearch.getStart())
+                .setSize(browseSearch.getSize())
+                .setFetchSource(ArticleIndexKey.ARTICLE_ID, null);
+
+        LOGGER.debug(requestBuilder.toString());
+
+        List<Integer> artIds = new ArrayList<>();
+        SearchResponse response = requestBuilder.get();
+        if (response.status() != RestStatus.OK) {
+            LOGGER.warn("Search status is not ok for " + requestBuilder);
+            return new ServiceMultiResult<>(0, artIds);
+        }
+
+        for (SearchHit hit : response.getHits()) {
+            LOGGER.info(gson.toJson(hit.getSource()));
+            artIds.add(Integer.parseInt(String.valueOf(hit.getSource().get(ArticleIndexKey.ARTICLE_ID))));
+        }
+
+        return new ServiceMultiResult<>(response.getHits().totalHits, artIds);
     }
 
     @Override
     public ServiceResult<List<String>> suggest(String prefix) {
-        CompletionSuggestionBuilder suggestion = SuggestBuilders.completionSuggestion("suggest").prefix(prefix).size(5);
+
+        CompletionSuggestionBuilder suggestion = SuggestBuilders.completionSuggestion("suggest")
+                .prefix(prefix).size(5);
 
         SuggestBuilder suggestBuilder = new SuggestBuilder();
         suggestBuilder.addSuggestion("autocomplete", suggestion);

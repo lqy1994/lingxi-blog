@@ -9,9 +9,9 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.MetaVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleMateService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class MetaServiceImpl implements IMetaService {
     private MetaMapper metaMapper;
 
     @Autowired
-    private IRelationshipService relationshipService;
+    private IArticleMateService relationshipService;
 
     @Autowired
     private IArticleService articleService;

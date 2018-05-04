@@ -4,7 +4,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleMeta;
 
 import java.util.List;
 
-public interface IRelationshipService {
+public interface IArticleMateService {
     /**
      * 按住键删除
      * @param cid

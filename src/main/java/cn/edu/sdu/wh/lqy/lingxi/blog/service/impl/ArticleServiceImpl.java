@@ -9,9 +9,9 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ArticleDTO;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleMateService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
@@ -19,8 +19,11 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.vdurmont.emoji.EmojiParser;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +32,11 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 @Service("articleService")
@@ -46,7 +51,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     private MetaMapper metaMapper;
 
     @Autowired
-    private IRelationshipService relationshipService;
+    private IArticleMateService relationshipService;
 
     @Autowired
     private IMetaService metasService;
@@ -55,6 +60,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     @Transactional
@@ -162,7 +170,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 //                if (articles.size() != 1) {
 ////                    throw new LingXiException("query content by id and return is not one");
 ////                }
-                return articles.get(0);
+                if (CollectionUtils.isNotEmpty(articles)) {
+                    return articles.get(0);
+                }
             }
         }
         return null;
@@ -229,7 +239,39 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public ServiceMultiResult<ArticleDTO> query(BrowseSearch browseSearch) {
-        return null;
+        if (StringUtils.isNotEmpty(browseSearch.getKeywords())) {
+            ServiceMultiResult<Integer> serviceResult = searchService.query(browseSearch);
+            if (serviceResult.getTotal() == 0) {
+                return new ServiceMultiResult<>(0, new ArrayList<>());
+            }
+
+            List<ArticleDTO> articleDTOList = Lists.newArrayList();
+            serviceResult.getResult().forEach(id -> {
+                Article article = articleMapper.selectByPrimaryKey(id);
+                articleDTOList.add(modelMapper.map(article, ArticleDTO.class));
+            });
+
+            return new ServiceMultiResult<>(serviceResult.getTotal(), articleDTOList);
+        } else {
+            return simpleQuery(browseSearch);
+        }
+    }
+
+    private ServiceMultiResult<ArticleDTO> simpleQuery(BrowseSearch browseSearch) {
+
+        int page = browseSearch.getStart() / browseSearch.getSize();
+        PageHelper.startPage(page, browseSearch.getSize());
+
+        ContentVoExample contentVoExample = new ContentVoExample();
+        ContentVoExample.Criteria criteria = contentVoExample.createCriteria();
+        criteria.andTypeEqualTo(TypeEnum.ARTICLE.getType());
+        criteria.andStatusEqualTo(TypeEnum.PUBLISH.getType());
+        contentVoExample.setOrderByClause(browseSearch.getOrderBy() + " " + browseSearch.getOrderDirect());
+        List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
+
+        List<ArticleDTO> articleDTOS = articles.stream().map(article -> modelMapper.map(article, ArticleDTO.class)).collect(Collectors.toList());
+
+        return new ServiceMultiResult<>(articles.size(), articleDTOS);
     }
 
     @Override

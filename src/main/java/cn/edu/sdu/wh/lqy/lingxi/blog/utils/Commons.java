@@ -277,6 +277,12 @@ public final class Commons {
         return "/user/img/rand/" + size + ".jpg";
     }
 
+    public static String show_thumbnail(Integer artId) {
+        int size = artId % 20;
+        size = size == 0 ? 1 : size;
+        return "/static/user/img/rand/" + size + ".jpg";
+    }
+
 
     /**
      * An :grinning:awesome :smiley:string &#128516;with a few :wink:emojis!

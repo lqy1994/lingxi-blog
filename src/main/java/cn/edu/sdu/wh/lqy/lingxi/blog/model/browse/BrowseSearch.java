@@ -10,7 +10,7 @@ public class BrowseSearch {
 
     private String keywords;
 
-    private String orderBy = "hits";
+    private String orderBy = "created";
 
     private String orderDirect = "desc";
 

@@ -20,6 +20,7 @@ public class ArticleIndexKey {
     public static final String ALLOW_COMMENT = "allowComment";
     public static final String ALLOW_PING = "allowPing";
     public static final String CONTENT = "content";
+    public static final String WORD_CNT = "wordCnt";
 
 
     public static final String AGG_META = "agg_meta"; //标签聚合

@@ -32,6 +32,11 @@ public interface ISearchService {
      */
     ServiceResult<List<String>> suggest(String prefix);
 
-    ServiceMultiResult<Long> query(BrowseSearch browseSearch);
+    /**
+     * 过滤搜索
+     * @param browseSearch
+     * @return
+     */
+    ServiceMultiResult<Integer> query(BrowseSearch browseSearch);
 
 }

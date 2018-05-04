@@ -3,7 +3,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMetaMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleMeta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleMateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RelationshipServiceImpl implements IRelationshipService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(RelationshipServiceImpl.class);
+public class ArticleMateServiceImpl implements IArticleMateService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleMateServiceImpl.class);
 
     @Autowired
     private ArticleMetaMapper articleMetaMapper;

@@ -12,12 +12,10 @@
     <meta name="keywords" content="博文"/>
     <link href="/static/user/css/main.css" rel='stylesheet' type='text/css'/>
     <link href="/static/user/css/list.css" rel='stylesheet' type='text/css'/>
-    <link href="/static/lib/layui/layui.css" rel="stylesheet" type="text/css" />
-    <link href="/static/lib/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="/static/lib/layui/layui.css" rel="stylesheet" type="text/css"/>
+    <link href="/static/lib/jquery-ui-1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
-<header th:replace="themes/default/header::header(null,null)"></header>
-
 <!-- NAV头部搜索模块 -->
 <div class="searchs">
     <div class="wrapper">
@@ -53,10 +51,11 @@
 </div>
 
 <div class="wrapper">
+
     <div class="filter-box">
         <div class="hd clear">
             <ul class="tab-lst">
-                <li class="on"><a th:href="@{/lingxi/browser()}"><span>全部文章</span></a>
+                <li class="on"><a th:href="@{/lingxi/browser}"><span>全部文章</span></a>
                 </li>
             </ul>
             <div class="info"><span class="num"></span></div>
@@ -66,31 +65,13 @@
                 <dl class="dl-lst clear">
                     <dt>分类：</dt>
                     <dd data-index="0">
-                        <div class="option-list region-select">
+                        <div class="option-list category-select">
                             <a data-bind="*"
-                               onclick="changeSimpleCondition('regionEnName', '*')">不限</a>
-                            <tr th:each="region, regionStat: ${regions}">
-                                <a th:attr="data-bind=${region.enName}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'regionEnName\', \'' + ${region.enName} + '\')'"
-                                   th:text="${region.cnName}"></a>
-                            </tr>
-                        </div>
-                    </dd>
-                </dl>
-                <dl class="dl-lst clear">
-                    <dt>字数：</dt>
-                    <dd data-index="1">
-                        <div class="option-list price-select">
-                            <a data-bind="*" href="javascript:void(0);"
-                               onclick="changeSimpleCondition('priceBlock', '*')">不限
-                            </a>
-                            <tr th:each="priceBlock : ${priceBlocks}">
-                                <a th:attr="data-bind=${priceBlock.key}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'priceBlock\',\'' + ${priceBlock.key} + '\')'"
-                                   th:text="${priceBlock.value.min < 0} ? (${priceBlock.value.max} + '字以下' ):
-                                    (${priceBlock.value.max < 0} ? ${priceBlock.value.min} + '字以上' :
-                                     ${priceBlock.value.min} + '-' + ${priceBlock.value.max} + '字')">
-                                </a>
+                               onclick="changeSimpleCondition('categoryName', '*')">不限</a>
+                            <tr th:each="category : ${categories}">
+                                <a th:attr="data-bind=${category.name}" href="javascript:void(0);"
+                                   th:onclick="'changeSimpleCondition(\'categoryName\', \'' + ${category.name} + '\')'"
+                                   th:text="${category.name}"></a>
                             </tr>
                         </div>
                     </dd>
@@ -98,134 +79,110 @@
                 <dl class="dl-lst clear">
                     <dt>浏览量：</dt>
                     <dd data-index="2">
-                        <div class="option-list area-select">
+                        <div class="option-list hits-select">
                             <a data-bind="*" href="javascript:void(0);"
-                               onclick="changeSimpleCondition('areaBlock', '*')">不限
+                               onclick="changeSimpleCondition('hitsBlock', '*')">不限
                             </a>
-                            <tr th:each="areaBlock : ${areaBlocks}">
-                                <a th:attr="data-bind=${areaBlock.key}" href="javascript:void(0);"
-                                   th:onclick="'changeSimpleCondition(\'areaBlock\',\'' + ${areaBlock.key} + '\')'"
-                                   th:text="${areaBlock.value.min < 0} ? (${areaBlock.value.max} + '次以下' ):
-                                    (${areaBlock.value.max < 0} ? ${areaBlock.value.min} + '次以上' :
-                                     ${areaBlock.value.min} + '-' + ${areaBlock.value.max} + '次')">
+                            <tr th:each="hitsBlock : ${hitsBlocks}">
+                                <a th:attr="data-bind=${hitsBlock.key}" href="javascript:void(0);"
+                                   th:onclick="'changeSimpleCondition(\'hitsBlock\',\'' + ${hitsBlock.key} + '\')'"
+                                   th:text="${hitsBlock.value.min < 0} ? (${hitsBlock.value.max} + '次以下' ):
+                                    (${hitsBlock.value.max < 0} ? ${hitsBlock.value.min} + '次以上' :
+                                     ${hitsBlock.value.min} + '-' + ${hitsBlock.value.max} + '次')">
                                 </a>
                             </tr>
                         </div>
                     </dd>
                 </dl>
+                <dl class="dl-lst clear">
+                    <dt>字数：</dt>
+                    <dd data-index="1">
+                        <div class="option-list wordCnt-select">
+                            <a data-bind="*" href="javascript:void(0);"
+                               onclick="changeSimpleCondition('wordCntBlock', '*')">不限
+                            </a>
+                            <tr th:each="wordCntBlock : ${wordCntBlocks}">
+                                <a th:attr="data-bind=${wordCntBlock.key}" href="javascript:void(0);"
+                                   th:onclick="'changeSimpleCondition(\'wordCntBlock\',\'' + ${wordCntBlock.key} + '\')'"
+                                   th:text="${wordCntBlock.value.min < 0} ? (${wordCntBlock.value.max} + '字以下' ):
+                                    (${wordCntBlock.value.max < 0} ? ${wordCntBlock.value.min} + '字以上' :
+                                     ${wordCntBlock.value.min} + '-' + ${wordCntBlock.value.max} + '字')">
+                                </a>
+                            </tr>
+                        </div>
+                    </dd>
+                </dl>
+
             </div>
             <div class="filter-bar01">
                 <div class="sort-bar" id="sort-bar">
                     <span>排序：</span>
-                    <div class="sort-parent" data-bind="lastUpdateTime">
-                        <a href="javascript:void(0);" onclick="changeSort('lastUpdateTime', 'desc')">
+                    <div class="sort-parent" data-bind="modified">
+                        <a href="javascript:void(0);" onclick="changeSort('modified', 'desc')">
                             <span>默认</span>
                         </a>
                     </div>
-                    <div class="sort-parent" data-bind="createTime">
-                        <a href="javascript:void(0);" onclick="changeSort('createTime', 'desc')">
+                    <div class="sort-parent" data-bind="created">
+                        <a href="javascript:void(0);" onclick="changeSort('created', 'desc')">
                             <span>最新</span>
                         </a>
                     </div>
-                    <div class="sort-parent" data-bind="area">
+                    <div class="sort-parent" data-bind="hits">
                         <span>浏览量</span><i></i>
                         <ul class="sort-children">
-                            <li><a href="javascript:void(0);" onclick="changeSort('area', 'asc')">浏览从少到多</a></li>
-                            <li><a href="javascript:void(0);" onclick="changeSort('area', 'desc')">浏览从多到少</a></li>
+                            <li><a href="javascript:void(0);" onclick="changeSort('hits', 'asc')">浏览从少到多</a></li>
+                            <li><a href="javascript:void(0);" onclick="changeSort('hits', 'desc')">浏览从多到少</a></li>
+                        </ul>
+                    </div>
+                    <div class="sort-parent" data-bind="word_cnt">
+                        <span>字数</span><i></i>
+                        <ul class="sort-children">
+                            <li><a href="javascript:void(0);" onclick="changeSort('word_cnt', 'asc')">字数从少到多</a></li>
+                            <li><a href="javascript:void(0);" onclick="changeSort('word_cnt', 'desc')">字数从多到少</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--<div class="main-box clear">
+
+    <div class="main-box clear">
         <div id="sem_card"></div>
         <div class="con-box">
             <div class="list-head clear">
-                <h2>共有<span th:text="${total}">859672</span>套<span th:text="${currentCity.cnName}"></span>文章</h2>
-                <div class="view-type" id="viewType">
+                <h2>共有<span th:text="${total}">12345678</span>篇文章</h2>
+                <!--<div class="view-type" id="viewType">
                     <div class="modeshows modeshow">
                     <span class="l-show view-mod" data-type="real" id="lshow"><i></i>
                         <span th:text="${currentCity.cnName} + '房源'"></span>
                     </span>
                     </div>
-                </div>
+                </div>-->
             </div>
             <div class="list-wrap">
-
                 <ul id="house-lst" class="house-lst">
-                    <tr th:each="house, houseStat: ${houses}">
+                    <tr th:each="article : ${articles}">
                         <li>
                             <div class="pic-panel">
-                                <a target="_blank" th:href="'/rent/house/show/' + ${house.id}">
-                                    <img th:src="${house.cover}" th:alt="${house.title}"/>
+                                <a target="_blank" th:href="'/lingxi/article/' + ${article.id}">
+                                    <img th:src="${commons.show_thumbnail(article.id)}"/>
                                 </a>
                             </div>
                             <div class="info-panel">
                                 <div>
                                     <h2>
-                                        <a target="_blank" th:href="'/rent/house/show/' + ${house.id}"
-                                           th:title="${house.title}" th:text="${house.title}">
-
+                                        <a target="_blank" th:href="'/lingxi/article/' + ${article.id}"
+                                           th:title="${article.title}" th:text="${article.title}">
                                         </a>
                                     </h2>
                                 </div>
-                                <div class="col-1">
-                                    <div class="where">
-                                        <a th:href="@{/rent/house(cityEnName=${searchBody.cityEnName}, search=${house.district})}"
-                                           class="laisuzhou">
-                                            <span class="region" th:text="${house.district} + '&nbsp;&nbsp;'"></span>
-                                        </a>
-                                        <span class="zone">
-                                            <span th:text="${house.room} + '室' + ${house.parlour} + '厅&nbsp;&nbsp;'"></span>
-                                        </span>
-                                        <span class="meters" th:text="${house.area} + '平米&nbsp;&nbsp;'"></span>
-                                        <span>朝向</span>
-                                    </div>
-                                    <div class="other">
-                                        <div class="con">
-                                            <span th:text="${house.floor} + '楼(共' + ${house.totalFloor} + '层)'">
-                                            </span>
-                                            <span>/</span>
-                                            <span th:text="${house.buildYear} + '年建'"></span>
-                                        </div>
-                                    </div>
-                                    <div class="chanquan">
-                                        <div class="left agency">
-                                            <div class="view-label left">
-                                                <span th:if="${house.houseDetail.subwayLineName != null}">
-                                                    <span class="fang-subway"></span>
-                                                    <span class="fang-subway-ex">
-                                                        <span>距离地铁
-                                                            <span th:text="${house.houseDetail.subwayLineName}"></span>
-                                                            <span th:text="${house.houseDetail.subwayStationName}"></span>站
-                                                            <span th:text="${house.distanceToSubway}"></span>米</span>
-                                                    </span>
-                                                </span>
-                                                <span th:each="tag: ${house.tags}">
-                                                    <span class="decoration"></span>
-                                                    <span class="decoration-ex">
-                                                        <span th:text="${tag}"></span>
-                                                    </span>
-                                                </span>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col-3">
-                                    <div class="price"><span class="num" th:text="${house.price}">价格</span>元/月
-                                    </div>
-                                    <div class="price-pre">
-                                            <span th:text="${#dates.format(house.lastUpdateTime, 'yyyy.MM.dd')} + ' 更新'">
-                                                更新时间
-                                            </span>
-                                    </div>
+                                    <div class="price">大约<span class="num" th:text="${article.wordCnt}"></span>个字</div>
                                 </div>
                                 <div class="col-2">
                                     <div class="square">
-                                        <div><span class="num" th:text="${house.watchTimes}">0</span>人</div>
-                                        <div class="col-look">看过此房</div>
+                                        <div><span class="num" th:text="${article.hits}">0</span>人</div>
+                                        <div class="col-look">浏览过此篇文章</div>
                                     </div>
                                 </div>
                             </div>
@@ -234,20 +191,20 @@
                 </ul>
             </div>
 
-            <div th:if="${!houses.isEmpty()}" id="pageable" class="page-box house-lst-page-box">
+            <div th:if="${!articles.isEmpty()}" id="pageable" class="page-box house-lst-page-box">
             </div>
-            <div th:if="${houses.isEmpty()}" class="page-box house-lst-page-box">
+            <div th:if="${articles.isEmpty()}" class="page-box house-lst-page-box">
                 没有找到相关结果>_<，换个姿势去搜索相关数据吧~
             </div>
         </div>
-    </div>-->
+    </div>
+
 </div>
-</div>
-<div th:replace="themes/default/footer::footer"></div>
-<script type="text/javascript" src="/static/lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.min.js"></script>
+<!--<script type="text/javascript" src="/static/lib/jquery-ui-1.12.1/jquery-ui.min.js"></script>-->
+<script type="text/javascript" th:src="@{/static/lib/jquery-ui-1.12.1/jquery-ui.min.js}"></script>
 <script src="/static/lib/layui/layui.js" type="text/javascript"></script>
 <script th:inline="javascript" type="text/javascript">
-    $('.xunwu-header .rent-page').addClass('on');
 
     var data = {};
 
@@ -257,7 +214,10 @@
             data.keywords = keywords;
         }
 
-        var target = '/rent/house?cityEnName=' + [[${searchBody.cityEnName}]] + '&';
+        console.log(data.toString())
+        console.log(keywords)
+
+        var target = '/lingxi/browser?';
         $.each(data, function (key, value) {
             target += (key + '=' + value + '&');
         });
@@ -278,7 +238,7 @@
 
     function changeSort(orderBy, direction) {
         data.orderBy = orderBy;
-        data.orderDirection = direction;
+        data.orderDirect = direction;
 
         window.location.href = locate_url(0, [[${searchBody.size}]]);
     }
@@ -290,32 +250,28 @@
         size = 5;
     }
 
-    $(function () {
-        data.priceBlock = [[${currentPriceBlock.key}]];
-        data.areaBlock = [[${currentAreaBlock.key}]];
-        data.room = [[${searchBody.room}]];
-        data.direction = [[${searchBody.direction}]];
-        data.regionEnName = [[${searchBody.regionEnName}]];
-        data.rentWay = [[${searchBody.rentWay}]];
+    //初始化参数
+    $(document).ready(
+        function () {
+        data.hitsBlock = [[${currentHitsBlock.key}]];
+        data.wordCntBlock = [[${currentWordCntBlock.key}]];
+        data.categoryName = [[${searchBody.categoryName}]];
         data.orderBy = [[${searchBody.orderBy}]];
-        data.orderDirection = [[${searchBody.orderDirection}]];
+        data.orderDirect = [[${searchBody.orderDirect}]];
 
-        $('.region-select a[data-bind="' + [[${searchBody.regionEnName}]] + '"]').addClass('on');
-        $('.price-select a[data-bind="' + [[${currentPriceBlock.key}]] + '"]').addClass('on');
-        $('.area-select a[data-bind="' + [[${currentAreaBlock.key}]] + '"]').addClass('on');
-        $('.room-select a[data-bind="' + [[${searchBody.room}]] + '"]').addClass('on');
-        $('.direction-select a[data-bind="' + [[${searchBody.direction}]] + '"]').addClass('on');
-        $('.rent-way-select a[data-bind="' + [[${searchBody.rentWay}]] + '"]').addClass('on');
-        $('#sort-bar').find('div[data-bind="' + data.orderBy +  '"]').addClass('on');
+        $('.hits-select a[data-bind="' + [[${currentHitsBlock.key}]] + '"]').addClass('on');
+        $('.wordCnt-select a[data-bind="' + [[${currentWordCntBlock.key}]] + '"]').addClass('on');
+        $('.category-select a[data-bind="' + [[${searchBody.categoryName}]] + '"]').addClass('on');
+        $('#sort-bar').find('div[data-bind="' + data.orderBy + '"]').addClass('on');
 
-        if (data.orderBy === 'area') {
-            var areaSpanText = '';
-            if (data.orderDirection == 'desc') {
-                areaSpanText = '面积从大到小';
+        if (data.orderBy === 'hits') {
+            var hitSpanText = '';
+            if (data.orderDirect == 'desc') {
+                hitSpanText = '浏览量从大到小';
             } else {
-                areaSpanText = '面积从小到大';
+                hitSpanText = '浏览量从小到大';
             }
-            $('#sort-bar').find('div[data-bind="area"] span').text(areaSpanText);
+            $('#sort-bar').find('div[data-bind="hits"] span').text(hitSpanText);
         }
 
         $('#searchForm').submit(function () {
@@ -323,37 +279,12 @@
             return false;
         });
 
-        var availableTags = [
-            "ActionScript",
-            "AppleScript",
-            "Asp",
-            "BASIC",
-            "C",
-            "C++",
-            "Clojure",
-            "COBOL",
-            "ColdFusion",
-            "Erlang",
-            "Fortran",
-            "Groovy",
-            "Haskell",
-            "Java",
-            "JavaScript",
-            "Lisp",
-            "Perl",
-            "PHP",
-            "Python",
-            "Ruby",
-            "Scala",
-            "Scheme"
-        ];
-
         $('#keyword-box').autocomplete({
             minLength: 2, // 最小字符数，默认1
             delay: 300, // 延迟加载300ms
             source: function (request, response) { // 数据源
                 $.ajax({
-                    url: '/rent/house/autocomplete?prefix=' + request.term,
+                    url: '/lingxi/article/autocomplete?prefix=' + request.term,
                     success: function (res) {
                         if (res.code === 200) {
                             response(res.data);
@@ -367,29 +298,32 @@
             }
         });
 
-    });
+    }
+    );
 
-    layui.use('laypage', function () {
-        var laypage = layui.laypage;
+//     layui.use('laypage', function () {
+//         var laypage = layui.laypage;
+//
+//         //执行一个laypage实例
+//         laypage.render({
+//             elem: 'pageable', //注意，这里的 test1 是 ID，不用加 # 号
+//             count: total, //数据总数，从服务端得到
+//             limit: size,
+//             curr: start / size + 1,
+//             jump: function (obj, first) {
+//                 //obj包含了当前分页的所有参数，比如：
+// //                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+// //                console.log(obj.limit); //得到每页显示的条数
+//
+//                 //首次不执行
+//                 if (!first) {
+//                     window.location.href = locate_url((obj.curr - 1) * obj.limit, obj.limit);
+//                 }
+//             }
+//         })
+//     });
 
-        //执行一个laypage实例
-        laypage.render({
-            elem: 'pageable', //注意，这里的 test1 是 ID，不用加 # 号
-            count: total, //数据总数，从服务端得到
-            limit: size,
-            curr: start / size + 1,
-            jump: function (obj, first) {
-                //obj包含了当前分页的所有参数，比如：
-//                console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
-//                console.log(obj.limit); //得到每页显示的条数
-
-                //首次不执行
-                if (!first) {
-                    window.location.href = locate_url((obj.curr - 1) * obj.limit, obj.limit);
-                }
-            }
-        })
-    });
 </script>
+
 </body>
 </html>
