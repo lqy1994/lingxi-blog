@@ -1,14 +1,14 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.CommentBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.CommentVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
+import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import com.github.pagehelper.PageHelper;
@@ -51,10 +51,10 @@ public class CommentServiceImpl implements ICommentService {
         if (comments.getContent().length() < 5 || comments.getContent().length() > 2000) {
             return "评论字数在5-2000个字符";
         }
-        if (null == comments.getCid()) {
+        if (null == comments.getArtId()) {
             return "评论文章不能为空";
         }
-        Article article = articleService.getContents(String.valueOf(comments.getCid()));
+        Article article = articleService.getArticle(String.valueOf(comments.getArtId()));
         if (article == null) {
             return "不存在的文章";
         }
@@ -113,15 +113,15 @@ public class CommentServiceImpl implements ICommentService {
 
     @Override
     @Transactional
-    public void delete(Integer coid, Integer cid) {
-        if (null == coid) {
+    public void delete(Integer commentId, Integer id) {
+        if (null == commentId) {
             throw new LingXiException("主键为空");
         }
-        commentMapper.deleteByPrimaryKey(coid);
-        Article contents = articleService.getContents(cid + "");
+        commentMapper.deleteByPrimaryKey(commentId);
+        Article contents = articleService.getArticle(id + "");
         if (null != contents && contents.getCommentsNum() > 0) {
             Article temp = new Article();
-            temp.setId(cid);
+            temp.setId(id);
             temp.setCommentsNum(contents.getCommentsNum() - 1);
             articleService.updateContentByCid(temp);
         }

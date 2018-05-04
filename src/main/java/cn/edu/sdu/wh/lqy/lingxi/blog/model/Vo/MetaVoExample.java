@@ -256,72 +256,72 @@ public class MetaVoExample {
         }
 
         public Criteria andSlugIsNull() {
-            addCriterion("slug is null");
+            addCriterion("thumbnail is null");
             return (Criteria) this;
         }
 
         public Criteria andSlugIsNotNull() {
-            addCriterion("slug is not null");
+            addCriterion("thumbnail is not null");
             return (Criteria) this;
         }
 
         public Criteria andSlugEqualTo(String value) {
-            addCriterion("slug =", value, "slug");
+            addCriterion("thumbnail =", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugNotEqualTo(String value) {
-            addCriterion("slug <>", value, "slug");
+            addCriterion("thumbnail <>", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugGreaterThan(String value) {
-            addCriterion("slug >", value, "slug");
+            addCriterion("thumbnail >", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugGreaterThanOrEqualTo(String value) {
-            addCriterion("slug >=", value, "slug");
+            addCriterion("thumbnail >=", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugLessThan(String value) {
-            addCriterion("slug <", value, "slug");
+            addCriterion("thumbnail <", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugLessThanOrEqualTo(String value) {
-            addCriterion("slug <=", value, "slug");
+            addCriterion("thumbnail <=", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugLike(String value) {
-            addCriterion("slug like", value, "slug");
+            addCriterion("thumbnail like", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugNotLike(String value) {
-            addCriterion("slug not like", value, "slug");
+            addCriterion("thumbnail not like", value, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugIn(List<String> values) {
-            addCriterion("slug in", values, "slug");
+            addCriterion("thumbnail in", values, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugNotIn(List<String> values) {
-            addCriterion("slug not in", values, "slug");
+            addCriterion("thumbnail not in", values, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugBetween(String value1, String value2) {
-            addCriterion("slug between", value1, value2, "slug");
+            addCriterion("thumbnail between", value1, value2, "thumbnail");
             return (Criteria) this;
         }
 
         public Criteria andSlugNotBetween(String value1, String value2) {
-            addCriterion("slug not between", value1, value2, "slug");
+            addCriterion("thumbnail not between", value1, value2, "thumbnail");
             return (Criteria) this;
         }
 

@@ -3,9 +3,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import com.github.pagehelper.PageInfo;
@@ -56,7 +56,7 @@ public class TagController extends BaseController {
         page = page < 0 || page > WebConstant.MAX_PAGE ? 1 : page;
 //        对于空格的特殊处理
         name = name.replaceAll("\\+", " ");
-        MetaDto metaDto = metaService.getMeta(Types.TAG.getType(), name);
+        MetaDto metaDto = metaService.getMeta(TypeEnum.TAG.getType(), name);
         if (null == metaDto) {
             return RestPageConst.ERROR_404;
         }

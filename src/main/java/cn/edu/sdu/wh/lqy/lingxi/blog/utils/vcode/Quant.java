@@ -66,7 +66,7 @@ public class Quant {
 	protected static final int alpharadbias = (((int) 1) << alpharadbshift);
 
 	/*
-	 * Types and Global Variables --------------------------
+	 * TypeEnum and Global Variables --------------------------
 	 */
 
 	protected byte[] thepicture; /* the input image itself */

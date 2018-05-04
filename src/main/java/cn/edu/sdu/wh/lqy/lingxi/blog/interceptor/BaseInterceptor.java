@@ -1,12 +1,11 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.interceptor;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Option;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IOptionService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IUserService;
-import cn.edu.sdu.wh.lqy.lingxi.blog.utils.*;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.AdminCommons;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Commons;
+import cn.edu.sdu.wh.lqy.lingxi.blog.utils.IPKit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义拦截器
@@ -67,7 +65,7 @@ public class BaseInterceptor extends HandlerInterceptorAdapter {
 //        if (request.getMethod().equals("GET")) {
 //            String csrf_token = UUID.UU64();
 //            // 默认存储30分钟
-//            stringRedisTemplate.opsForValue().set(Types.CSRF_TOKEN.getType() + ":" + csrf_token,
+//            stringRedisTemplate.opsForValue().set(TypeEnum.CSRF_TOKEN.getType() + ":" + csrf_token,
 //                    uri, 30 * 60, TimeUnit.SECONDS);
 //            request.setAttribute("_csrf_token", csrf_token);
 //        }

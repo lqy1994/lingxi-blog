@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta">
     <id column="mid" jdbcType="INTEGER" property="mid" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="slug" jdbcType="VARCHAR" property="slug" />
+    <result column="thumbnail" jdbcType="VARCHAR" property="thumbnail" />
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
@@ -74,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    mid, name, slug, type, description, sort, parent
+    mid, name, thumbnail, type, description, sort, parent
   </sql>
   <select id="selectByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.MetaVoExample" resultMap="BaseResultMap">
     select
@@ -115,10 +115,10 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta" useGeneratedKeys="true" keyProperty="mid">
-    insert into meta (mid, name, slug,
+    insert into meta (mid, name, thumbnail,
       type, description, sort,
       parent)
-    values (#{mid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
+    values (#{mid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR},
       #{type,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER},
       #{parent,jdbcType=INTEGER})
   </insert>
@@ -131,8 +131,8 @@
       <if test="name != null">
         name,
       </if>
-      <if test="slug != null">
-        slug,
+      <if test="thumbnail != null">
+        thumbnail,
       </if>
       <if test="type != null">
         type,
@@ -154,8 +154,8 @@
       <if test="name != null">
         #{name,jdbcType=VARCHAR},
       </if>
-      <if test="slug != null">
-        #{slug,jdbcType=VARCHAR},
+      <if test="thumbnail != null">
+        #{thumbnail,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=VARCHAR},
@@ -186,8 +186,8 @@
       <if test="record.name != null">
         name = #{record.name,jdbcType=VARCHAR},
       </if>
-      <if test="record.slug != null">
-        slug = #{record.slug,jdbcType=VARCHAR},
+      <if test="record.thumbnail != null">
+        thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=VARCHAR},
@@ -210,7 +210,7 @@
     update meta
     set mid = #{record.mid,jdbcType=INTEGER},
       name = #{record.name,jdbcType=VARCHAR},
-      slug = #{record.slug,jdbcType=VARCHAR},
+      thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       sort = #{record.sort,jdbcType=INTEGER},
@@ -225,8 +225,8 @@
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},
       </if>
-      <if test="slug != null">
-        slug = #{slug,jdbcType=VARCHAR},
+      <if test="thumbnail != null">
+        thumbnail = #{thumbnail,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -246,7 +246,7 @@
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta">
     update meta
     set name = #{name,jdbcType=VARCHAR},
-      slug = #{slug,jdbcType=VARCHAR},
+      thumbnail = #{thumbnail,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER},
@@ -255,16 +255,16 @@
   </update>
 
   <select id="selectFromSql" resultMap="MetaDto" parameterType="Map">
-    select a.*, count(b.cid) as count from meta a left join relationship b on a.mid = b.mid where a.type = #{type} group by a.mid order by #{order} limit #{limit}
+    select a.*, count(b.cid) as count from meta a left join article_meta b on a.mid = b.mid where a.type = #{type} group by a.mid order by #{order} limit #{limit}
   </select>
 
   <select id="selectDtoByNameAndType" resultMap="MetaDto">
-    select a.*, count(b.cid) as count from meta a left join relationship b on a.mid = b.mid where a.type = #{type} and a.name = #{name} group by a.mid
+    select a.*, count(b.cid) as count from meta a left join article_meta b on a.mid = b.mid where a.type = #{type} and a.name = #{name} group by a.mid
   </select>
 
   <select id="countWithSql" parameterType="Integer" resultType="Integer">
     SELECT count(0)
-    FROM article a LEFT JOIN relationship b ON a.id = b.cid
+    FROM article a LEFT JOIN article_meta b ON a.id = b.cid
     WHERE b.mid = #{value} AND a.status = 'publish' AND a.type = 'post';
   </select>
 </mapper>

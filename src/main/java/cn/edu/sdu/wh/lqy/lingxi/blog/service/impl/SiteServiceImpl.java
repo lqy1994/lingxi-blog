@@ -12,7 +12,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.BackResponseBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.StatisticsBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.*;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISiteService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
@@ -69,7 +69,7 @@ public class SiteServiceImpl implements ISiteService {
             limit = 10;
         }
         ContentVoExample example = new ContentVoExample();
-        example.createCriteria().andStatusEqualTo(Types.PUBLISH.getType()).andTypeEqualTo(Types.ARTICLE.getType());
+        example.createCriteria().andStatusEqualTo(TypeEnum.PUBLISH.getType()).andTypeEqualTo(TypeEnum.ARTICLE.getType());
         example.setOrderByClause("created desc");
         PageHelper.startPage(1, limit);
         List<Article> list = articleMapper.selectByExample(example);
@@ -154,7 +154,7 @@ public class SiteServiceImpl implements ISiteService {
         StatisticsBo statistics = new StatisticsBo();
 
         ContentVoExample contentVoExample = new ContentVoExample();
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
+        contentVoExample.createCriteria().andTypeEqualTo(TypeEnum.ARTICLE.getType()).andStatusEqualTo(TypeEnum.PUBLISH.getType());
         Long articles =   articleMapper.countByExample(contentVoExample);
 
         Long comments = commentMapper.countByExample(new CommentVoExample());
@@ -162,7 +162,7 @@ public class SiteServiceImpl implements ISiteService {
         Long attachs = attachMapper.countByExample(new AttachVoExample());
 
         MetaVoExample metaVoExample = new MetaVoExample();
-        metaVoExample.createCriteria().andTypeEqualTo(Types.LINK.getType());
+        metaVoExample.createCriteria().andTypeEqualTo(TypeEnum.LINK.getType());
         Long links = metaMapper.countByExample(metaVoExample);
 
         statistics.setArticles(articles);
@@ -180,7 +180,7 @@ public class SiteServiceImpl implements ISiteService {
         if (null != archives) {
             archives.forEach(archive -> {
                 ContentVoExample example = new ContentVoExample();
-                ContentVoExample.Criteria criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
+                ContentVoExample.Criteria criteria = example.createCriteria().andTypeEqualTo(TypeEnum.ARTICLE.getType()).andStatusEqualTo(TypeEnum.PUBLISH.getType());
                 example.setOrderByClause("created desc");
                 String date = archive.getDate();
                 Date sd = DateKit.dateFormat(date, "yyyy年MM月");

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface ArticleMapper /*extends BaseMapper<Article>*/ {
+public interface ArticleMapper extends BaseMapper<Article> {
 
     long countByExample(ContentVoExample example);
 
@@ -23,6 +23,8 @@ public interface ArticleMapper /*extends BaseMapper<Article>*/ {
     int insertSelective(Article record);
 
     List<Article> selectByExampleWithBLOBs(ContentVoExample example);
+
+    List<Article> selectById(String id);
 
     List<Article> selectByExample(ContentVoExample example);
 
@@ -43,5 +45,7 @@ public interface ArticleMapper /*extends BaseMapper<Article>*/ {
     List<ArchiveBo> findReturnArchiveBo();
 
     List<Article> findByCatalog(Integer mid);
+
+    List<Article> selectByTypeAndStatus(@Param("type") String type, @Param("status") String status);
 
 }

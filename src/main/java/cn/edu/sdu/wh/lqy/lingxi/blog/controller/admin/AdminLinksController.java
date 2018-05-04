@@ -2,9 +2,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +26,7 @@ public class AdminLinksController extends BaseController {
 
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<Meta> metas = metasService.getMetas(Types.LINK.getType());
+        List<Meta> metas = metasService.getMetas(TypeEnum.LINK.getType());
         request.setAttribute("links", metas);
         return RestPageConst.ADMIN_LINKS;
     }
@@ -39,10 +39,10 @@ public class AdminLinksController extends BaseController {
         try {
             Meta metas = new Meta();
             metas.setName(title);
-            metas.setSlug(url);
+            metas.setThumbnail(url);
             metas.setDescription(logo);
             metas.setSort(sort);
-            metas.setType(Types.LINK.getType());
+            metas.setType(TypeEnum.LINK.getType());
             if (null != mid) {
                 metas.setMid(mid);
                 metasService.update(metas);

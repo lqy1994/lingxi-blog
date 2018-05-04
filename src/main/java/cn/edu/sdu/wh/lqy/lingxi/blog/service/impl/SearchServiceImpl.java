@@ -2,7 +2,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.RangeValueBlock;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.*;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,11 +22,13 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryAction;
 import org.elasticsearch.index.reindex.DeleteByQueryRequestBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.search.suggest.Suggest;
 import org.elasticsearch.search.suggest.SuggestBuilder;
 import org.elasticsearch.search.suggest.SuggestBuilders;
@@ -124,7 +128,6 @@ public class SearchServiceImpl implements ISearchService {
         } else {
             success = deleteAndCreate(totalHit, indexTemplate);
         }
-
     }
 
     private void removeIndex(ArticleIndexMessage message) {
@@ -263,21 +266,21 @@ public class SearchServiceImpl implements ISearchService {
     }
 
     @Override
-    public ServiceMultiResult<Integer> query(ArticleVoSearch articleVoSearch) {
+    public ServiceMultiResult<Integer> query(ArticleSearch articleSearch) {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
         boolQuery.must(
-                QueryBuilders.multiMatchQuery(articleVoSearch.getTitle(),
+                QueryBuilders.multiMatchQuery(articleSearch.getTitle(),
                         ArticleIndexKey.TITLE, ArticleIndexKey.TAGS, ArticleIndexKey.CONTENT
                 ));
 
         SearchRequestBuilder requestBuilder = elasticsearchClient.prepareSearch(INDEX_NAME)
                 .setTypes(INDEX_TYPE)
                 .setQuery(boolQuery)
-//                .addSort(contentVoSearch.getOrderBy(),
-//                        SortOrder.fromString(contentVoSearch.getOrderDirection()))
-                .setFrom(articleVoSearch.getStart())
-                .setSize(articleVoSearch.getSize())
+                .addSort(articleSearch.getOrderBy(),
+                        SortOrder.fromString(articleSearch.getOrderDirection()))
+                .setFrom(articleSearch.getStart())
+                .setSize(articleSearch.getSize())
                 .setFetchSource(ArticleIndexKey.ARTICLE_ID, null);
 
         LOGGER.info("Search Request Builder --- {}", requestBuilder.toString());
@@ -294,6 +297,41 @@ public class SearchServiceImpl implements ISearchService {
             contentIds.add(Ints.tryParse(String.valueOf(hit.getSource().get(ArticleIndexKey.ARTICLE_ID))));
         }
         return new ServiceMultiResult<>(response.getHits().totalHits, contentIds);
+    }
+
+
+    @Override
+    public ServiceMultiResult<Long> query(BrowseSearch browseSearch) {
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        //Category
+        boolQuery.filter(QueryBuilders.termQuery(ArticleIndexKey.CATEGORIES, browseSearch.getCategoryName()));
+        //Hits
+        RangeValueBlock hitsBlock = RangeValueBlock.matchHits(browseSearch.getHitsBlock());
+        if (!RangeValueBlock.ALL.equals(hitsBlock)) {
+            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(ArticleIndexKey.HITS);
+            if (hitsBlock.getMax() > 0) {
+                rangeQueryBuilder.lte(hitsBlock.getMax());
+            }
+            if (hitsBlock.getMin() > 0) {
+                rangeQueryBuilder.gte(hitsBlock.getMin());
+            }
+            boolQuery.filter(rangeQueryBuilder);
+        }
+        //WordCnt
+        RangeValueBlock wordCntBlock = RangeValueBlock.matchWordCnt(browseSearch.getWordCntBlock());
+//        if (!RangeValueBlock.ALL.equals(wordCntBlock)) {
+//            RangeQueryBuilder rangeQueryBuilder = QueryBuilders.rangeQuery(ArticleIndexKey);
+//            if (hitsBlock.getMax() > 0) {
+//                rangeQueryBuilder.lte(hitsBlock.getMax());
+//            }
+//            if (hitsBlock.getMin() > 0) {
+//                rangeQueryBuilder.gte(hitsBlock.getMin());
+//            }
+//            boolQuery.filter(rangeQueryBuilder);
+//        }
+
+
+        return null;
     }
 
     @Override

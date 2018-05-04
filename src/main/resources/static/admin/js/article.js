@@ -28,8 +28,9 @@ var tale = new $.tale();
  */
 function subArticle(status) {
     var title = $('#articleForm input[name=title]').val();
-    var content = $('#summernote').summernote('code');
-    console.log(content)
+    // var content = $('#text').val();
+    var content = CKEDITOR.instances.blogContent.getData();
+
     if (title == '') {
         tale.alertWarn('请输入文章标题');
         return;
@@ -64,10 +65,9 @@ function subArticle(status) {
 }
 
 // var textarea = $('#text'),
-
-    // toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
+//     toolbar = $('<div class="markdown-editor" id="md-button-bar" />').insertBefore(textarea.parent())
 // preview = $('<div id="md-preview" class="md-hidetab" />').insertAfter('.markdown-editor');
-
+//
 // markdown(textarea, toolbar, preview);
 
 

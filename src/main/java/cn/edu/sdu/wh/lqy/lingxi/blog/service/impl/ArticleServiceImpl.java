@@ -7,7 +7,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ArticleDTO;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -16,6 +16,8 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.vdurmont.emoji.EmojiParser;
@@ -23,14 +25,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 @Service("articleService")
-public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */implements IArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleServiceImpl.class);
 
@@ -47,6 +53,9 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
     private IMetaService metasService;
     @Autowired
     private ISearchService searchService;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
     @Override
     @Transactional
@@ -76,18 +85,31 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
                 return "路径太短了";
             }
             if (!TaleUtils.isPath(article.getThumbnail())) return "您输入的路径不合法";
-            ContentVoExample contentVoExample = new ContentVoExample();
-            contentVoExample.createCriteria().andTypeEqualTo(article.getType()).andStatusEqualTo(article.getThumbnail());
-            long count = articleMapper.countByExample(contentVoExample);
-            if (count > 0) return "该路径已经存在，请重新输入";
+//            ContentVoExample contentVoExample = new ContentVoExample();
+//            contentVoExample.createCriteria().andTypeEqualTo(article.getType()).andStatusEqualTo(article.getThumbnail());
+//            long count = articleMapper.countByExample(contentVoExample);
+            Integer count = articleMapper.selectCount(new EntityWrapper<>(article));
+            if (count > 0) {
+                return "该路径已经存在，请重新输入";
+            }
         } else {
             article.setThumbnail(null);
         }
 
-//        article.setContent(EmojiParser.parseToAliases(article.getContent()));
         article.setContent(article.getContent());
 
         int time = DateKit.getCurrentUnixTime();
+
+        String string = valueOperations().get(WebConstant.ARTICLE_CURRENT_ID).toString();
+        Integer curIdVal = Integer.valueOf(string.replaceAll("\"", ""));
+        if (curIdVal != null) {
+            curIdVal++;
+            article.setId(curIdVal);
+            valueOperations().set(WebConstant.ARTICLE_CURRENT_ID, String.valueOf(curIdVal), 60 * 60 * 24 * 30 * 12, TimeUnit.SECONDS);
+        } else {
+            article.setId(new Random().nextInt(1000000));
+        }
+
         article.setCreated(time);
         article.setModified(time);
         article.setHits(0);
@@ -97,8 +119,8 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
         String categories = article.getCategories();
         articleMapper.insertNewArticle(article);
         Integer artId = article.getId();
-        metasService.saveMetas(artId, tags, Types.TAG.getType());
-        metasService.saveMetas(artId, categories, Types.CATEGORY.getType());
+        metasService.saveMetas(artId, tags, TypeEnum.TAG.getType());
+        metasService.saveMetas(artId, categories, TypeEnum.CATEGORY.getType());
 
         searchService.index(artId);
 
@@ -106,32 +128,37 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
     }
 
     @Override
-    public PageInfo<Article> getContents(Integer offset, Integer limit) {
-        LOGGER.debug("Begin getContents: offset:{}, limit:{}.", offset, limit);
-        ContentVoExample example = new ContentVoExample();
-        example.setOrderByClause("created desc");
-        example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
+    public PageInfo<Article> getArticles(Integer offset, Integer limit) {
+        LOGGER.debug("Begin getArticles: offset:{}, limit:{}.", offset, limit);
+//        ContentVoExample example = new ContentVoExample();
+//        example.setOrderByClause("created desc");
+//        example.createCriteria().andTypeEqualTo(TypeEnum.ARTICLE.getType()).andStatusEqualTo(TypeEnum.PUBLISH.getType());
         PageHelper.startPage(offset, limit);
-        List<Article> data = articleMapper.selectByExampleWithBLOBs(example);
+
+//        List<Article> data = articleMapper.selectByExampleWithBLOBs(example);
+
+        List<Article> data = articleMapper.selectByTypeAndStatus(TypeEnum.ARTICLE.getType(), TypeEnum.PUBLISH.getType());
         PageInfo<Article> pageInfo = new PageInfo<>(data);
-        LOGGER.debug("Exit getContents");
+        LOGGER.debug("Exit getArticles");
         return pageInfo;
     }
 
     @Override
-    public Article getContents(String id) {
+    public Article getArticle(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                Article article = articleMapper.selectByPrimaryKey(Integer.valueOf(id));
+                Article article = articleMapper.selectById(Integer.valueOf(id));
                 if (article != null) {
                     article.setHits(article.getHits() + 1);
-                    articleMapper.updateByPrimaryKey(article);
+//                    articleMapper.updateByPrimaryKey(article);
+                    articleMapper.updateById(article);
                 }
                 return article;
             } else {
-                ContentVoExample contentVoExample = new ContentVoExample();
-                contentVoExample.createCriteria().andSlugEqualTo(id);
-                List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
+//                ContentVoExample contentVoExample = new ContentVoExample();
+//                contentVoExample.createCriteria().andSlugEqualTo(id);
+//                List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
+                List<Article> articles = articleMapper.selectById(id);
 //                if (articles.size() != 1) {
 ////                    throw new LingXiException("query content by id and return is not one");
 ////                }
@@ -144,7 +171,8 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
     @Override
     public void updateContentByCid(Article article) {
         if (null != article && null != article.getId()) {
-            articleMapper.updateByPrimaryKeySelective(article);
+//            articleMapper.updateByPrimaryKeySelective(article);
+            articleMapper.updateById(article);
         }
     }
 
@@ -163,8 +191,8 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
         PageHelper.startPage(page, limit);
         ContentVoExample contentVoExample = new ContentVoExample();
         ContentVoExample.Criteria criteria = contentVoExample.createCriteria();
-        criteria.andTypeEqualTo(Types.ARTICLE.getType());
-        criteria.andStatusEqualTo(Types.PUBLISH.getType());
+        criteria.andTypeEqualTo(TypeEnum.ARTICLE.getType());
+        criteria.andStatusEqualTo(TypeEnum.PUBLISH.getType());
         criteria.andTitleLike("%" + keyword + "%");
         contentVoExample.setOrderByClause("created desc");
         List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
@@ -180,11 +208,11 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
 
     @Override
     @Transactional
-    public String deleteByCid(Integer cid) {
-        Article article = this.getContents(cid + "");
+    public String deleteByCid(Integer id) {
+        Article article = getArticle(id + "");
         if (null != article) {
-            articleMapper.deleteByPrimaryKey(cid);
-            relationshipService.deleteById(cid, null);
+            articleMapper.deleteById(id);
+            relationshipService.deleteById(id, null);
             return WebConstant.SUCCESS_RESULT;
         }
         return "数据为空";
@@ -235,11 +263,15 @@ public class ArticleServiceImpl /*extends ServiceImpl<ArticleMapper, Article> */
         Integer id = article.getId();
         article.setContent(EmojiParser.parseToAliases(article.getContent()));
 
-        articleMapper.updateByPrimaryKeySelective(article);
+        articleMapper.updateById(article);
         relationshipService.deleteById(id, null);
-        metasService.saveMetas(id, article.getTags(), Types.TAG.getType());
-        metasService.saveMetas(id, article.getCategories(), Types.CATEGORY.getType());
+        metasService.saveMetas(id, article.getTags(), TypeEnum.TAG.getType());
+        metasService.saveMetas(id, article.getCategories(), TypeEnum.CATEGORY.getType());
         searchService.index(id);
         return WebConstant.SUCCESS_RESULT;
+    }
+
+    public ValueOperations valueOperations() {
+        return redisTemplate.opsForValue();
     }
 }

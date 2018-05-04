@@ -2,9 +2,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
@@ -49,22 +49,22 @@ public class SearchController extends BaseController {
     public String search(Model model, @PathVariable String keyword, @PathVariable int page,
                          @RequestParam(value = "limit", defaultValue = "12") int limit) {
 
-        ArticleVoSearch articleVoSearch = new ArticleVoSearch();
-        articleVoSearch.setTitle(keyword);
-        articleVoSearch.setStart(page);
-        articleVoSearch.setSize(limit);
-        articleVoSearch.setType(Types.ARTICLE.getType());
-        articleVoSearch.setStatus(Types.PUBLISH.getType());
-        articleVoSearch.setOrderBy("created");
-        articleVoSearch.setOrderDirection("desc");
+        ArticleSearch articleSearch = new ArticleSearch();
+        articleSearch.setTitle(keyword);
+        articleSearch.setStart(page);
+        articleSearch.setSize(limit);
+        articleSearch.setType(TypeEnum.ARTICLE.getType());
+        articleSearch.setStatus(TypeEnum.PUBLISH.getType());
+        articleSearch.setOrderBy("created");
+        articleSearch.setOrderDirection("desc");
 
         PageInfo<Article> articles = new PageInfo<>();
 
-        ServiceMultiResult<Integer> serviceResult = searchService.query(articleVoSearch);
+        ServiceMultiResult<Integer> serviceResult = searchService.query(articleSearch);
 
         if (serviceResult != null && serviceResult.getTotal() > 0) {
             List<Article> articleList = serviceResult.getResult().stream()
-                    .map(contId -> articleService.getContents(contId + ""))
+                    .map(contId -> articleService.getArticle(contId + ""))
                     .collect(Collectors.toList());
 
             articles = new PageInfo<>(articleList);

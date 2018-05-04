@@ -71,6 +71,10 @@ public class ArticleIndexTemplate {
      * 内容文字
      */
     private String content;
+    /**
+     * 字数
+     */
+    private Integer wordCnt;
 
     private List<ArticleSuggest> suggest;
 
@@ -210,6 +214,14 @@ public class ArticleIndexTemplate {
         this.suggest = suggest;
     }
 
+    public Integer getWordCnt() {
+        return wordCnt;
+    }
+
+    public void setWordCnt(Integer wordCnt) {
+        this.wordCnt = wordCnt;
+    }
+
     @Override
     public String toString() {
         return "ArticleIndexTemplate{" +
@@ -229,6 +241,7 @@ public class ArticleIndexTemplate {
                 ", allowPing=" + allowPing +
                 ", allowFeed=" + allowFeed +
                 ", content='" + content + '\'' +
+                ", wordCnt=" + wordCnt +
                 ", suggest=" + suggest +
                 '}';
     }

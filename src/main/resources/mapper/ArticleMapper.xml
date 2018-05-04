@@ -17,6 +17,7 @@
         <result column="allow_comment" jdbcType="BIT" property="allowComment"/>
         <result column="allow_ping" jdbcType="BIT" property="allowPing"/>
         <result column="allow_feed" jdbcType="BIT" property="allowFeed"/>
+        <result column="word_cnt" jdbcType="INTEGER" property="wordCnt"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article">
         <result column="content" jdbcType="LONGVARCHAR" property="content"/>
@@ -83,7 +84,7 @@
     </sql>
     <sql id="Base_Column_List">
         id, title, thumbnail, created, modified, author_id, type, `status`, tags, categories, hits,
-        comments_num, allow_comment, allow_ping, allow_feed
+        comments_num, allow_comment, allow_ping, allow_feed, word_cnt
     </sql>
     <sql id="Blob_Column_List">
         content
@@ -97,7 +98,7 @@
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from tale.article
+        from article
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -105,6 +106,15 @@
             order by ${orderByClause}
         </if>
     </select>
+    
+    <select id="selectById" parameterType="java.lang.String" resultType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article">
+        SELECT id
+        <include refid="Base_Column_List"/> ,
+        <include refid="Blob_Column_List"/>
+        FROM article
+        WHERE id = #{id}
+    </select>
+
     <select id="selectByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample"
             resultMap="BaseResultMap">
         select
@@ -112,7 +122,7 @@
             distinct
         </if>
         <include refid="Base_Column_List"/>
-        from tale.article
+        from article
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
@@ -133,27 +143,27 @@
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
-        from tale.article
+        from article
         where id = #{id,jdbcType=INTEGER}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        delete from tale.article
+        delete from article
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <delete id="deleteByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample">
-        delete from tale.article
+        delete from article
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </delete>
     <insert id="insertNewArticle" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article" useGeneratedKeys="true" keyProperty="id">
-        insert into tale.article (id, title, thumbnail,
+        insert into article (id, title, thumbnail,
                                   created, modified, author_id,
                                   type, status, tags,
                                   categories, hits, comments_num,
                                   allow_comment, allow_ping, allow_feed,
                                   content)
-        values (#{id, jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR},
+        values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{thumbnail,jdbcType=VARCHAR},
                                         #{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER},
                                         #{authorId,jdbcType=INTEGER},
                                         #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR},
@@ -164,7 +174,7 @@
     </insert>
     <insert id="insertSelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article" useGeneratedKeys="true"
             keyProperty="id">
-        insert into tale.article
+        insert into article
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
                 id,
@@ -268,13 +278,13 @@
     </insert>
     <select id="countByExample" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample"
             resultType="java.lang.Long">
-        select count(*) from tale.article
+        select count(*) from article
         <if test="_parameter != null">
             <include refid="Example_Where_Clause"/>
         </if>
     </select>
     <update id="updateByExampleSelective" parameterType="map">
-        update tale.article
+        update article
         <set>
             <if test="record.id != null">
                 id = #{record.id,jdbcType=INTEGER},
@@ -330,7 +340,7 @@
         </if>
     </update>
     <update id="updateByExampleWithBLOBs" parameterType="map">
-        update tale.article
+        update article
         set id = #{record.id,jdbcType=INTEGER},
         title = #{record.title,jdbcType=VARCHAR},
         thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
@@ -352,7 +362,7 @@
         </if>
     </update>
     <update id="updateByExample" parameterType="map">
-        update tale.article
+        update article
         set id = #{record.id,jdbcType=INTEGER},
         title = #{record.title,jdbcType=VARCHAR},
         thumbnail = #{record.thumbnail,jdbcType=VARCHAR},
@@ -373,7 +383,7 @@
         </if>
     </update>
     <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article">
-        update tale.article
+        update article
         <set>
             <if test="title != null">
                 title = #{title,jdbcType=VARCHAR},
@@ -424,7 +434,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article">
-        update tale.article
+        update article
         set title         = #{title,jdbcType=VARCHAR},
             thumbnail     = #{thumbnail,jdbcType=VARCHAR},
             created       = #{created,jdbcType=INTEGER},
@@ -443,7 +453,7 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article">
-        update tale.article
+        update article
         set title         = #{title,jdbcType=VARCHAR},
             thumbnail     = #{thumbnail,jdbcType=VARCHAR},
             created       = #{created,jdbcType=INTEGER},
@@ -471,7 +481,7 @@
         select
             FROM_UNIXTIME(created, '%Y年%m月') as date,
             count(*)                         as count
-        from tale.article
+        from article
         where type = 'post' and status = 'publish'
         group by date
         order by date desc
@@ -480,8 +490,14 @@
 
     <select id="findByCatalog" resultMap="BaseResultMap" parameterType="Integer">
         select a.*
-        from tale.article a left join relationship b on a.id = b.cid
+        from article a left join article_meta b on a.id = b.cid
         where b.mid = #{value} and a.status = 'publish' and a.type = 'post'
         order by a.created desc
+    </select>
+
+    <select id="selectByTypeAndStatus"  resultMap="ResultMapWithBLOBs">
+        SELECT *
+        FROM article
+        where type = #{type} and status = #{status}
     </select>
 </mapper>

@@ -51,7 +51,7 @@ public class AdminCommentController extends BaseController {
             if (null == comments) {
                 return ApiResponse.fail("不存在该评论");
             }
-            commentsService.delete(coid, comments.getCid());
+            commentsService.delete(coid, comments.getArtId());
         } catch (Exception e) {
             String msg = "评论删除失败";
             LOGGER.error(msg, e);

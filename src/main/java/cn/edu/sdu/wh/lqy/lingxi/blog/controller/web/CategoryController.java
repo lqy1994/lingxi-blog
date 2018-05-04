@@ -3,9 +3,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import com.github.pagehelper.PageInfo;
@@ -41,7 +41,7 @@ public class CategoryController extends BaseController {
     public String categories(Model model, @PathVariable String keyword,
                              @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         page = page < 0 || page > WebConstant.MAX_PAGE ? 1 : page;
-        MetaDto metaDto = metaService.getMeta(Types.CATEGORY.getType(), keyword);
+        MetaDto metaDto = metaService.getMeta(TypeEnum.CATEGORY.getType(), keyword);
         if (null == metaDto) {
             return this.render_404();
         }

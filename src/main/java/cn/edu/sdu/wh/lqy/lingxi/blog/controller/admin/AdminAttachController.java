@@ -3,11 +3,11 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Attach;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IAttachService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Commons;
@@ -58,7 +58,7 @@ public class AdminAttachController extends BaseController {
                         @RequestParam(value = "limit", defaultValue = "12") int limit) {
         PageInfo<Attach> attachPaginator = attachService.getAttachs(page, limit);
         request.setAttribute("attachs", attachPaginator);
-        request.setAttribute(Types.ATTACH_URL.getType(), Commons.site_option(Types.ATTACH_URL.getType(), Commons.site_url()));
+        request.setAttribute(TypeEnum.ATTACH_URL.getType(), Commons.site_option(TypeEnum.ATTACH_URL.getType(), Commons.site_url()));
         request.setAttribute("max_file_size", WebConstant.MAX_FILE_SIZE / 1024);
         return RestPageConst.ADMIN_ATTACH;
     }
@@ -80,7 +80,7 @@ public class AdminAttachController extends BaseController {
                 String fname = multipartFile.getOriginalFilename();
                 if (multipartFile.getSize() <= WebConstant.MAX_FILE_SIZE) {
                     String fkey = TaleUtils.getFileKey(fname);
-                    String ftype = TaleUtils.isImage(multipartFile.getInputStream()) ? Types.IMAGE.getType() : Types.FILE.getType();
+                    String ftype = TaleUtils.isImage(multipartFile.getInputStream()) ? TypeEnum.IMAGE.getType() : TypeEnum.FILE.getType();
                     File file = new File(CLASSPATH + fkey);
                     try {
                         FileCopyUtils.copy(multipartFile.getInputStream(), new FileOutputStream(file));

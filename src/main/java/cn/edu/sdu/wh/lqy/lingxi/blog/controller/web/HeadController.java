@@ -3,11 +3,11 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ArchiveBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.CommentBo;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -63,7 +63,7 @@ public class HeadController extends BaseController {
      */
     @GetMapping(value = "links")
     public String links(Model model) {
-        List<Meta> links = metaService.getMetas(Types.LINK.getType());
+        List<Meta> links = metaService.getMetas(TypeEnum.LINK.getType());
         model.addAttribute("links", links);
         return RestPageConst.LINKS;
     }
@@ -73,7 +73,7 @@ public class HeadController extends BaseController {
      */
     @GetMapping(value = "/{pageName}")
     public String page(Model model, @PathVariable String pageName, HttpServletRequest request) {
-        Article article = articleService.getContents(pageName);
+        Article article = articleService.getArticle(pageName);
         if (article == null) {
             return this.render_404();
         }

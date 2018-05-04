@@ -1,6 +1,7 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.browse.BrowseSearch;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceResult;
 
@@ -24,11 +25,13 @@ public interface ISearchService {
      * @param
      * @return
      */
-    ServiceMultiResult<Integer> query(ArticleVoSearch articleVoSearch);
+    ServiceMultiResult<Integer> query(ArticleSearch articleSearch);
 
     /**
      * 获取补全建议关键词
      */
     ServiceResult<List<String>> suggest(String prefix);
+
+    ServiceMultiResult<Long> query(BrowseSearch browseSearch);
 
 }

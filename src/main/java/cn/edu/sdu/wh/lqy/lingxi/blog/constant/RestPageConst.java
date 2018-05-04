@@ -24,7 +24,9 @@ public class RestPageConst {
 
     public static final String ADMIN_ARTICLE_LIST = "admin/article_list";
 
-    public static final String ADMIN_ARTICLE_EDIT = "admin/article_edit2";
+    public static final String ADMIN_ARTICLE_EDIT = "admin/article_edit1";
+
+//    public static final String ADMIN_ARTICLE_EDIT = "admin/article_edit2";
 
     public static final String ADMIN_CATEGORY = "admin/category";
 

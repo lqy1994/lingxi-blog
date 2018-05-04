@@ -1,14 +1,14 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service.impl;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
-import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.exception.LingXiException;
+import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.MetaMapper;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Article;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleMeta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.MetaVoExample;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IRelationshipService;
@@ -89,17 +89,17 @@ public class MetaServiceImpl implements IMetaService {
 
             metaMapper.deleteByPrimaryKey(mid);
 
-            List<RelationshipVoKey> rlist = relationshipService.getRelationshipById(null, mid);
+            List<ArticleMeta> rlist = relationshipService.getRelationshipById(null, mid);
             if (null != rlist) {
-                for (RelationshipVoKey r : rlist) {
-                    Article contents = articleService.getContents(String.valueOf(r.getCid()));
+                for (ArticleMeta r : rlist) {
+                    Article contents = articleService.getArticle(String.valueOf(r.getCid()));
                     if (null != contents) {
                         Article temp = new Article();
                         temp.setId(r.getCid());
-                        if (type.equals(Types.CATEGORY.getType())) {
+                        if (type.equals(TypeEnum.CATEGORY.getType())) {
                             temp.setCategories(reMeta(name, contents.getCategories()));
                         }
-                        if (type.equals(Types.TAG.getType())) {
+                        if (type.equals(TypeEnum.TAG.getType())) {
                             temp.setTags(reMeta(name, contents.getTags()));
                         }
                         articleService.updateContentByCid(temp);
@@ -165,7 +165,7 @@ public class MetaServiceImpl implements IMetaService {
             throw new LingXiException("查询到多条数据");
         } else {
             metas = new Meta();
-            metas.setSlug(name);
+            metas.setThumbnail(name);
             metas.setName(name);
             metas.setType(type);
             metaMapper.insertSelective(metas);
@@ -174,7 +174,7 @@ public class MetaServiceImpl implements IMetaService {
         if (mid != 0) {
             Long count = relationshipService.countById(cid, mid);
             if (count == 0) {
-                RelationshipVoKey relationships = new RelationshipVoKey();
+                ArticleMeta relationships = new ArticleMeta();
                 relationships.setCid(cid);
                 relationships.setMid(mid);
                 relationshipService.insertVo(relationships);

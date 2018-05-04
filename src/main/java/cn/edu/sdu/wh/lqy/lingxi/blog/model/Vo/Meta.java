@@ -16,7 +16,7 @@ public class Meta implements Serializable {
     /**
      * 项目缩略名
      */
-    private String slug;
+    private String thumbnail;
 
     /**
      * 项目类型
@@ -53,12 +53,12 @@ public class Meta implements Serializable {
         this.name = name;
     }
 
-    public String getSlug() {
-        return slug;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
-    public void setSlug(String slug) {
-        this.slug = slug;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public String getType() {

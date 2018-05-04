@@ -10,7 +10,7 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ContentVoExample;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Meta;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.User;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.LogActions;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IArticleService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ILogService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
@@ -47,7 +47,7 @@ public class AdminArticleController extends BaseController {
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.setOrderByClause("created desc");
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
+        contentVoExample.createCriteria().andTypeEqualTo(TypeEnum.ARTICLE.getType());
         PageInfo<Article> contentsPaginator = articleService.getArticlesWithpage(contentVoExample, page, limit);
         request.setAttribute("articles", contentsPaginator);
         return RestPageConst.ADMIN_ARTICLE_LIST;
@@ -55,16 +55,16 @@ public class AdminArticleController extends BaseController {
 
     @GetMapping(value = "/publish")
     public String newArticle(HttpServletRequest request) {
-        List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
+        List<Meta> categories = metasService.getMetas(TypeEnum.CATEGORY.getType());
         request.setAttribute("categories", categories);
         return RestPageConst.ADMIN_ARTICLE_EDIT;
     }
 
-    @GetMapping(value = "/{cid}")
-    public String editArticle(@PathVariable String cid, HttpServletRequest request) {
-        Article contents = articleService.getContents(cid);
+    @GetMapping(value = "/{id}")
+    public String editArticle(@PathVariable String id, HttpServletRequest request) {
+        Article contents = articleService.getArticle(id);
         request.setAttribute("contents", contents);
-        List<Meta> categories = metasService.getMetas(Types.CATEGORY.getType());
+        List<Meta> categories = metasService.getMetas(TypeEnum.CATEGORY.getType());
         request.setAttribute("categories", categories);
         request.setAttribute("active", "article");
         return RestPageConst.ADMIN_ARTICLE_EDIT;
@@ -72,21 +72,18 @@ public class AdminArticleController extends BaseController {
 
     @PostMapping(value = "/publish")
     @ResponseBody
-    public ApiResponse publishArticle(Article contents, HttpServletRequest request) {
+    public ApiResponse publishArticle(Article article, HttpServletRequest request) {
         User users = this.user(request);
-        contents.setAuthorId(users.getUid());
-        contents.setType(Types.ARTICLE.getType());
-        if (StringUtils.isBlank(contents.getCategories())) {
-            contents.setCategories("默认分类");
+        article.setAuthorId(users.getUid());
+        article.setType(TypeEnum.ARTICLE.getType());
+        if (StringUtils.isBlank(article.getCategories())) {
+            article.setCategories("默认分类");
         }
-        String result = articleService.publish(contents);
+        String result = articleService.publish(article);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);
-        } else {
-            //索引更新
-
-//            searchService.index();
         }
+
         return ApiResponse.ok();
     }
 
@@ -95,7 +92,7 @@ public class AdminArticleController extends BaseController {
     public ApiResponse modifyArticle(Article contents, HttpServletRequest request) {
         User users = this.user(request);
         contents.setAuthorId(users.getUid());
-        contents.setType(Types.ARTICLE.getType());
+        contents.setType(TypeEnum.ARTICLE.getType());
         String result = articleService.updateArticle(contents);
         if (!WebConstant.SUCCESS_RESULT.equals(result)) {
             return ApiResponse.fail(result);

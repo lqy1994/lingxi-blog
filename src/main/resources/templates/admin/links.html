@@ -26,7 +26,7 @@
                             <th:block th:each="link : ${links}">
                                 <tr th:attr="mid=${link.mid}">
                                     <td th:text="${link.name}"></td>
-                                    <td><a th:href="@{${link.slug}}" target="_blank" th:text="${link.slug}"></a></td>
+                                    <td><a th:href="@{${link.thumbnail}}" target="_blank" th:text="${link.thumbnail}"></a></td>
                                     <td th:text="${link.description}"></td>
                                     <td th:text="${link.sort}"></td>
                                     <td>

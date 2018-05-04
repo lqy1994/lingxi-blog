@@ -1,6 +1,6 @@
 package cn.edu.sdu.wh.lqy.lingxi.blog.service;
 
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.RelationshipVoKey;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleMeta;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ public interface IRelationshipService {
 
     /**
      * 保存對象
-     * @param relationshipVoKey
+     * @param articleMeta
      */
-    void insertVo(RelationshipVoKey relationshipVoKey);
+    void insertVo(ArticleMeta articleMeta);
 
     /**
      * 根据id搜索
@@ -33,5 +33,5 @@ public interface IRelationshipService {
      * @param mid
      * @return
      */
-    List<RelationshipVoKey> getRelationshipById(Integer cid, Integer mid);
+    List<ArticleMeta> getRelationshipById(Integer cid, Integer mid);
 }

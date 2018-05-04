@@ -11,7 +11,7 @@ public class Comment implements Serializable {
     /**
      * post表主键,关联字段
      */
-    private Integer cid;
+    private Integer artId;
 
     /**
      * 评论生成时的GMT unix时间戳
@@ -83,12 +83,12 @@ public class Comment implements Serializable {
         this.coid = coid;
     }
 
-    public Integer getCid() {
-        return cid;
+    public Integer getArtId() {
+        return artId;
     }
 
-    public void setCid(Integer cid) {
-        this.cid = cid;
+    public void setArtId(Integer artId) {
+        this.artId = artId;
     }
 
     public Integer getCreated() {

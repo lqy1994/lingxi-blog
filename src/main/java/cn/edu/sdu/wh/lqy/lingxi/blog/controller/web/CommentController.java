@@ -2,10 +2,10 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.web;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ErrorCode;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.ErrorCode;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ICommentService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.IPKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.PatternKit;
@@ -54,7 +54,7 @@ public class CommentController extends BaseController {
             return ApiResponse.fail(ErrorCode.BAD_REQUEST);
         }
 
-        String token = redisTemplate.opsForValue().get(Types.CSRF_TOKEN.getType() + ":" + _csrf_token);
+        String token = redisTemplate.opsForValue().get(TypeEnum.CSRF_TOKEN.getType() + ":" + _csrf_token);
         if (cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils.isNull(token)) {
             return ApiResponse.fail(ErrorCode.BAD_REQUEST);
         }
@@ -80,7 +80,7 @@ public class CommentController extends BaseController {
         }
 
         String val = IPKit.getIpAddrByRequest(request) + ":" + cid;
-        String cntStr = redisTemplate.opsForValue().get(Types.COMMENTS_FREQUENCY.getType() + ":" + val);
+        String cntStr = redisTemplate.opsForValue().get(TypeEnum.COMMENTS_FREQUENCY.getType() + ":" + val);
         Integer count = 0;
 
         if (cn.edu.sdu.wh.lqy.lingxi.blog.utils.StringUtils.isNotNull(cntStr)) {
@@ -99,7 +99,7 @@ public class CommentController extends BaseController {
 
         Comment comments = new Comment();
         comments.setAuthor(author);
-        comments.setCid(cid);
+        comments.setArtId(cid);
         comments.setIp(request.getRemoteAddr());
         comments.setUrl(url);
         comments.setContent(text);
@@ -113,7 +113,7 @@ public class CommentController extends BaseController {
                 cookie("tale_remember_url", URLEncoder.encode(url, "UTF-8"), 7 * 24 * 60 * 60, response);
             }
             // 设置对每个文章1分钟可以评论一次
-            redisTemplate.opsForValue().set(Types.COMMENTS_FREQUENCY.getType() + ":" + val, "1", 60, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(TypeEnum.COMMENTS_FREQUENCY.getType() + ":" + val, "1", 60, TimeUnit.SECONDS);
             if (!WebConstant.SUCCESS_RESULT.equals(result)) {
                 return ApiResponse.fail(result);
             }

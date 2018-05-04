@@ -2,7 +2,7 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.es;
 
 import cn.edu.sdu.wh.lqy.lingxi.blog.BaseTests;
 import cn.edu.sdu.wh.lqy.lingxi.blog.mapper.ArticleMapper;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleVoSearch;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.ArticleSearch;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.search.ServiceMultiResult;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import com.google.gson.Gson;
@@ -31,7 +31,7 @@ public class ArticleIndexTests extends BaseTests {
 
     @Test
     public void testQuery() {
-        ArticleVoSearch voSearch = new ArticleVoSearch();
+        ArticleSearch voSearch = new ArticleSearch();
         voSearch.setStart(0);
         voSearch.setSize(5);
         voSearch.setTitle("Redis");

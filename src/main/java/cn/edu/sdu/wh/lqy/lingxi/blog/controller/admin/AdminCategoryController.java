@@ -3,9 +3,9 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.controller.admin;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.RestPageConst;
 import cn.edu.sdu.wh.lqy.lingxi.blog.constant.WebConstant;
 import cn.edu.sdu.wh.lqy.lingxi.blog.controller.BaseController;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
-import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.Types;
 import cn.edu.sdu.wh.lqy.lingxi.blog.model.Bo.ApiResponse;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.MetaDto;
+import cn.edu.sdu.wh.lqy.lingxi.blog.model.dto.TypeEnum;
 import cn.edu.sdu.wh.lqy.lingxi.blog.service.IMetaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +27,8 @@ public class AdminCategoryController extends BaseController {
 
     @GetMapping(value = "")
     public String index(HttpServletRequest request) {
-        List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConstant.MAX_POSTS);
-        List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConstant.MAX_POSTS);
+        List<MetaDto> categories = metasService.getMetaList(TypeEnum.CATEGORY.getType(), null, WebConstant.MAX_POSTS);
+        List<MetaDto> tags = metasService.getMetaList(TypeEnum.TAG.getType(), null, WebConstant.MAX_POSTS);
         request.setAttribute("categories", categories);
         request.setAttribute("tags", tags);
         return RestPageConst.ADMIN_CATEGORY;
@@ -38,7 +38,7 @@ public class AdminCategoryController extends BaseController {
     @ResponseBody
     public ApiResponse saveCategory(@RequestParam String cname, @RequestParam Integer mid) {
         try {
-            metasService.saveMeta(Types.CATEGORY.getType(), cname, mid);
+            metasService.saveMeta(TypeEnum.CATEGORY.getType(), cname, mid);
         } catch (Exception e) {
             String msg = "分类保存失败";
             LOGGER.error(msg, e);

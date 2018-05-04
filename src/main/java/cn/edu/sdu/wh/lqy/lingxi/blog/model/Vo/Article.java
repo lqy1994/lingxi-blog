@@ -86,6 +86,8 @@ public class Article implements Serializable {
      */
     private String content;
 
+    private Integer wordCnt;
+
 
     public String getTitle() {
         return title;
@@ -213,5 +215,13 @@ public class Article implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Integer getWordCnt() {
+        return wordCnt;
+    }
+
+    public void setWordCnt(Integer wordCnt) {
+        this.wordCnt = wordCnt;
     }
 }

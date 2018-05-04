@@ -2,13 +2,13 @@ package cn.edu.sdu.wh.lqy.lingxi.blog.constant;
 
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class WebConstant {
 
+    public static final String ARTICLE_CURRENT_ID = "article_current_id";
     public static Map<String, String> initConfig = new ConcurrentHashMap<>();
 
 

@@ -3,7 +3,7 @@
 <mapper namespace="cn.edu.sdu.wh.lqy.lingxi.blog.mapper.CommentMapper">
   <resultMap id="BaseResultMap" type="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
     <id column="coid" jdbcType="INTEGER" property="coid" />
-    <result column="cid" jdbcType="INTEGER" property="cid" />
+    <result column="art_id" jdbcType="INTEGER" property="artId" />
     <result column="created" jdbcType="INTEGER" property="created" />
     <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="author_id" jdbcType="INTEGER" property="authorId" />
@@ -78,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    coid, cid, created, author, author_id, owner_id, mail, url, ip, agent, type, status, 
+    coid, art_id, created, author, author_id, owner_id, mail, url, ip, agent, type, status,
     parent
   </sql>
   <sql id="Blob_Column_List">
@@ -141,12 +141,12 @@
     </if>
   </delete>
   <insert id="insert" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment" useGeneratedKeys="true" keyProperty="coid">
-    insert into comment (coid, cid, created,
+    insert into comment (coid, art_id, created,
       author, author_id, owner_id, 
       mail, url, ip, agent, 
       type, status, parent, 
       content)
-    values (#{coid,jdbcType=INTEGER}, #{cid,jdbcType=INTEGER}, #{created,jdbcType=INTEGER}, 
+    values (#{coid,jdbcType=INTEGER}, #{artId,jdbcType=INTEGER}, #{created,jdbcType=INTEGER},
       #{author,jdbcType=VARCHAR}, #{authorId,jdbcType=INTEGER}, #{ownerId,jdbcType=INTEGER}, 
       #{mail,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, #{agent,jdbcType=VARCHAR}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{parent,jdbcType=INTEGER}, 
@@ -158,8 +158,8 @@
       <if test="coid != null">
         coid,
       </if>
-      <if test="cid != null">
-        cid,
+      <if test="artId != null">
+        art_id,
       </if>
       <if test="created != null">
         created,
@@ -202,8 +202,8 @@
       <if test="coid != null">
         #{coid,jdbcType=INTEGER},
       </if>
-      <if test="cid != null">
-        #{cid,jdbcType=INTEGER},
+      <if test="artId != null">
+        #{artId,jdbcType=INTEGER},
       </if>
       <if test="created != null">
         #{created,jdbcType=INTEGER},
@@ -255,8 +255,8 @@
       <if test="record.coid != null">
         coid = #{record.coid,jdbcType=INTEGER},
       </if>
-      <if test="record.cid != null">
-        cid = #{record.cid,jdbcType=INTEGER},
+      <if test="record.artId != null">
+        art_id = #{record.artId,jdbcType=INTEGER},
       </if>
       <if test="record.created != null">
         created = #{record.created,jdbcType=INTEGER},
@@ -302,7 +302,7 @@
   <update id="updateByExampleWithBLOBs" parameterType="map">
     update comment
     set coid = #{record.coid,jdbcType=INTEGER},
-      cid = #{record.cid,jdbcType=INTEGER},
+      art_id = #{record.artId,jdbcType=INTEGER},
       created = #{record.created,jdbcType=INTEGER},
       author = #{record.author,jdbcType=VARCHAR},
       author_id = #{record.authorId,jdbcType=INTEGER},
@@ -322,7 +322,7 @@
   <update id="updateByExample" parameterType="map">
     update comment
     set coid = #{record.coid,jdbcType=INTEGER},
-      cid = #{record.cid,jdbcType=INTEGER},
+      art_id = #{record.artId,jdbcType=INTEGER},
       created = #{record.created,jdbcType=INTEGER},
       author = #{record.author,jdbcType=VARCHAR},
       author_id = #{record.authorId,jdbcType=INTEGER},
@@ -341,8 +341,8 @@
   <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
     update comment
     <set>
-      <if test="cid != null">
-        cid = #{cid,jdbcType=INTEGER},
+      <if test="artId != null">
+        art_id = #{artId,jdbcType=INTEGER},
       </if>
       <if test="created != null">
         created = #{created,jdbcType=INTEGER},
@@ -385,7 +385,7 @@
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
     update comment
-    set cid = #{cid,jdbcType=INTEGER},
+    set art_id = #{artId,jdbcType=INTEGER},
       created = #{created,jdbcType=INTEGER},
       author = #{author,jdbcType=VARCHAR},
       author_id = #{authorId,jdbcType=INTEGER},
@@ -402,7 +402,7 @@
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.wh.lqy.lingxi.blog.model.Vo.Comment">
     update comment
-    set cid = #{cid,jdbcType=INTEGER},
+    set art_id = #{artId,jdbcType=INTEGER},
       created = #{created,jdbcType=INTEGER},
       author = #{author,jdbcType=VARCHAR},
       author_id = #{authorId,jdbcType=INTEGER},

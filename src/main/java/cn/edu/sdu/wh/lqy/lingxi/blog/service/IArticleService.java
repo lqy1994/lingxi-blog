@@ -27,16 +27,16 @@ public interface IArticleService  {
      * @param limit 每页条数
      * @return Article
      */
-    PageInfo<Article> getContents(Integer offset, Integer limit);
+    PageInfo<Article> getArticles(Integer offset, Integer limit);
 
 
     /**
-     * 根据id或slug获取文章
+     * 根据id获取文章
      *
      * @param id id
      * @return Article
      */
-    Article getContents(String id);
+    Article getArticle(String id);
 
     /**
      * 根据主键更新

@@ -23,7 +23,7 @@ public class CommentBo extends Comment {
         setIp(comments.getIp());
         setContent(comments.getContent());
         setOwnerId(comments.getOwnerId());
-        setCid(comments.getCid());
+        setArtId(comments.getArtId());
     }
 
     public int getLevels() {

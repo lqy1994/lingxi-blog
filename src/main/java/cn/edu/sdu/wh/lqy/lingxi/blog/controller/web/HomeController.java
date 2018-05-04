@@ -53,7 +53,7 @@ public class HomeController extends BaseController {
     @GetMapping(value = "/page/{offset}")
     public String index(Model model, @PathVariable("offset") int offset, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         offset = offset < 0 || offset > WebConstant.MAX_PAGE ? 1 : offset;
-        PageInfo<Article> articles = articleService.getContents(offset, limit);
+        PageInfo<Article> articles = articleService.getArticles(offset, limit);
         model.addAttribute("articles", articles);
         if (offset > 1) {
             model.addAttribute("title", "第" + offset + "页");

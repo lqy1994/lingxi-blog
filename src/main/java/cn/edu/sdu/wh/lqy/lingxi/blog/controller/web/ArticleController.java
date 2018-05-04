@@ -48,7 +48,7 @@ public class ArticleController extends BaseController {
      */
     @GetMapping(value = {"article/{id}", "article/{id}.html"})
     public String getArticle(Model model, @PathVariable String id, HttpServletRequest request) {
-        Article article = articleService.getContents(id);
+        Article article = articleService.getArticle(id);
         if (null == article || "draft".equals(article.getStatus())) {
             return this.render_404();
         }
@@ -68,7 +68,7 @@ public class ArticleController extends BaseController {
      */
     @GetMapping(value = {"article/{id}/preview", "article/{id}.html"})
     public String articlePreview(Model model, HttpServletRequest request, @PathVariable String id) {
-        Article contents = articleService.getContents(id);
+        Article contents = articleService.getArticle(id);
         if (null == contents) {
             return this.render_404();
         }
@@ -132,24 +132,17 @@ public class ArticleController extends BaseController {
     @GetMapping("browser")
     public String articleBrowser(Model model, @ModelAttribute BrowseSearch browseSearch) {
 
-//        searchService.query()
-//        ServiceMultiResult<ArticleDTO> serviceMultiResult = articleService.query(browseSearch);
-//
-//        model.addAttribute("total", serviceMultiResult.getTotal());
-//        model.addAttribute("articles", serviceMultiResult.getResult());
-//
-//        if (rentSearch.getRegionEnName() == null) {
-//            rentSearch.setRegionEnName("*");
-//        }
-//
-//        model.addAttribute("searchBody", rentSearch);
-//        model.addAttribute("regions", addressResult.getResult());
-//
-//        model.addAttribute("priceBlocks", RentValueBlock.PRICE_BLOCK);
-//        model.addAttribute("areaBlocks", RentValueBlock.AREA_BLOCK);
-//
-//        model.addAttribute("currentPriceBlock", RentValueBlock.matchPrice(rentSearch.getPriceBlock()));
-//        model.addAttribute("currentAreaBlock", RentValueBlock.matchArea(rentSearch.getAreaBlock()));
+
+//        ServiceMultiResult<HouseDTO> serviceMultiResult = articleService.query(browseSearch);
+
+        model.addAttribute("searchBody", browseSearch);
+
+
+
+
+
+
+
 
         return RestPageConst.ARTICLE_BROWSER;
     }
