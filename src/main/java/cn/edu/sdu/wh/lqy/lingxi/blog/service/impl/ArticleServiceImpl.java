@@ -16,7 +16,6 @@ import cn.edu.sdu.wh.lqy.lingxi.blog.service.ISearchService;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.DateKit;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.TaleUtils;
 import cn.edu.sdu.wh.lqy.lingxi.blog.utils.Tools;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -85,10 +84,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 return "路径太短了";
             }
             if (!TaleUtils.isPath(article.getThumbnail())) return "您输入的路径不合法";
-//            ContentVoExample contentVoExample = new ContentVoExample();
-//            contentVoExample.createCriteria().andTypeEqualTo(article.getType()).andStatusEqualTo(article.getThumbnail());
-//            long count = articleMapper.countByExample(contentVoExample);
-            Integer count = articleMapper.selectCount(new EntityWrapper<>(article));
+            ContentVoExample contentVoExample = new ContentVoExample();
+            contentVoExample.createCriteria().andTypeEqualTo(article.getType()).andStatusEqualTo(article.getThumbnail());
+            long count = articleMapper.countByExample(contentVoExample);
+//            Integer count = articleMapper.selectCount(new EntityWrapper<>(article));
             if (count > 0) {
                 return "该路径已经存在，请重新输入";
             }
@@ -130,14 +129,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public PageInfo<Article> getArticles(Integer offset, Integer limit) {
         LOGGER.debug("Begin getArticles: offset:{}, limit:{}.", offset, limit);
-//        ContentVoExample example = new ContentVoExample();
-//        example.setOrderByClause("created desc");
-//        example.createCriteria().andTypeEqualTo(TypeEnum.ARTICLE.getType()).andStatusEqualTo(TypeEnum.PUBLISH.getType());
+        ContentVoExample example = new ContentVoExample();
+        example.setOrderByClause("created desc");
+        example.createCriteria().andTypeEqualTo(TypeEnum.ARTICLE.getType()).andStatusEqualTo(TypeEnum.PUBLISH.getType());
         PageHelper.startPage(offset, limit);
 
-//        List<Article> data = articleMapper.selectByExampleWithBLOBs(example);
+        List<Article> data = articleMapper.selectByExampleWithBLOBs(example);
 
-        List<Article> data = articleMapper.selectByTypeAndStatus(TypeEnum.ARTICLE.getType(), TypeEnum.PUBLISH.getType());
+//        List<Article> data = articleMapper.selectByTypeAndStatus(TypeEnum.ARTICLE.getType(), TypeEnum.PUBLISH.getType());
         PageInfo<Article> pageInfo = new PageInfo<>(data);
         LOGGER.debug("Exit getArticles");
         return pageInfo;
@@ -147,18 +146,19 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Article getArticle(String id) {
         if (StringUtils.isNotBlank(id)) {
             if (Tools.isNumber(id)) {
-                Article article = articleMapper.selectById(Integer.valueOf(id));
+//                Article article = articleMapper.selectById(Integer.valueOf(id));
+                Article article = articleMapper.selectByPrimaryKey(Integer.valueOf(id));
                 if (article != null) {
                     article.setHits(article.getHits() + 1);
-//                    articleMapper.updateByPrimaryKey(article);
-                    articleMapper.updateById(article);
+                    articleMapper.updateByPrimaryKey(article);
+//                    articleMapper.updateById(article);
                 }
                 return article;
             } else {
-//                ContentVoExample contentVoExample = new ContentVoExample();
-//                contentVoExample.createCriteria().andSlugEqualTo(id);
-//                List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
-                List<Article> articles = articleMapper.selectById(id);
+                ContentVoExample contentVoExample = new ContentVoExample();
+                contentVoExample.createCriteria().andSlugEqualTo(id);
+                List<Article> articles = articleMapper.selectByExampleWithBLOBs(contentVoExample);
+//                List<Article> articles = articleMapper.selectById(id);
 //                if (articles.size() != 1) {
 ////                    throw new LingXiException("query content by id and return is not one");
 ////                }
@@ -171,8 +171,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public void updateContentByCid(Article article) {
         if (null != article && null != article.getId()) {
-//            articleMapper.updateByPrimaryKeySelective(article);
-            articleMapper.updateById(article);
+            articleMapper.updateByPrimaryKeySelective(article);
+//            articleMapper.updateById(article);
         }
     }
 
@@ -211,7 +211,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public String deleteByCid(Integer id) {
         Article article = getArticle(id + "");
         if (null != article) {
-            articleMapper.deleteById(id);
+            articleMapper.deleteByPrimaryKey(id);
             relationshipService.deleteById(id, null);
             return WebConstant.SUCCESS_RESULT;
         }
@@ -263,7 +263,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Integer id = article.getId();
         article.setContent(EmojiParser.parseToAliases(article.getContent()));
 
-        articleMapper.updateById(article);
+        articleMapper.updateByPrimaryKey(article);
         relationshipService.deleteById(id, null);
         metasService.saveMetas(id, article.getTags(), TypeEnum.TAG.getType());
         metasService.saveMetas(id, article.getCategories(), TypeEnum.CATEGORY.getType());
